@@ -6,6 +6,7 @@ DevLys) extract as Latin junk such as "dk;kZy;"; those are detected and OCR'd to
 """
 
 import io
+import logging
 import os
 import re
 import shutil
@@ -16,6 +17,10 @@ from pathlib import Path
 from pypdf import PdfReader
 
 from . import ROOT
+
+# Government PDFs are often malformed; pypdf logs a warning per broken object but still
+# extracts fine. Those warnings drown the run log, so only real errors are shown.
+logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 _LETTERS = re.compile(r"[A-Za-z\u0900-\u097F]")
 _DEVANAGARI = re.compile(r"[\u0900-\u097F]")

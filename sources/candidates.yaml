@@ -1,0 +1,192 @@
+# Organisations to watch. tools/discover_careers.py finds each one's careers page and
+# writes sources/watch_pages.yaml. Give `url:` to pin a page instead of discovering it.
+# group: cg-state | central | psu | academic | state-board
+
+# ---- Chhattisgarh state -------------------------------------------------------
+- {name: CG Vyapam, home: "https://vyapamcg.cgstate.gov.in/", url: "https://vyapamcg.cgstate.gov.in/", group: cg-state, state: CG}
+- {name: CGPSC, home: "https://psc.cg.gov.in/", group: cg-state, state: CG}
+- {name: CG High Court, home: "https://highcourt.cg.gov.in/", group: cg-state, state: CG}
+- {name: CHiPS (CG Infotech), home: "https://chips.gov.in/", group: cg-state, state: CG}
+- {name: CG Power Companies, home: "https://www.cspc.co.in/", group: cg-state, state: CG}
+- {name: CG Apex Cooperative Bank, home: "https://www.cgapexbank.com/", url: "https://www.cgapexbank.com/recruitment.php", group: cg-state, state: CG}
+- {name: CG Health / NHM, home: "https://cghealth.nic.in/", group: cg-state, state: CG}
+- {name: CG Directorate of Technical Education, home: "https://dte.cg.gov.in/", group: cg-state, state: CG}
+- {name: CG School Education, home: "https://eduportal.cg.nic.in/", group: cg-state, state: CG}
+- {name: CG Police, home: "https://cgpolice.gov.in/", group: cg-state, state: CG}
+- {name: Pt. Ravishankar Shukla University, home: "https://www.prsu.ac.in/", url: "https://www.prsu.ac.in/", group: cg-state, state: CG}
+- {name: CSVTU Bhilai, home: "https://csvtu.ac.in/", group: cg-state, state: CG}
+- {name: Hemchand Yadav University Durg, home: "https://durguniversity.ac.in/", group: cg-state, state: CG}
+- {name: IIIT Naya Raipur, home: "https://www.iiitnr.ac.in/", group: academic, state: CG}
+- {name: AIIMS Raipur, home: "https://www.aiimsraipur.edu.in/", group: academic, state: CG}
+- {name: IIT Bhilai, home: "https://www.iitbhilai.ac.in/", group: academic, state: CG}
+- {name: NIT Raipur, home: "https://nitrr.ac.in/", group: academic, state: CG}
+- {name: IIM Raipur, home: "https://iimraipur.ac.in/", group: academic, state: CG}
+- {name: Guru Ghasidas University Bilaspur, home: "https://www.ggu.ac.in/", group: academic, state: CG}
+- {name: SECL Bilaspur, home: "https://www.secl-cil.in/", group: psu, state: CG}
+- {name: NMDC, home: "https://www.nmdc.co.in/", group: psu, state: CG}
+- {name: RRB Bilaspur, home: "https://rrbbilaspur.gov.in/", url: "https://rrbbilaspur.gov.in/", group: central, state: CG}
+
+# ---- Central government ----------------------------------------------------------
+- {name: UPSC, home: "https://upsc.gov.in/", url: "https://upsc.gov.in/recruitment/recruitment-advertisement", group: central}
+- {name: UPSC exams, home: "https://upsc.gov.in/", url: "https://upsc.gov.in/examinations/active-exams", group: central}
+- {name: SSC, home: "https://ssc.gov.in/", group: central}
+- {name: IBPS, home: "https://www.ibps.in/", group: central}
+- {name: Employment News, home: "https://employmentnews.gov.in/", group: central}
+- {name: ISRO, home: "https://www.isro.gov.in/", url: "https://www.isro.gov.in/Careers.html", group: central}
+- {name: ISRO VSSC, home: "https://www.vssc.gov.in/", group: central}
+- {name: ISRO URSC, home: "https://www.ursc.gov.in/", group: central}
+- {name: ISRO SAC, home: "https://www.sac.gov.in/", group: central}
+- {name: ISRO NRSC, home: "https://www.nrsc.gov.in/", group: central}
+- {name: ISRO IPRC, home: "https://www.iprc.gov.in/", group: central}
+- {name: ISRO LPSC, home: "https://www.lpsc.gov.in/", group: central}
+- {name: ISRO SDSC SHAR, home: "https://www.shar.gov.in/", group: central}
+- {name: IIRS Dehradun, home: "https://www.iirs.gov.in/", group: central}
+- {name: DRDO, home: "https://www.drdo.gov.in/", group: central}
+- {name: BARC, home: "https://www.barc.gov.in/", url: "https://www.barc.gov.in/careers/", group: central}
+- {name: NPCIL, home: "https://www.npcilcareers.co.in/", group: psu}
+- {name: C-DAC, home: "https://www.cdac.in/", group: central}
+- {name: NIELIT, home: "https://www.nielit.gov.in/", group: central}
+- {name: NIC, home: "https://www.nic.in/", group: central}
+- {name: STPI, home: "https://stpi.in/", group: central}
+- {name: CSIR, home: "https://www.csir.res.in/", group: central}
+- {name: Digital India Corporation, home: "https://dic.gov.in/", group: central}
+- {name: MeitY, home: "https://www.meity.gov.in/", group: central}
+- {name: NeGD, home: "https://negd.gov.in/", group: central}
+- {name: UIDAI, home: "https://uidai.gov.in/", group: central}
+- {name: C-DOT, home: "https://www.cdot.in/", group: central}
+- {name: ERNET India, home: "https://ernet.in/", group: central}
+- {name: CRIS (Railway IT), home: "https://cris.org.in/", group: central}
+- {name: BECIL, home: "https://www.becil.com/", group: central}
+- {name: RBI, home: "https://opportunities.rbi.org.in/", group: central}
+- {name: NABARD, home: "https://www.nabard.org/", group: central}
+- {name: SBI Careers, home: "https://sbi.co.in/web/careers", group: central}
+- {name: LIC, home: "https://licindia.in/", group: central}
+- {name: AAI, home: "https://www.aai.aero/", url: "https://www.aai.aero/en/careers/recruitment", group: central}
+- {name: FCI, home: "https://fci.gov.in/", group: central}
+- {name: ESIC, home: "https://www.esic.gov.in/", group: central}
+- {name: EPFO, home: "https://www.epfindia.gov.in/", group: central}
+- {name: Kendriya Vidyalaya Sangathan, home: "https://kvsangathan.nic.in/", group: central}
+- {name: Navodaya Vidyalaya Samiti, home: "https://navodaya.gov.in/", group: central}
+
+# ---- PSUs ------------------------------------------------------------------------
+- {name: BHEL, home: "https://careers.bhel.in/", group: psu}
+- {name: NTPC, home: "https://careers.ntpc.co.in/", url: "https://careers.ntpc.co.in/recruitment/", group: psu}
+- {name: BEL, home: "https://bel-india.in/", group: psu}
+- {name: HAL, home: "https://hal-india.co.in/", group: psu}
+- {name: IOCL, home: "https://iocl.com/", group: psu}
+- {name: ONGC, home: "https://ongcindia.com/", group: psu}
+- {name: GAIL, home: "https://gailonline.com/", group: psu}
+- {name: Coal India, home: "https://www.coalindia.in/", group: psu}
+- {name: SAIL Careers, home: "https://sailcareers.com/", group: psu}
+- {name: POWERGRID, home: "https://www.powergrid.in/", group: psu}
+- {name: ECIL, home: "https://www.ecil.co.in/", group: psu}
+- {name: RailTel, home: "https://www.railtel.in/", group: psu}
+- {name: NLC India, home: "https://www.nlcindia.in/", group: psu}
+- {name: HPCL, home: "https://www.hindustanpetroleum.com/", group: psu}
+- {name: BPCL, home: "https://www.bharatpetroleum.in/", group: psu}
+- {name: Oil India, home: "https://www.oil-india.com/", group: psu}
+- {name: RITES, home: "https://rites.com/", group: psu}
+- {name: NHPC, home: "https://www.nhpcindia.com/", group: psu}
+- {name: BDL, home: "https://bdl-india.in/", group: psu}
+- {name: IRCTC, home: "https://www.irctc.com/", group: psu}
+
+# ---- Neighbouring states: state-level boards only (no districts) ----------------
+- {name: MP Employees Selection Board (MPESB), home: "https://esb.mp.gov.in/", group: state-board, state: MP}
+- {name: MPPSC, home: "https://mppsc.mp.gov.in/", group: state-board, state: MP}
+- {name: OPSC, home: "https://www.opsc.gov.in/", group: state-board, state: OD}
+- {name: OSSC, home: "https://www.ossc.gov.in/", group: state-board, state: OD}
+- {name: OSSSC, home: "https://www.osssc.gov.in/", group: state-board, state: OD}
+- {name: MPSC, home: "https://mpsc.gov.in/", group: state-board, state: MH}
+- {name: TGPSC, home: "https://www.tgpsc.gov.in/", group: state-board, state: TG}
+- {name: TG Police Recruitment Board, home: "https://www.tgprb.in/", group: state-board, state: TG}
+
+# ---- IITs ------------------------------------------------------------------------
+- {name: IIT Bombay, home: "https://www.iitb.ac.in/", group: academic}
+- {name: IIT Delhi, home: "https://home.iitd.ac.in/", group: academic}
+- {name: IIT Kanpur, home: "https://www.iitk.ac.in/", group: academic}
+- {name: IIT Kharagpur, home: "https://www.iitkgp.ac.in/", group: academic}
+- {name: IIT Madras, home: "https://www.iitm.ac.in/", group: academic}
+- {name: IIT Guwahati, home: "https://www.iitg.ac.in/", group: academic}
+- {name: IIT Roorkee, home: "https://www.iitr.ac.in/", group: academic}
+- {name: IIT Hyderabad, home: "https://www.iith.ac.in/", group: academic}
+- {name: IIT Gandhinagar, home: "https://iitgn.ac.in/", group: academic}
+- {name: IIT Jodhpur, home: "https://www.iitj.ac.in/", url: "https://www.iitj.ac.in/", group: academic}
+- {name: IIT Patna, home: "https://www.iitp.ac.in/", group: academic}
+- {name: IIT Ropar, home: "https://www.iitrpr.ac.in/", group: academic}
+- {name: IIT Bhubaneswar, home: "https://www.iitbbs.ac.in/", group: academic}
+- {name: IIT Indore, home: "https://www.iiti.ac.in/", group: academic}
+- {name: IIT Mandi, home: "https://www.iitmandi.ac.in/", group: academic}
+- {name: IIT BHU Varanasi, home: "https://www.iitbhu.ac.in/", group: academic}
+- {name: IIT Palakkad, home: "https://iitpkd.ac.in/", group: academic}
+- {name: IIT Tirupati, home: "https://www.iittp.ac.in/", group: academic}
+- {name: IIT ISM Dhanbad, home: "https://www.iitism.ac.in/", group: academic}
+- {name: IIT Goa, home: "https://iitgoa.ac.in/", group: academic}
+- {name: IIT Jammu, home: "https://www.iitjammu.ac.in/", group: academic}
+- {name: IIT Dharwad, home: "https://www.iitdh.ac.in/", group: academic}
+
+# ---- NITs ------------------------------------------------------------------------
+- {name: NIT Warangal, home: "https://www.nitw.ac.in/", group: academic}
+- {name: NIT Trichy, home: "https://www.nitt.edu/", group: academic}
+- {name: NIT Surathkal, home: "https://www.nitk.ac.in/", group: academic}
+- {name: NIT Calicut, home: "https://nitc.ac.in/", url: "https://nitc.ac.in/", group: academic}
+- {name: VNIT Nagpur, home: "https://vnit.ac.in/", url: "https://vnit.ac.in/", group: academic}
+- {name: MANIT Bhopal, home: "https://www.manit.ac.in/", group: academic}
+- {name: MNIT Jaipur, home: "https://www.mnit.ac.in/", group: academic}
+- {name: MNNIT Allahabad, home: "https://www.mnnit.ac.in/", url: "https://www.mnnit.ac.in/", group: academic}
+- {name: NIT Rourkela, home: "https://www.nitrkl.ac.in/", group: academic}
+- {name: NIT Durgapur, home: "https://nitdgp.ac.in/", group: academic}
+- {name: NIT Jamshedpur, home: "https://www.nitjsr.ac.in/", group: academic}
+- {name: NIT Patna, home: "https://www.nitp.ac.in/", group: academic}
+- {name: NIT Silchar, home: "https://www.nits.ac.in/", group: academic}
+- {name: NIT Hamirpur, home: "https://nith.ac.in/", group: academic}
+- {name: NIT Jalandhar, home: "https://www.nitj.ac.in/", group: academic}
+- {name: NIT Kurukshetra, home: "https://nitkkr.ac.in/", group: academic}
+- {name: NIT Srinagar, home: "https://nitsri.ac.in/", group: academic}
+- {name: NIT Goa, home: "https://www.nitgoa.ac.in/", group: academic}
+- {name: NIT Arunachal Pradesh, home: "https://www.nitap.ac.in/", group: academic}
+- {name: NIT Delhi, home: "https://nitdelhi.ac.in/", group: academic}
+- {name: NIT Manipur, home: "https://www.nitmanipur.ac.in/", group: academic}
+- {name: NIT Meghalaya, home: "https://www.nitm.ac.in/", group: academic}
+- {name: NIT Mizoram, home: "https://www.nitmz.ac.in/", group: academic}
+- {name: NIT Nagaland, home: "https://www.nitnagaland.ac.in/", group: academic}
+- {name: NIT Puducherry, home: "https://www.nitpy.ac.in/", group: academic}
+- {name: NIT Sikkim, home: "https://www.nitsikkim.ac.in/", group: academic}
+- {name: NIT Agartala, home: "https://www.nita.ac.in/", group: academic}
+- {name: NIT Uttarakhand, home: "https://nituk.ac.in/", group: academic}
+- {name: SVNIT Surat, home: "https://www.svnit.ac.in/", group: academic}
+- {name: NIT Andhra Pradesh, home: "https://www.nitandhra.ac.in/", group: academic}
+
+# ---- IIITs, IISERs, IISc and central universities ------------------------------------
+- {name: IIIT Hyderabad, home: "https://www.iiit.ac.in/", group: academic}
+- {name: IIIT Bangalore, home: "https://www.iiitb.ac.in/", group: academic}
+- {name: IIIT Delhi, home: "https://www.iiitd.ac.in/", group: academic}
+- {name: IIIT Allahabad, home: "https://www.iiita.ac.in/", group: academic}
+- {name: ABV-IIITM Gwalior, home: "https://www.iiitm.ac.in/", group: academic}
+- {name: IIITDM Jabalpur, home: "https://www.iiitdmj.ac.in/", group: academic}
+- {name: IIITDM Kancheepuram, home: "https://www.iiitdm.ac.in/", group: academic}
+- {name: IIIT Nagpur, home: "https://iiitn.ac.in/", group: academic}
+- {name: IIIT Pune, home: "https://www.iiitp.ac.in/", group: academic}
+- {name: IIIT Ranchi, home: "https://iiitranchi.ac.in/", group: academic}
+- {name: IIIT Bhubaneswar, home: "https://www.iiit-bh.ac.in/", group: academic}
+- {name: IIIT Lucknow, home: "https://iiitl.ac.in/", group: academic}
+- {name: IIIT Vadodara, home: "https://iiitvadodara.ac.in/", group: academic}
+- {name: IIIT Kota, home: "https://www.iiitkota.ac.in/", group: academic}
+- {name: IIIT Bhopal, home: "https://iiitbhopal.ac.in/", group: academic}
+- {name: IIIT Guwahati, home: "https://www.iiitg.ac.in/", group: academic}
+- {name: IIIT Sri City, home: "https://www.iiits.ac.in/", url: "https://iiits.ac.in/", group: academic}
+- {name: IIIT Dharwad, home: "https://www.iiitdwd.ac.in/", group: academic}
+- {name: IISc Bangalore, home: "https://iisc.ac.in/", group: academic}
+- {name: IISER Pune, home: "https://www.iiserpune.ac.in/", group: academic}
+- {name: IISER Kolkata, home: "https://www.iiserkol.ac.in/", group: academic}
+- {name: IISER Bhopal, home: "https://www.iiserb.ac.in/", group: academic}
+- {name: IISER Mohali, home: "https://www.iisermohali.ac.in/", group: academic}
+- {name: IISER Berhampur, home: "https://www.iiserbpr.ac.in/", group: academic}
+- {name: NISER Bhubaneswar, home: "https://www.niser.ac.in/", group: academic}
+- {name: IGNTU Amarkantak, home: "https://www.igntu.ac.in/", group: academic}
+- {name: Dr. Harisingh Gour University Sagar, home: "https://www.dhsgsu.edu.in/", group: academic}
+- {name: Central University of Odisha, home: "https://cuo.ac.in/", group: academic}
+- {name: University of Hyderabad, home: "https://uohyd.ac.in/", group: academic}
+- {name: Banaras Hindu University, home: "https://www.bhu.ac.in/", group: academic}
+- {name: JNU, home: "https://www.jnu.ac.in/", group: academic}
+- {name: University of Delhi, home: "https://www.du.ac.in/", group: academic}
+- {name: IGNOU, home: "http://www.ignou.ac.in/", group: academic}

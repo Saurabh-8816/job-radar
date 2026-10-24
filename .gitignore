@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.pytest-tmp/
+.tessdata/
+
+# Local experiments; only data/jobs.db is the real state
+data/*.db
+!data/jobs.db
+data/*.log

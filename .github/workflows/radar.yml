@@ -1,0 +1,61 @@
+name: radar
+
+on:
+  schedule:
+    - cron: "15 */4 * * *"        # every 4 hours (UTC), 15 past to dodge the top-of-hour queue
+  workflow_dispatch:
+    inputs:
+      only:
+        description: "Limit sources, e.g. cg, district, academic (blank = all)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: jobradar-db              # radar and digest both commit the database; never overlap
+  cancel-in-progress: false
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install OCR (Tesseract, Hindi + English)
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq tesseract-ocr tesseract-ocr-hin
+
+      - run: pip install -r requirements.txt
+
+      - name: Run radar
+        run: python -m radar.main run ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
+
+      - name: Save state
+        run: |
+          git config user.name "job-radar-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/jobs.db site/index.html
+          if ! git diff --cached --quiet; then
+            git commit -q -m "radar: $(date -u +'%Y-%m-%d %H:%M') UTC [skip ci]"
+            git pull -q --rebase && git push -q
+          fi
+
+      - name: Publish dashboard (Cloudflare Pages)
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy site --project-name=job-radar --branch=main

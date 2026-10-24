@@ -1,0 +1,220 @@
+# Job Radar match profile — edit freely, no code changes needed.
+#
+# Term syntax
+#   plain English  -> whole-word, case-insensitive          e.g.  programmer
+#   cs:TERM        -> whole-word, CASE-SENSITIVE            e.g.  cs:IT   (so "it" doesn't match)
+#   re:PATTERN     -> regular expression, case-insensitive  e.g.  re:\bM\.?\s?C\.?\s?A\b
+#   Hindi text     -> plain substring match                 e.g.  प्रोग्रामर
+#
+# "head" = title + description from the listing. "body" = text of the advert PDF.
+# Guiding rule: missing a job is worse than noise. Anything uncertain lands in tier B
+# (daily digest). Nothing is ever deleted — tier C is still on the dashboard.
+
+# Used on announcement pages and generic career pages to keep only job-related rows/links.
+job_words:
+  - recruit
+  - re:\brecruitment\b
+  - re:\bvacanc(y|ies)\b
+  - advertisement
+  - re:\badvt\.?\b
+  - re:\bwalk[\s-]?in\b
+  - re:\b(career|careers|jobs?|openings?|positions?)\b
+  - re:\b(engagement|empanelment|deputation|contractual|outsourc\w*)\b
+  - re:\bposts?\s+of\b
+  - re:\bproject\s+(staff|associate|assistant|engineer|fellow|position|scientist|manager|officer|consultant|personnel)\b
+  - re:\b(jrf|srf|ra-?i{1,3})\b
+  - re:\bresearch\s+(associate|assistant|fellow|scientist)\b
+  - re:\b(faculty|guest\s+lecturer|guest\s+faculty|teaching\s+assistant)\b
+  - re:\binterview\b
+  - re:\bapplications?\s+(are\s+)?invited\b
+  - re:\bselection\b
+  - re:\bmerit\s+list\b
+  - भर्ती
+  - विज्ञापन
+  - रिक्त
+  - संविदा
+  - नियुक्ति
+  - पदों
+  - पद हेतु
+  - आवेदन
+  - साक्षात्कार
+  - चयन सूची
+  - मेरिट सूची
+
+# Notices about an existing drive (lists, results, schedules). They go to the digest
+# as "update", never as an instant alert. Checked against head only.
+update_words:
+  - re:\bmerit\s*(-|cum)?\s*(list|selection)\b
+  - re:\b(selection|waiting|provisional|final|select)\s*(-|cum)?\s*(list|lists)\b
+  - re:\b(eligible|ineligible|in-eligible|shortlisted|short-listed|rejected)\b
+  - re:\blist\s+of\s+(candidates|eligible|selected|shortlisted)\b
+  - re:\bclaims?\s+(and|&)\s+objections?\b
+  - re:\b(result|results|answer\s+key|cut[\s-]?off|admit\s+card|call\s+letter|hall\s+ticket)\b
+  - re:\bskill\s+test\b
+  - re:\b(interview|exam|examination|test)\s+(schedule|date|list)\b
+  - re:\bdocument\s+verification\b
+  - re:\b(corrigendum|addendum|erratum)\b
+  - re:\b(dawa|dava)\b
+  - re:\b(cancel\w*|suspension\s+of|suspended|postpone\w*|appointment\s+orders?)\b
+  - re:\b(date\s+extension|extension\s+of\s+(the\s+)?(last\s+)?date|dates?\s+(is\s+|has\s+been\s+)?extended)\b
+  - re:\bverification\s+of\s+(the\s+)?(original\s+)?(documents?|certificates?)\b
+  - निरस्त
+  - स्थगित
+  - नियुक्ति आदेश
+  - तिथि वृद्धि
+  - दावा
+  - आपत्ति
+  - चयन सूची
+  - प्रतीक्षा सूची
+  - मेरिट सूची
+  - पात्र/अपात्र
+  - अपात्र
+  - अनंतिम सूची
+  - अंतिम सूची
+  - परीक्षा परिणाम
+  - परिणाम
+  - शुद्धि पत्र
+  - संशोधन
+  - कौशल परीक्षा
+
+# Tier A = instant Telegram alert.
+tier_a:
+  # Strong terms: match in head OR advert PDF.
+  strong:
+    - programmer
+    - re:\bassistant\s+programmer\b
+    - re:\bdata\s*entry\b
+    - re:\bcomputer\s+(operator|programmer|assistant|instructor|teacher|science|applications?|engineer|faculty)\b
+    - re:\b(m|b)\.?\s?c\.?\s?a\.?\b
+    - re:\b(m|b)\.?\s?sc\.?\s*\(?\s*(it|cs|computer|information)
+    - re:\b(b|m)\.?\s?tech\.?\s*\(?\s*(cs|cse|it|computer|information)
+    - re:\b(b|m)\.?\s?e\.?\s*\(?\s*(cs|cse|it|computer)
+    - re:\b(pgdca|dca|o\s*level|a\s*level)\b
+    - re:\binformation\s+technology\b
+    - re:\bsoftware\b
+    - re:\bsystem(s)?\s+(analyst|administrator|engineer|manager|officer)\b
+    - re:\b(network|database|db)\s+(administrator|engineer|manager)\b
+    - re:\b(it|i\.t\.)\s+(officer|assistant|manager|executive|consultant|coordinator|expert|professional|specialist|support)\b
+    - re:\b(web|app|application|full[\s-]?stack|frontend|backend|python|java)\s+developer\b
+    - re:\b(developer|data\s+analyst|data\s+scientist|mis\s+(assistant|coordinator|executive|expert))\b
+    - re:\bscientist[\s-]*['"]?(b|c|sc|sd)['"]?\b
+    - re:\bscientist\s*/\s*engineer\b
+    - re:\b(sub[\s-]?engineer|junior\s+engineer|je|assistant\s+engineer)\s*[-(]?\s*civil
+    - re:\bdiploma\s+(in\s+)?civil\b
+    - re:\bcivil\s+engineer(ing)?\b
+    # Statewide 2026 drive hiring Assistant Programmers in every Janpad. Districts spell it
+    # many ways: VB-G-RAM-G, VB-GRAMG, VB-G Ram-G, Vikasit Bharat-Ji Ram-Ji, Viksit Bharat Guarantee Mission…
+    - re:\b(vb[\s-]*)?g[\s-]*ram[\s-]*g\b
+    - re:\bji[\s-]*ram[\s-]*ji\b
+    - re:\bvi[kc]?a?s[ih]?t\s+bharat\b[^.]{0,60}(guarantee|rozgar|employment|livelihood|ram)
+    - re:\bemployment\s+and\s+livelihood\b
+    - जी राम जी
+    - प्रोग्रामर
+    - डाटा एंट्री
+    - डेटा एंट्री
+    - एम.सी.ए
+    - एमसीए
+    - बी.सी.ए
+    - बीसीए
+    - पीजीडीसीए
+    - सूचना प्रौद्योगिकी
+    - कम्प्यूटर ऑपरेटर
+    - कंप्यूटर ऑपरेटर
+    - कम्प्यूटर साइंस
+    - कंप्यूटर साइंस
+    - उप अभियंता
+    - उपअभियंता
+    - सब इंजीनियर
+    - रोजगार एवं आजीविका
+  # Weak terms: too common inside PDFs ("computer knowledge required"), so they
+  # only promote to tier A when they appear in the title/description.
+  weak:
+    - computer
+    - cs:IT
+    - cs:CSE
+    - re:\bcivil\b
+    - re:\btechnical\s+assistant\b
+    - कम्प्यूटर
+    - कंप्यूटर
+    - सिविल
+  # Combos: tier A only when a role word AND a computing word both appear (head or PDF).
+  # A role word without the computing word goes to tier B.
+  combos:
+    research:
+      role:
+        - re:\b(jrf|srf)\b
+        - re:\bjunior\s+research\s+fellow\b
+        - re:\bproject\s+(staff|associate|assistant|engineer|fellow|scientist|manager|officer|consultant|technician)\b
+        - re:\bresearch\s+(associate|assistant|scientist|engineer|fellow)\b
+        - re:(?-i:\b(RA|PA|JPA|SPA|PE)\s*-\s*(I{1,3}|1|2|3)\b)   # "RA-II", "PA-1"; strict so OCR noise like "Ra 2" doesn't count
+      with: &computing
+        - re:\bcomput\w*
+        - cs:CS
+        - cs:CSE
+        - cs:IT
+        - cs:ECE
+        - cs:AI
+        - cs:ML
+        - cs:IoT
+        - cs:NLP
+        - cs:GIS
+        - software
+        - re:\b(data|database|machine\s+learning|deep\s+learning|artificial\s+intelligence|cyber|network\w*|programming|coding|python|java|web|cloud|blockchain|vlsi|embedded)\b
+        - re:\binformation\s+technology\b
+        - कम्प्यूटर
+        - कंप्यूटर
+    teaching:
+      role:
+        - re:\b(assistant|associate)\s+professor\b
+        - re:\b(lecturer|guest\s+faculty|guest\s+lecturer|faculty|teaching\s+assistant|instructor|tutor)\b
+        - व्याख्याता
+        - अतिथि शिक्षक
+        - अतिथि व्याख्याता
+        - सहायक प्राध्यापक
+      with: *computing
+
+# Tier B = daily digest. Any-graduate posts and anything uncertain.
+tier_b:
+  - re:\b(sub[\s-]?engineer|junior\s+engineer)\b   # non-civil branches: worth a look, not an alert
+  - re:\bany\s+(graduate|degree)\b
+  - re:\bgraduat(e|ion)\b
+  - re:\bbachelor'?s?\s+degree\b
+  - re:\bpost[\s-]?graduat\w*
+  - स्नातक
+  - स्नातकोत्तर
+
+# Tier C = stored and shown on the dashboard, no alert. Only applied when the
+# head matches one of these AND nothing from tier A/B matched anywhere.
+tier_c:
+  - re:\b(staff\s+)?nurse\b
+  - re:\b(anm|gnm|mpw|chc|phc)\b
+  - re:\b(pharmacist|mbbs|medical\s+officer|doctor|dental|physiotherap\w*|radiographer|lab(oratory)?\s+technician|optometr\w*|ophthalmic|psychologist|counsell?or|dietician)\b
+  - re:\b(driver|peon|chowkidar|watchman|security\s+guard|guard|cook|sweeper|cleaner|attendant|mali|gardener|dai)\b
+  - re:\b(anganwadi|aanganwadi|midwife|ayush|veterinary|physical\s+education|b\.?p\.?ed)\b
+  - re:\b(iti|electrician|plumber|fitter|welder|turner|carpenter|mason|kotwar)\b
+  - नर्स
+  - फार्मासिस्ट
+  - चिकित्सा अधिकारी
+  - वाहन चालक
+  - भृत्य
+  - चौकीदार
+  - आंगनबाड़ी
+  - रसोइया
+  - स्वीपर
+
+# Application deadline detection in advert text.
+# deadline_before: phrase within ~80 characters BEFORE a date ("last date ... 06/11/2026").
+# deadline_after:  word within ~25 characters AFTER a date ("06/11/2026 तक" = "until").
+deadline_before:
+  - re:last\s+date
+  - re:closing\s+date
+  - re:on\s+or\s+before
+  - re:due\s+date
+  - re:not\s+later\s+than
+  - अंतिम तिथि
+  - अंतिम दिनांक
+  - अंतिम तारीख
+deadline_after:
+  - तक
+  - re:\btill\b
+  - re:\bupto\b

@@ -15,7 +15,7 @@ NEW_ROW = """
 
 def _run(monkeypatch, tmp_path, html, capsys):
     src = district_source("Kondagaon")
-    monkeypatch.setattr(pipeline, "load_sources", lambda only=None: [src])
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])
     monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {u: Response(u, True, 200, text=html) for u in urls})
     monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
     opts = pipeline.RunOptions(dry_run=True, read_docs=False, build_site=False, db_path=tmp_path / "t.db")
@@ -74,7 +74,7 @@ def _run_watch(monkeypatch, tmp_path, pages):
     from radar.models import Source
     srcs = [Source(id=f"inst-{n}", name=f"Institute {n}", kind="watch", url=f"https://inst{n}.ac.in/jobs",
                    group="academic", filter_jobs=True) for n in range(len(pages))]
-    monkeypatch.setattr(pipeline, "load_sources", lambda only=None: srcs)
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: srcs)
     monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {
         u: Response(u, True, 200, text=pages[i]) for i, u in enumerate(urls)})
     monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
@@ -108,7 +108,7 @@ def test_same_notice_on_two_institute_pages_alerts_once(monkeypatch, tmp_path):
 
 def test_failures_are_counted_for_health(monkeypatch, tmp_path):
     src = district_source("Kondagaon")
-    monkeypatch.setattr(pipeline, "load_sources", lambda only=None: [src])
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])
     monkeypatch.setattr(pipeline, "fetch_many",
                         lambda urls, **kw: {u: Response(u, False, error="ConnectionError") for u in urls})
     opts = pipeline.RunOptions(dry_run=True, read_docs=False, build_site=False, db_path=tmp_path / "f.db")

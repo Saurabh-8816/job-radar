@@ -19,6 +19,7 @@ class Source:
     filter_jobs: bool = False    # keep only rows/links that look job-related
     selector: str | None = None  # watch pages: CSS scope to ignore menus
     enabled: bool = True
+    runner: str = "cloud"        # "local": blocks GitHub's servers, fetched by the laptop relay
 
 
 @dataclass

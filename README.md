@@ -114,11 +114,27 @@ Without OCR, scanned adverts are marked "check manually" and go to the digest, s
 The digest ends with a coverage line, and flags any source that failed 3 runs in a row or
 whose page layout changed. Fix the URL in `sources/` and the next run picks it up.
 
-## Blocked sites
-If the spike shows a site blocking the cloud, register your laptop as a
-[self-hosted runner](https://docs.github.com/actions/hosting-your-own-runners) and add a
-second job to `radar.yml` with `runs-on: self-hosted` and `--only <source-id>`. That job
-runs whenever the laptop is on.
+## Sites that block GitHub: the laptop relay
+About 40 sites (CG Vyapam, CGPSC, UPSC, MPPSC, MPESB, NTPC and others) refuse GitHub's
+non-Indian servers. They're marked `runner: local` in `sources/watch_pages.yaml`, and your
+laptop fetches them instead:
+
+```
+Laptop (every 2h while on)                      GitHub (every 4h, 24/7)
+  fetch the blocked sites, read new adverts  ──►  ingest data/inbox/*.json like any other page
+  push a small file to data/inbox/                 classify · alert · digest · dashboard
+```
+
+The laptop never touches `jobs.db` or needs the Telegram token, and it only adds new
+files, so git never conflicts. If the laptop is off, nothing breaks; the 8 PM digest says
+when it last checked in.
+
+Install once (PowerShell, in this folder):
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\install_relay_task.ps1
+```
+Run it by hand any time with `python -m radar.main relay --push`. The log is in `data/relay.log`.
+To move another site to the laptop, add `runner: local` to its entry.
 
 ## Layout
 ```

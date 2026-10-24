@@ -1,29 +1,30 @@
-"""One radar run: fetch → parse → store → read adverts → classify → alert → dashboard."""
+"""One radar run: fetch → parse → store → read adverts → classify → alert → dashboard.
+
+Pages from sites that block GitHub arrive as inbox files from the laptop relay and
+go through the same `_ingest` path as pages fetched here.
+"""
 
 import json
-import re
 import time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import timedelta
 from pathlib import Path
 
 from rapidfuzz import fuzz, process
 
-from . import DEFAULT_DB, commands, dashboard
+from . import DEFAULT_DB, commands, dashboard, relay
 from .classify import Classifier
-from .fetch import fetch_many, get
+from .docs import read_item_docs
+from .fetch import fetch_many
 from .notify import Telegram, format_alert, format_line
 from .parsers import parse
-from .pdftext import extract, ocr_languages
+from .pdftext import ocr_languages
 from .sources import load_sources
 from .store import Store
 from .textutil import today_ist
 
-_FORM_LABEL = re.compile(r"आवेदन\s*(प्रारूप|पत्र|फार्म|फॉर्म)|प्रारूप|application\s*form|format|proforma", re.I)
-_ADVERT_LABEL = re.compile(r"विज्ञापन|भर्ती|advertis|advt|notification|recruit|vacanc|view", re.I)
-_READABLE = (".pdf", ".jpg", ".jpeg", ".png")
 MAX_INDIVIDUAL_ALERTS = 10
 CHURN_LIMIT = 25
 
@@ -39,17 +40,28 @@ class RunOptions:
     workers: int = 16
     build_site: bool = True
     db_path: Path = DEFAULT_DB
+    runner: str = "all"            # "cloud" on GitHub: skip sources only the laptop can reach
+    ingest_inbox: bool = True
+
+
+@dataclass
+class _Run:
+    store: Store
+    clf: Classifier
+    opts: RunOptions
+    stats: Counter = field(default_factory=Counter)
+    new_ids: list = field(default_factory=list)
+    baselined_now: list = field(default_factory=list)
 
 
 def run(opts: RunOptions) -> Counter:
-    clf = Classifier.load()
-    store = Store(opts.db_path)
+    ctx = _Run(Store(opts.db_path), Classifier.load(), opts)
+    store, clf, stats = ctx.store, ctx.clf, ctx.stats
     tg = Telegram(opts.dry_run)
     today = today_ist()
-    stats = Counter()
 
     commands.process(tg, store)
-    sources = load_sources(opts.only)
+    sources = load_sources(opts.only, runner=None if opts.runner == "all" else opts.runner)
     for s in sources:
         store.sync_source(s)
     store.commit()
@@ -58,8 +70,6 @@ def run(opts: RunOptions) -> Counter:
     started = time.monotonic()
     responses = fetch_many([s.url for s in sources], workers=opts.workers, timeout=25)
     print(f"  fetched in {time.monotonic() - started:.0f}s")
-
-    new_ids, baselined_now = [], []
     for s in sources:
         r = responses[s.url]
         if not r.ok:
@@ -67,52 +77,83 @@ def run(opts: RunOptions) -> Counter:
             stats["sources_failed"] += 1
             continue
         result = parse(s, r.text, s.url)
-        if result.status == "unrecognized":
-            store.source_failed(s.id, "page layout not recognised", status="unrecognized")
-            stats["sources_unrecognized"] += 1
-            continue
-        items = result.items
-        if s.filter_jobs:
-            items = [i for i in items if clf.is_job_related(f"{i.title} {i.description} {i.url}")]
-        baseline = not opts.all_new and not store.is_baselined(s.id)
-        churn = None
-        if not baseline and s.kind == "watch":
-            unseen = len(store.unknown_keys(i.key for i in items))
-            if unseen > CHURN_LIMIT:
-                # A real careers page never posts dozens of notices between two runs; this is
-                # the site changing its link format. Absorb silently and flag it for review.
-                baseline, churn = True, f"{unseen} links changed at once; absorbed without alerts"
-        for item in items:
-            doc_status = "skipped" if (baseline and s.kind == "watch") else "pending"
-            row_id = store.insert_item(item, baseline, doc_status)
-            if row_id:
-                new_ids.append(row_id)
-                stats["items_baseline" if baseline else "items_new"] += 1
-        store.source_ok(s.id, result.status, len(items), baselined=True)
-        if churn:
-            store.flag_source(s.id, churn)
-            stats["sources_churned"] += 1
-        stats["sources_ok"] += 1
-        if baseline and not churn:
-            baselined_now.append(s)
+        _ingest(ctx, s, result.status, result.items)
+
+    if opts.ingest_inbox:
+        _ingest_inbox(ctx)
     store.commit()
 
-    for row_id in new_ids:  # first pass on the listing text alone
-        _classify(store, clf, store.get(row_id), today)
+    for row_id in ctx.new_ids:  # first pass: listing text, plus advert text the relay sent
+        row = store.get(row_id)
+        body = row["doc_text"] or ""
+        _classify(store, clf, row, today, body, row["doc_status"] if body else None)
     store.commit()
 
     if opts.read_docs:
         stats.update(read_documents(store, clf, opts, today))
-    stats["duplicates"] = _dedupe(store, new_ids)
+    stats["duplicates"] = _dedupe(store, ctx.new_ids)
     store.commit()
 
     stats["alerts"] = send_alerts(store, tg, today)
-    if baselined_now:
-        _baseline_note(tg, baselined_now, stats)
+    if ctx.baselined_now:
+        _baseline_note(tg, ctx.baselined_now, stats)
     if opts.build_site:
         dashboard.build(store)
     store.close()
     return stats
+
+
+def _ingest(ctx: _Run, s, status: str, items, doc_texts: dict | None = None):
+    store, stats = ctx.store, ctx.stats
+    if status == "unrecognized":
+        store.source_failed(s.id, "page layout not recognised", status="unrecognized")
+        stats["sources_unrecognized"] += 1
+        return
+    if s.filter_jobs:
+        items = [i for i in items if ctx.clf.is_job_related(f"{i.title} {i.description} {i.url}")]
+    baseline = not ctx.opts.all_new and not store.is_baselined(s.id)
+    churn = None
+    if not baseline and s.kind == "watch":
+        unseen = len(store.unknown_keys(i.key for i in items))
+        if unseen > CHURN_LIMIT:
+            # A real careers page never posts dozens of notices between two runs; this is
+            # the site changing its link format. Absorb silently and flag it for review.
+            baseline, churn = True, f"{unseen} links changed at once; absorbed without alerts"
+    for item in items:
+        text, doc_status = (doc_texts or {}).get(item.key, ("", None))
+        if doc_status is None:
+            doc_status = "skipped" if (baseline and s.kind == "watch") else "pending"
+        row_id = store.insert_item(item, baseline, doc_status, doc_text=text)
+        if row_id:
+            ctx.new_ids.append(row_id)
+            stats["items_baseline" if baseline else "items_new"] += 1
+    store.source_ok(s.id, status, len(items), baselined=True)
+    if churn:
+        store.flag_source(s.id, churn)
+        stats["sources_churned"] += 1
+    stats["sources_ok"] += 1
+    if baseline and not churn:
+        ctx.baselined_now.append(s)
+
+
+def _ingest_inbox(ctx: _Run):
+    done = []
+    for path, generated, entries in relay.load_inbox():
+        for source, status, error, items, doc_texts in entries:
+            ctx.store.sync_source(source)
+            if status == "failed":
+                ctx.store.source_failed(source.id, f"from laptop: {error or 'fetch failed'}")
+                ctx.stats["sources_failed"] += 1
+            else:
+                _ingest(ctx, source, status, items, doc_texts)
+        if generated and generated > (ctx.store.get_meta("relay_last") or ""):
+            ctx.store.set_meta("relay_last", generated)
+        ctx.stats["inbox_files"] += 1
+        done.append(path)
+    ctx.store.commit()
+    if not ctx.opts.dry_run:
+        for path in done:
+            path.unlink()
 
 
 def _classify(store, clf, row, today, body="", body_status=None, save_doc=False):
@@ -125,47 +166,15 @@ def _classify(store, clf, row, today, body="", body_status=None, save_doc=False)
     return verdict
 
 
-def _rank_docs(docs: list, clf: Classifier) -> list:
-    """Adverts first (labels naming a matching post, then advert words); forms last."""
-    def score(doc):
-        label, url = doc
-        s = 0
-        if clf.strong.first(label) or clf.weak.first(label):
-            s += 3
-        if _ADVERT_LABEL.search(label):
-            s += 1
-        if _FORM_LABEL.search(label):
-            s -= 5
-        return -s
-    readable = [d for d in docs if d[1].lower().split("?")[0].endswith(_READABLE)]
-    return sorted(readable, key=score)[:3]
-
-
 def read_documents(store, clf, opts: RunOptions, today) -> Counter:
     rows = store.pending_docs(opts.doc_item_limit, today.isoformat())
     if not rows:
         return Counter()
     print(f"Reading adverts for {len(rows)} items (OCR: {ocr_languages() or 'unavailable'})…")
-    clf_docs = clf
 
     def work(row):
-        texts, statuses = [], []
-        for _label, url in _rank_docs(json.loads(row["docs"] or "[]"), clf_docs):
-            resp = get(url, binary=True, max_bytes=10_000_000, timeout=45, retries=1, total_timeout=90)
-            if not resp.ok:
-                statuses.append("error")
-                continue
-            doc = extract(resp.content, url, ocr=opts.ocr)
-            statuses.append(doc.status)
-            if doc.status in ("text", "ocr"):
-                texts.append(doc.text)
-        if texts:
-            status = "ocr" if "ocr" in statuses else "text"
-        elif "unreadable" in statuses:
-            status = "unreadable"
-        else:
-            status = "error" if statuses else "none"
-        return row, "\n".join(texts), status
+        text, status = read_item_docs(json.loads(row["docs"] or "[]"), clf, opts.ocr)
+        return row, text, status
 
     counts = Counter()
     with ThreadPoolExecutor(max_workers=3) as pool:

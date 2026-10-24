@@ -112,17 +112,18 @@ class Store:
         return dict(row)
 
     # ---- items ------------------------------------------------------------
-    def insert_item(self, item: Item, baseline: bool, doc_status: str = "pending") -> int | None:
+    def insert_item(self, item: Item, baseline: bool, doc_status: str = "pending",
+                    doc_text: str = "") -> int | None:
         """Insert if unseen; returns the new row id, or None when already known."""
         now = now_ist_iso()
         cur = self.db.execute(
             """INSERT OR IGNORE INTO items(key, source_id, title, description, url, notice_url, docs,
-                 start_date, end_date, deadline, first_seen, last_seen, baseline, doc_status)
-               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                 start_date, end_date, deadline, first_seen, last_seen, baseline, doc_status, doc_text)
+               VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
             (item.key, item.source_id, item.title, item.description, item.url, item.notice_url,
              json.dumps(item.docs, ensure_ascii=False), item.start_date, item.end_date,
              item.end_date, now, now, int(baseline),
-             doc_status if item.docs else "none"))
+             doc_status if item.docs else "none", (doc_text or "")[:DOC_TEXT_LIMIT]))
         if cur.rowcount:
             return cur.lastrowid
         self.db.execute("UPDATE items SET last_seen=? WHERE key=?", (now, item.key))

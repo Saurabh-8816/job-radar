@@ -1,10 +1,11 @@
 """The 8 PM digest: closing soon, starred reminders, tier-B finds, updates, source health."""
 
 from collections import defaultdict
-from datetime import timedelta
+from datetime import date, timedelta
 
 from . import commands
 from .notify import Telegram, format_line
+from .sources import load_sources
 from .store import Store
 from .textutil import days_left, today_ist
 
@@ -19,6 +20,21 @@ def _section(title, rows, store, today, cap=SECTION_CAP):
     if len(rows) > cap:
         out.append(f"…and {len(rows) - cap} more on the dashboard.")
     return out
+
+
+def _relay_status(store: Store, today) -> list[str]:
+    """Warn when the laptop hasn't relayed the GitHub-blocked sites for a day."""
+    local = load_sources(runner="local")
+    if not local:
+        return []
+    last = store.get_meta("relay_last")
+    names = ", ".join(s.name for s in local[:4])
+    if last and (today - date.fromisoformat(last[:10])).days < 1:
+        return [f"Laptop relay: last check-in {last[11:16]} today ({len(local)} sites)."]
+    when = f"since {last[:10]}" if last else "yet"
+    return [f"• ⚠ Your laptop hasn't checked in {when}: {len(local)} sites that block GitHub "
+            f"({names}…) aren't being watched. Turn the laptop on, or run "
+            "<code>python -m radar.main relay --push</code>."]
 
 
 def build(store: Store, today=None) -> tuple[str, list[int]]:
@@ -67,6 +83,7 @@ def build(store: Store, today=None) -> tuple[str, list[int]]:
     unhealthy = store.unhealthy_sources()
     counts = store.source_counts()
     lines.append(f"\n<b>Coverage</b>: {counts['healthy'] or 0}/{counts['total'] or 0} sources healthy.")
+    lines += _relay_status(store, today)
     for s in unhealthy[:10]:
         if s["note"]:
             lines.append(f"• ⚠ {s['name']}: {s['note']}")

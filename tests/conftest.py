@@ -28,3 +28,11 @@ def district_source(name="Kondagaon", category="recruitment") -> Source:
 @pytest.fixture(scope="session")
 def clf() -> Classifier:
     return Classifier.load()
+
+
+@pytest.fixture(autouse=True)
+def isolated_inbox(monkeypatch, tmp_path):
+    """No test may read or delete the real data/inbox or relay cache."""
+    from radar import relay
+    monkeypatch.setattr(relay, "INBOX", tmp_path / "inbox")
+    monkeypatch.setattr(relay, "CACHE", tmp_path / "relay_cache.json")

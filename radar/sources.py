@@ -42,12 +42,15 @@ def _watch() -> list[Source]:
             state=w.get("state", "IN"), district=w.get("district"), group=w.get("group", "central"),
             category="careers", filter_jobs=w.get("filter_jobs", True),
             selector=w.get("selector"), enabled=w.get("enabled", True),
+            runner=w.get("runner", "cloud"),
         ))
     return out
 
 
-def load_sources(only: str | None = None, include_disabled: bool = False) -> list[Source]:
-    sources = [s for s in _districts() + _watch() if s.enabled or include_disabled]
+def load_sources(only: str | None = None, include_disabled: bool = False,
+                 runner: str | None = None) -> list[Source]:
+    sources = [s for s in _districts() + _watch()
+               if (s.enabled or include_disabled) and (runner is None or s.runner == runner)]
     if only:
         wanted = [o.strip().lower() for o in only.split(",") if o.strip()]
         sources = [s for s in sources

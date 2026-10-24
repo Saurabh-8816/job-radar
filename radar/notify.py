@@ -20,10 +20,22 @@ LIMIT = 3900  # Telegram's hard limit is 4096 characters
 
 
 class Telegram:
+    """Sends for real when configured. In --dry-run, prints and reports success so a
+    scratch DB behaves like a real one. In a real run WITHOUT credentials it prints and
+    reports failure, so alerts stay unsent until the secrets are fixed instead of
+    being marked delivered and lost."""
+
     def __init__(self, dry_run: bool = False):
         self.token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
         self.chat_id = os.environ.get("TELEGRAM_CHAT_ID", "").strip()
-        self.live = bool(self.token and self.chat_id) and not dry_run
+        self.dry_run = dry_run
+        self.configured = bool(self.token and self.chat_id)
+        self.live = self.configured and not dry_run
+        if not dry_run and not self.configured:
+            missing = [n for n, v in (("TELEGRAM_BOT_TOKEN", self.token), ("TELEGRAM_CHAT_ID", self.chat_id)) if not v]
+            # GitHub turns this line into a yellow warning on the run page.
+            print(f"::warning title=Telegram not configured::{' and '.join(missing)} missing; "
+                  "nothing will be sent and alerts stay queued until the secrets are set.")
 
     def _call(self, method: str, **payload):
         r = requests.post(_API.format(token=self.token, method=method), json=payload, timeout=25)
@@ -32,9 +44,12 @@ class Telegram:
         return r.json() if r.ok else None
 
     def send(self, text: str) -> bool:
+        """True only when the message was delivered (or simulated in --dry-run)."""
         for chunk in split_message(text):
             if not self.live:
                 print("\n----- telegram (not sent) -----\n" + html.unescape(_TAG.sub("", chunk)))
+                if not self.dry_run:
+                    return False
                 continue
             if self._call("sendMessage", chat_id=self.chat_id, text=chunk, parse_mode="HTML",
                           disable_web_page_preview=True) is None:

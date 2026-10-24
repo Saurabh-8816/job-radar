@@ -106,6 +106,28 @@ def test_same_notice_on_two_institute_pages_alerts_once(monkeypatch, tmp_path):
     assert stats["items_new"] == 2 and stats["duplicates"] == 1 and stats["alerts"] == 1
 
 
+def test_alerts_stay_queued_when_telegram_is_not_configured(monkeypatch, tmp_path, capsys):
+    for var in ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
+        monkeypatch.delenv(var, raising=False)
+    src = district_source("Kondagaon")
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])
+    html = fixture_text("kondagaon_recruitment.html")
+    monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {u: Response(u, True, 200, text=html) for u in urls})
+    monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
+    opts = pipeline.RunOptions(dry_run=False, read_docs=False, build_site=False, db_path=tmp_path / "q.db")
+    pipeline.run(opts)
+    assert "Telegram not configured" in capsys.readouterr().out
+    store = Store(tmp_path / "q.db")
+    assert len(store.alerts_due(TODAY.isoformat())) == 1     # still waiting, not lost
+
+    monkeypatch.setattr(pipeline.Telegram, "_call", lambda self, method, **p: {"ok": True, "result": []})
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "test-token")
+    monkeypatch.setenv("TELEGRAM_CHAT_ID", "42")
+    stats = pipeline.run(opts)                                # secrets fixed: it goes out now
+    assert stats["alerts"] == 1
+    assert Store(tmp_path / "q.db").alerts_due(TODAY.isoformat()) == []
+
+
 def test_failures_are_counted_for_health(monkeypatch, tmp_path):
     src = district_source("Kondagaon")
     monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])

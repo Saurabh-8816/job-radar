@@ -81,6 +81,9 @@ class Classifier:
         self.tier_c = TermSet(p.get("tier_c"))
         self.deadline_before = TermSet(p.get("deadline_before"))
         self.deadline_after = TermSet(p.get("deadline_after"))
+        region = p.get("region_filter") or {}
+        self.region_keep = TermSet(region.get("keep"))
+        self.region_block = TermSet(region.get("block"))
 
     @classmethod
     def load(cls, path=PROFILE_PATH) -> "Classifier":
@@ -89,6 +92,13 @@ class Classifier:
 
     def is_job_related(self, text: str) -> bool:
         return self.job.first(text) is not None
+
+    def in_region(self, title: str) -> bool:
+        """For all-India aggregators: False when the title names another state or its
+        board, unless it also names a central / all-India body."""
+        if self.region_keep.first(title):
+            return True
+        return self.region_block.first(title) is None
 
     def classify(self, title: str, description: str = "", body: str = "",
                  end_date: str | None = None, body_status: str | None = None,

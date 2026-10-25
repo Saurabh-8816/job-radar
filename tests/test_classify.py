@@ -148,6 +148,42 @@ def test_old_reference_dates_are_not_deadlines(clf):
     assert v.deadline == "2026-11-06"
 
 
+@pytest.mark.parametrize("title", [
+    "UP ECCE Educator Kanpur Nagar Online Form 2026",
+    "UPPSC Review Officer RO ARO Online Form 2026",
+    "UPSSSC UP Lekhpal Mains Document Upload 2026",
+    "Bihar Police BPSSC Company Commander Online Form 2026",
+    "Rajasthan High Court Junior Assistant Online Form 2026",
+    "HSSC CET Group D Online Form 2026",
+    "WB Police Constable Online Form 2026",
+    "TNPSC Group 4 Online Form 2026",
+    "Kerala PSC LDC Online Form 2026",
+])
+def test_other_states_are_dropped(clf, title):
+    assert not clf.in_region(title)
+
+
+@pytest.mark.parametrize("title", [
+    "Chhattisgarh CG Vyapam Assistant Programmer Online Form 2026",
+    "MP MPESB Primary Teacher Online Form 2026",
+    "Odisha OSSC Combined Technical Services Online Form 2026",
+    "Delhi DSSSB Sweeper, Safai Karamchari, Chowkidar Post Online Form 2026",
+    "Maharashtra MPSC Group C Online Form 2026",
+    "Telangana TGPSC Group 4 Online Form 2026",
+    "Railway RRB Station Master Online Form 2026",
+    "UPSC Assistant Public Prosecutor and Other Post Online Form 2026",
+    "Supreme Court of India Court Master Online Form 2026",
+    "Assam Rifles Rally Recruitment Online Form 2026",
+    "Central University of Rajasthan Non Teaching Online Form 2026",
+    "Punjab National Bank PNB Specialist Officer Online Form 2026",
+    "NIT Patna Assistant Programmer Online Form 2026",
+    "HPCL Engineer Online Form 2026",
+    "CWC Assistant Manager and Junior Executive Online Form 2026",
+])
+def test_wanted_regions_and_all_india_posts_are_kept(clf, title):
+    assert clf.in_region(title)
+
+
 def test_job_word_filter_for_announcements(clf):
     assert clf.is_job_related("Advertisement for recruitment to vacant contractual posts")
     assert clf.is_job_related("रिक्त पदों पर संविदा भर्ती हेतु विज्ञापन")

@@ -1158,4 +1158,5 @@
   state: IN
   url: https://www.sarkariresult.com/latestjob/
   churn_limit: 150   # aggregator: dozens of new posts a day are normal
+  region_filter: true  # keep CG, MP, Odisha, Delhi, Maharashtra, Telangana, central, all-India
   note: safety net for notices the official sources miss; may repeat an official alert

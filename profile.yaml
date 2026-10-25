@@ -203,6 +203,42 @@ tier_c:
   - रसोइया
   - स्वीपर
 
+# Region filter for all-India aggregators (sources with `region_filter: true`).
+# Wanted: Chhattisgarh (home domicile), MP, Odisha, Delhi, Maharashtra, Telangana,
+# central government and all-India posts. Other states' posts usually need their
+# domicile, so a title naming one is dropped, unless it also names a central /
+# all-India body ("Assam Rifles", "Central University of Rajasthan", "NIT Patna").
+region_filter:
+  keep:
+    - re:\b(central\s+university|aiims|iits?|iiits?|nits?|iims?|iiser|niser|ignou|esic|epfo|nta|ugc|csir|icar|icmr|ncert)\b
+    - re:\b(rrb|rrc|railways?|kvs|kendriya\s+vidyalaya|navodaya|nvs|india\s+post|postal|gds)\b
+    - re:\b(assam\s+rifles|indian\s+(army|navy|air\s*force|coast\s+guard|oil|bank)|army|navy|air\s*force|bsf|crpf|cisf|itbp|ssb|nda|cds)\b
+    - re:\b(punjab\s+national\s+bank|punjab\s*(&|and)\s*sind\s+bank|bank\s+of\s+maharashtra|sbi|rbi|nabard|lic|ibps)\b
+    - re:\b(upsc|ssc|isro|drdo|barc|bel|bhel|ntpc|coal\s+india|ongc|iocl|gail|hal|sail|nhpc|powergrid|rites|c-?dac|nielit|fci|cwc|supreme\s+court)\b
+  block:
+    - cs:UP
+    - re:\b(uttar\s+pradesh|upsssc|uppsc|upessc|upsessb|uppbpb|uppcl|upsrtc|upnhm|upcisb|up\s+police)\b
+    - re:\b(bihar|bpsc|bssc|bpssc|csbc|bsphcl|beltron)\b
+    - re:\b(rajasthan|rpsc|rsmssb|rssb)\b
+    - re:\b(haryana|hssc|hpsc|hkrn)\b
+    - re:\b(punjab|psssb|ppsc|pspcl)\b
+    - re:\b(himachal|hppsc|hpssc|hprca)\b
+    - cs:HP
+    - re:\b(uttarakhand|uksssc|ukpsc|ukmssb)\b
+    - re:\b(jharkhand|jssc|jpsc)\b
+    - re:\b(west\s+bengal|wbssc|wbpsc|wbprb|wbhrb)\b
+    - cs:WB
+    - re:\bassam\b
+    - re:\b(gujarat|gsssb|gpsc|gsrtc|ojas)\b
+    - re:\b(karnataka|kpsc|kea)\b
+    - re:\bkerala\b
+    - re:\b(tamil\s*nadu|tnpsc|tnusrb)\b
+    - cs:TN
+    - re:\b(andhra\s+pradesh|appsc|apslprb)\b
+    - cs:AP
+    - re:\b(jammu|kashmir|j\s*&\s*k|jkssb|jkpsc|ladakh)\b
+    - re:\b(goa|sikkim|tripura|manipur|meghalaya|mizoram|nagaland|arunachal|puducherry|pondicherry|chandigarh|andaman|lakshadweep|dadra|daman)\b
+
 # Application deadline detection in advert text.
 # deadline_before: phrase within ~80 characters BEFORE a date ("last date ... 06/11/2026").
 # deadline_after:  word within ~25 characters AFTER a date ("06/11/2026 तक" = "until").

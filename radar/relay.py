@@ -99,6 +99,8 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
         items = result.items
         if s.filter_jobs:
             items = [i for i in items if clf.is_job_related(f"{i.title} {i.description} {i.url}")]
+        if s.region_filter:
+            items = [i for i in items if clf.in_region(i.title)]
         first_contact = s.id not in baselined   # GitHub indexes these silently; no need to read adverts
         for item in items:
             if item.key in cache or (item.key in known and not first_contact):

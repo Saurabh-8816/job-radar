@@ -111,6 +111,8 @@ def _ingest(ctx: _Run, s, status: str, items, doc_texts: dict | None = None):
         return
     if s.filter_jobs:
         items = [i for i in items if ctx.clf.is_job_related(f"{i.title} {i.description} {i.url}")]
+    if s.region_filter:
+        items = [i for i in items if ctx.clf.in_region(i.title)]
     baseline = not ctx.opts.all_new and not store.is_baselined(s.id)
     churn = None
     if not baseline and s.kind == "watch":

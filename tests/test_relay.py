@@ -24,6 +24,7 @@ def env(monkeypatch, tmp_path):
     monkeypatch.setattr(relay, "CACHE", tmp_path / "relay_cache.json")
     monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
     monkeypatch.setattr(pipeline, "load_sources", lambda only=None, runner=None: [])  # GitHub reaches nothing itself
+    monkeypatch.setattr(relay, "read_item_docs", lambda *a, **kw: ("", "none"))      # no detail-page fetches
     for var in ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID"):
         monkeypatch.delenv(var, raising=False)
     db = tmp_path / "jobs.db"

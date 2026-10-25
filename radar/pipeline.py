@@ -37,6 +37,7 @@ class RunOptions:
     ocr: bool = True
     all_new: bool = False          # backtest: treat every item as new (use with a scratch DB)
     doc_item_limit: int = 40       # adverts read per run; the rest wait for the next run
+    doc_time_budget: int = 600     # seconds of advert reading (mostly OCR) per run; leftovers wait
     workers: int = 16
     build_site: bool = True
     db_path: Path = DEFAULT_DB
@@ -52,6 +53,7 @@ class _Run:
     stats: Counter = field(default_factory=Counter)
     new_ids: list = field(default_factory=list)
     baselined_now: list = field(default_factory=list)
+    full_text: dict = field(default_factory=dict)   # row id -> relay advert text before DB truncation
 
 
 def run(opts: RunOptions) -> Counter:
@@ -85,7 +87,7 @@ def run(opts: RunOptions) -> Counter:
 
     for row_id in ctx.new_ids:  # first pass: listing text, plus advert text the relay sent
         row = store.get(row_id)
-        body = row["doc_text"] or ""
+        body = ctx.full_text.get(row_id) or row["doc_text"] or ""
         _classify(store, clf, row, today, body, row["doc_status"] if body else None)
     store.commit()
 
@@ -129,6 +131,8 @@ def _ingest(ctx: _Run, s, status: str, items, doc_texts: dict | None = None):
         row_id = store.insert_item(item, baseline, doc_status, doc_text=text)
         if row_id:
             ctx.new_ids.append(row_id)
+            if text:
+                ctx.full_text[row_id] = text
             stats["items_baseline" if baseline else "items_new"] += 1
     store.source_ok(s.id, status, len(items), baselined=True)
     if churn:
@@ -173,15 +177,22 @@ def read_documents(store, clf, opts: RunOptions, today) -> Counter:
     rows = store.pending_docs(opts.doc_item_limit, today.isoformat())
     if not rows:
         return Counter()
-    print(f"Reading adverts for {len(rows)} items (OCR: {ocr_languages() or 'unavailable'})…")
+    print(f"Reading adverts for {len(rows)} items, every page (OCR: {ocr_languages() or 'unavailable'})…")
+    deadline = time.monotonic() + opts.doc_time_budget
 
     def work(row):
-        text, status = read_item_docs(json.loads(row["docs"] or "[]"), clf, opts.ocr)
+        docs = json.loads(row["docs"] or "[]")
+        # A notice that's only a link to a detail page: read that page and its PDFs.
+        page_url = row["url"] if (not docs and row["url"] and row["url"] != row["notice_url"]) else None
+        text, status = read_item_docs(docs, clf, opts.ocr, page_url=page_url, deadline=deadline)
         return row, text, status
 
     counts = Counter()
     with ThreadPoolExecutor(max_workers=3) as pool:
         for row, text, status in pool.map(work, rows):
+            if status == "deferred":      # time budget spent: stays pending for the next run
+                counts["docs_deferred"] += 1
+                continue
             _classify(store, clf, row, today, text, status, save_doc=True)
             counts[f"docs_{status}"] += 1
     store.commit()

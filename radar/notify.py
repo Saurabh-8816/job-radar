@@ -115,16 +115,19 @@ def doc_links(row, limit: int = 3) -> str:
 
 def format_alert(row, source, today: date | None = None) -> str:
     matched = ", ".join(json.loads(row["matched"] or "[]")[:6])
+    evidence = [r for r in json.loads(row["reasons"] or "[]") if r.startswith("advert p.")]
     title = html.escape(row["title"][:280])
     i = row["id"]
-    return "\n".join([
+    lines = [
         f"<b>{title}</b>",
         html.escape(where(source)),
         f"⏳ {deadline_phrase(row['deadline'], today)}",
         f"Why: {html.escape(matched)}" if matched else "",
+        *[f"📄 <i>{html.escape(e[:230])}</i>" for e in evidence],
         doc_links(row),
         f"#{i}   /star_{i}   /applied_{i}   /hide_{i}",
-    ]).replace("\n\n", "\n")
+    ]
+    return "\n".join(line for line in lines if line)
 
 
 def format_line(row, source, today: date | None = None) -> str:

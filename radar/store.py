@@ -123,7 +123,9 @@ class Store:
             (item.key, item.source_id, item.title, item.description, item.url, item.notice_url,
              json.dumps(item.docs, ensure_ascii=False), item.start_date, item.end_date,
              item.end_date, now, now, int(baseline),
-             doc_status if item.docs else "none", (doc_text or "")[:DOC_TEXT_LIMIT]))
+             # documents to read, or a detail page to follow (watch links that aren't the page itself)
+             doc_status if (item.docs or (item.url and item.url != item.notice_url)) else "none",
+             (doc_text or "")[:DOC_TEXT_LIMIT]))
         if cur.rowcount:
             return cur.lastrowid
         self.db.execute("UPDATE items SET last_seen=? WHERE key=?", (now, item.key))

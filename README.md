@@ -14,6 +14,18 @@ covers everything else, and a dashboard lets you search all of it.
 fetch pages → parse notices → new? → read advert (PDF / OCR) → classify → Telegram + dashboard
 ```
 
+## How adverts are read
+Every new notice is read **in full**: every page of every attached advert (up to 5 per
+notice, blank application forms skipped), OCR for scanned or legacy-font Hindi pages,
+and, when a notice is only a link to a detail page (CG Vyapam, SarkariResult), that
+page plus the PDFs it links to. So a post buried on page 21 of a "various posts"
+advert (DSSSB 03/2026: TGT Computer Science, IT Assistant) still matches, and the
+alert quotes where: `📄 advert p.21: …Trained Graduate Teacher (Computer Science)…`.
+
+Typed PDFs cost almost nothing (a 45-page advert reads in ~2 s). OCR is capped at
+10 minutes per run to stay inside GitHub's free minutes; anything left over is read
+on the next run, never skipped.
+
 ## How notices are sorted
 
 | Tier | Meaning | You get |

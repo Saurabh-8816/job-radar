@@ -133,8 +133,11 @@ class Classifier:
             reasons.append("check manually: advert unreadable" if body_status == "unreadable"
                            else "no profile term matched")
 
+        matched = _dedupe(matched)
+        if tier == "A" and body:
+            reasons += _evidence(body, head, matched)
         deadline = self._deadline(body, end_date, today or today_ist())
-        return Verdict(kind, tier, _dedupe(matched), reasons, deadline)
+        return Verdict(kind, tier, matched, reasons, deadline)
 
     def body_deadline(self, body: str, today: date) -> str | None:
         if not body:
@@ -155,6 +158,26 @@ class Classifier:
         found = self.body_deadline(body, today)
         dates = [d for d in (found, end_date) if d]
         return min(dates) if dates else None
+
+
+def _evidence(body: str, head: str, matched: list[str], limit: int = 2) -> list[str]:
+    """Where in the advert the matching post appears ("advert p.21: …TGT (Computer
+    Science)…"), so a 45-page notice doesn't have to be searched by hand. Terms that
+    already appear in the title are skipped: the title says it."""
+    out, flat_head = [], " ".join(head.lower().split())
+    for term in matched:
+        if " ".join(term.lower().split()) in flat_head:
+            continue
+        # PDF text breaks lines mid-phrase ("Computer\nScience"), so match any whitespace.
+        m = re.search(r"\s+".join(map(re.escape, term.split())), body, re.I)
+        if not m:
+            continue
+        pos = m.start()
+        snippet = " ".join(body[max(0, pos - 60):m.end() + 90].replace("\f", " ").split())
+        out.append(f"advert p.{body.count(chr(12), 0, pos) + 1}: …{snippet}…")
+        if len(out) == limit:
+            break
+    return out
 
 
 def _dedupe(words):

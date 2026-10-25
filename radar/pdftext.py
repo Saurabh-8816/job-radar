@@ -1,8 +1,10 @@
-"""Text from advert documents: embedded PDF text first, OCR for scans.
+"""Text from advert documents: every page, embedded text first, OCR for scans.
 
 Most district adverts are scanned images with no text layer, so OCR (Tesseract,
 Hindi + English) does the real work. PDFs typed in legacy Hindi fonts (Kruti Dev,
-DevLys) extract as Latin junk such as "dk;kZy;"; those are detected and OCR'd too.
+DevLys) extract as Latin junk such as "dk;kZy;"; those pages are OCR'd too. The
+decision is per page, so a typed cover letter in front of a scanned table still
+gets the table read.
 """
 
 import io
@@ -10,6 +12,7 @@ import logging
 import os
 import re
 import shutil
+import time
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -75,33 +78,53 @@ def _ocr_image(image, langs: str) -> str:
     return pytesseract.image_to_string(image.convert("L"), lang=langs)
 
 
-def extract(data: bytes, url: str = "", *, max_pages: int = 4, ocr: bool = True,
-            ocr_pages: int = 2) -> DocText:
+PAGE_BREAK = "\n\f\n"     # pages are joined with a form feed, so a match's page number is recoverable
+
+
+def _page_is_readable(text: str) -> bool:
+    return len(_LETTERS.findall(text)) >= 40 and not looks_legacy_font(text)
+
+
+def page_of(text: str, pos: int) -> int:
+    return text.count("\f", 0, pos) + 1
+
+
+def extract(data: bytes, url: str = "", *, max_pages: int | None = None, ocr: bool = True,
+            ocr_pages: int = 12, deadline: float | None = None) -> DocText:
+    """Every page's text. Pages without a usable text layer (scans, legacy Hindi fonts)
+    are OCR'd, up to `ocr_pages` per document and until `deadline` (time.monotonic());
+    typed pages cost nothing, so a 45-page typed advert is read in full."""
     if url.lower().split("?")[0].endswith(_IMAGE_EXT):
         return _extract_image(data, ocr)
     try:
         reader = PdfReader(io.BytesIO(data))
-        pages = len(reader.pages)
-        text = "\n".join(_page_text(p) for p in reader.pages[:max_pages])
+        page_count = len(reader.pages)
+        texts = [_page_text(p) for p in (reader.pages if max_pages is None else reader.pages[:max_pages])]
     except Exception:
         return DocText("", "error")
-    if is_useful(text):
-        return DocText(text, "text", pages)
 
-    langs = ocr_languages() if ocr else None
+    unreadable = [i for i, t in enumerate(texts) if not _page_is_readable(t)]
+    langs = ocr_languages() if (ocr and unreadable) else None
+    done = 0
     if langs:
         try:
             import pypdfium2 as pdfium
             pdf = pdfium.PdfDocument(data)
-            n = min(ocr_pages, len(pdf))
-            ocr_text = "\n".join(_ocr_image(pdf[i].render(scale=200 / 72).to_pil(), langs)
-                                 for i in range(n))
+            for i in unreadable[:ocr_pages]:
+                if deadline is not None and time.monotonic() > deadline:
+                    break
+                ocr_text = _ocr_image(pdf[i].render(scale=200 / 72).to_pil(), langs)
+                if _page_is_readable(ocr_text):
+                    texts[i] = ocr_text
+                done += 1
             pdf.close()
-            if is_useful(ocr_text):
-                return DocText(ocr_text, "ocr", pages, n)
         except Exception:
             pass
-    return DocText(text, "unreadable", pages)
+
+    text = PAGE_BREAK.join(t if _page_is_readable(t) else "" for t in texts)
+    if not is_useful(text):
+        return DocText(text, "unreadable", page_count, done)
+    return DocText(text, "ocr" if done else "text", page_count, done)
 
 
 def _extract_image(data: bytes, ocr: bool) -> DocText:

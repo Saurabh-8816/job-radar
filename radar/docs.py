@@ -1,19 +1,33 @@
-"""Download and read the advert documents attached to a notice (shared by the
-GitHub run and the laptop relay)."""
+"""Download and read everything attached to a notice (shared by the GitHub run and
+the laptop relay): every page of every advert PDF, and, when the notice is only a
+link to a detail page (CG Vyapam "Post" pages, SarkariResult job pages), that
+page's text plus the PDFs linked from it."""
 
 import re
+import time
+from urllib.parse import urljoin, urlsplit
+
+from bs4 import BeautifulSoup
 
 from .classify import Classifier
 from .fetch import get
-from .pdftext import extract
+from .pdftext import PAGE_BREAK, extract
+from .textutil import clean
 
 _FORM_LABEL = re.compile(r"आवेदन\s*(प्रारूप|पत्र|फार्म|फॉर्म)|प्रारूप|application\s*form|format|proforma", re.I)
-_ADVERT_LABEL = re.compile(r"विज्ञापन|भर्ती|advertis|advt|notification|recruit|vacanc|view", re.I)
+_ADVERT_LABEL = re.compile(r"विज्ञापन|भर्ती|advertis|advt|notification|recruit|vacanc|notice|view", re.I)
 _READABLE = (".pdf", ".jpg", ".jpeg", ".png")
+MAX_DOCS = 5
+PAGE_TEXT_LIMIT = 60_000
+
+
+def _is_readable(url: str) -> bool:
+    return urlsplit(url).path.lower().endswith(_READABLE)
 
 
 def rank_docs(docs: list, clf: Classifier) -> list:
-    """Adverts first (labels naming a matching post, then advert words); forms last."""
+    """Adverts first (labels naming a matching post, then advert words); blank
+    application forms last, and only read when there is nothing else."""
     def score(doc):
         label, _url = doc
         s = 0
@@ -24,20 +38,47 @@ def rank_docs(docs: list, clf: Classifier) -> list:
         if _FORM_LABEL.search(label):
             s -= 5
         return -s
-    readable = [d for d in docs if d[1].lower().split("?")[0].endswith(_READABLE)]
-    return sorted(readable, key=score)[:3]
+    readable = sorted((d for d in docs if _is_readable(d[1])), key=score)
+    adverts = [d for d in readable if not _FORM_LABEL.search(d[0])]
+    return (adverts or readable)[:MAX_DOCS]
 
 
-def read_item_docs(docs: list, clf: Classifier, ocr: bool = True) -> tuple[str, str]:
-    """Text of the best (up to 3) documents, and an overall status:
-    text | ocr | unreadable | error | none."""
+def _detail_page(url: str, clf: Classifier) -> tuple[str, list]:
+    """Text of an HTML detail page, and the advert documents it links to."""
+    resp = get(url, timeout=30, retries=1)
+    if not resp.ok or "html" not in (resp.content_type or "text/html"):
+        return "", []
+    soup = BeautifulSoup(resp.text, "lxml")
+    for tag in soup(["script", "style", "noscript", "nav", "header", "footer", "form"]):
+        tag.decompose()
+    docs = []
+    for a in soup.find_all("a", href=True):
+        href = urljoin(url, a["href"].strip())
+        if href.startswith("http") and _is_readable(href):
+            docs.append((clean(a.get_text(" ")) or "Document", href))
+    text = clean((soup.find("main") or soup.body or soup).get_text(" "))[:PAGE_TEXT_LIMIT]
+    return text, rank_docs(list(dict.fromkeys(docs)), clf)[:3]
+
+
+def read_item_docs(docs: list, clf: Classifier, ocr: bool = True, page_url: str | None = None,
+                   deadline: float | None = None) -> tuple[str, str]:
+    """All text for one notice and an overall status:
+    text | ocr | unreadable | error | none | deferred (time budget ran out; retry next run)."""
     texts, statuses = [], []
-    for _label, url in rank_docs(docs, clf):
-        resp = get(url, binary=True, max_bytes=10_000_000, timeout=45, retries=1, total_timeout=90)
+    targets = rank_docs(docs, clf)
+    if not targets and page_url:
+        page_text, targets = _detail_page(page_url, clf)
+        if page_text:
+            texts.append(page_text)
+            statuses.append("text")
+    for _label, url in targets:
+        if deadline is not None and time.monotonic() > deadline:
+            return "", "deferred"
+        resp = get(url, binary=True, max_bytes=20_000_000, timeout=45, retries=1, total_timeout=120)
         if not resp.ok:
             statuses.append("error")
             continue
-        doc = extract(resp.content, url, ocr=ocr)
+        doc = extract(resp.content, url, ocr=ocr, deadline=deadline)
         statuses.append(doc.status)
         if doc.status in ("text", "ocr"):
             texts.append(doc.text)
@@ -47,4 +88,4 @@ def read_item_docs(docs: list, clf: Classifier, ocr: bool = True) -> tuple[str, 
         status = "unreadable"
     else:
         status = "error" if statuses else "none"
-    return "\n".join(texts), status
+    return PAGE_BREAK.join(texts), status

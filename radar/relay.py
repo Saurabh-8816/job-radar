@@ -31,6 +31,7 @@ from .textutil import IST, now_ist_iso
 INBOX = DATA_DIR / "inbox"
 CACHE = DATA_DIR / "relay_cache.json"      # keys already shipped (local only, git-ignored)
 CACHE_DAYS = 10
+SHIP_TEXT_LIMIT = 120_000   # full advert text travels to GitHub; only the DB copy is trimmed
 
 
 # ---- laptop side --------------------------------------------------------------
@@ -70,7 +71,8 @@ def _save_cache(cache: dict):
 
 
 def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
-            ocr: bool = True, sources: list[Source] | None = None) -> Path | None:
+            ocr: bool = True, sources: list[Source] | None = None,
+            time_budget: int = 900) -> Path | None:
     if push:
         pulled = _git("pull", "--rebase", "--autostash", "-q")
         if pulled.returncode != 0:
@@ -107,16 +109,34 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
                 continue
             row = {**asdict(item), "doc_text": "", "doc_status": None}
             entry["items"].append(row)
-            if item.docs and not first_contact:
+            if (item.docs or item.url != item.notice_url) and not first_contact:
                 to_read.append(row)
 
+    # GitHub can't fetch these sites' adverts itself, so a notice is only shipped once its
+    # advert has been read here. Anything over the limit or the time budget waits for the
+    # next relay run (it isn't cached, so it's picked up again).
+    later = to_read[doc_limit:]
     to_read = to_read[:doc_limit]
     if to_read:
-        print(f"  reading {len(to_read)} new adverts…")
+        print(f"  reading {len(to_read)} new adverts, every page…")
+        deadline = time.monotonic() + time_budget
+
+        def read(row):
+            docs = [tuple(d) for d in row["docs"]]
+            page = row["url"] if not docs and row["url"] != row["notice_url"] else None
+            return read_item_docs(docs, clf, ocr, page_url=page, deadline=deadline)
+
         with ThreadPoolExecutor(max_workers=3) as pool:
-            for row, (text, status) in zip(to_read, pool.map(
-                    lambda r: read_item_docs([tuple(d) for d in r["docs"]], clf, ocr), to_read)):
-                row["doc_text"], row["doc_status"] = text[:8000], status
+            for row, (text, status) in zip(to_read, pool.map(read, to_read)):
+                if status == "deferred":
+                    later.append(row)
+                else:
+                    row["doc_text"], row["doc_status"] = text[:SHIP_TEXT_LIMIT], status
+    if later:
+        held = {id(r) for r in later}
+        for e in entries:
+            e["items"] = [r for r in e["items"] if id(r) not in held]
+        print(f"  {len(later)} adverts left for the next relay run")
 
     INBOX.mkdir(parents=True, exist_ok=True)
     stamp = datetime.now(IST).strftime("%Y%m%dT%H%M%S")

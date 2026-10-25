@@ -99,6 +99,7 @@
 - {name: MPSC, home: "https://mpsc.gov.in/", group: state-board, state: MH}
 - {name: TGPSC, home: "https://www.tgpsc.gov.in/", group: state-board, state: TG}
 - {name: TG Police Recruitment Board, home: "https://www.tgprb.in/", group: state-board, state: TG}
+- {name: DSSSB (Delhi), home: "https://dsssb.delhi.gov.in/", group: state-board, state: DL}
 
 # ---- IITs ------------------------------------------------------------------------
 - {name: IIT Bombay, home: "https://www.iitb.ac.in/", group: academic}

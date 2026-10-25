@@ -19,6 +19,8 @@ from ..textutil import clean, normalize_url, parse_date
 _VOLATILE_PARAMS = {"token", "sid", "session", "sessionid", "phpsessid", "jsessionid",
                     "ts", "t", "timestamp", "_", "rand", "nocache", "cache", "v", "ver", "k", "key"}
 _RANDOMISH = re.compile(r"[A-Za-z0-9+/=_%.-]{20,}")
+# Aggregators print the deadline in the row: "Online Form 2026 | Last Date : 13/11/2026".
+_LAST_DATE = re.compile(r"(?:last|closing)\s*date\s*[:\-–]?\s*(\d{1,2}\s*[./-]\s*\d{1,2}\s*[./-]\s*\d{4})", re.I)
 
 _SKIP_SCHEMES = ("javascript:", "mailto:", "tel:", "#", "whatsapp:")
 _DOC_EXT = (".pdf", ".doc", ".docx", ".xls", ".xlsx", ".jpg", ".jpeg", ".png")
@@ -93,6 +95,7 @@ def parse(html: str, page_url: str, source) -> ParseResult:
             notice_url=page_url,
             docs=[(text or "Document", url)] if is_document(url) else [],
             start_date=parse_date(context),
+            end_date=parse_date(m.group(1)) if (m := _LAST_DATE.search(context)) else None,
             key_hint=stable_key(url, text, context),
         ))
     return ParseResult("ok" if items else "empty", items)

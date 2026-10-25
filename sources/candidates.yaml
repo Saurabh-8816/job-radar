@@ -191,3 +191,6 @@
 - {name: JNU, home: "https://www.jnu.ac.in/", group: academic}
 - {name: University of Delhi, home: "https://www.du.ac.in/", group: academic}
 - {name: IGNOU, home: "http://www.ignou.ac.in/", group: academic}
+
+# ---- Aggregators (safety net) -----------------------------------------------------
+- {name: SarkariResult, home: "https://www.sarkariresult.com/", url: "https://www.sarkariresult.com/latestjob/", group: aggregator}

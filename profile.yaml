@@ -27,6 +27,7 @@ job_words:
   - re:\b(faculty|guest\s+lecturer|guest\s+faculty|teaching\s+assistant)\b
   - re:\binterview\b
   - re:\bapplications?\s+(are\s+)?invited\b
+  - re:\b(online\s+form|apply\s+online|online\s+application)\b
   - re:\bselection\b
   - re:\bmerit\s+list\b
   - भर्ती

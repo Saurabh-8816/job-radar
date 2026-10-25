@@ -1152,3 +1152,10 @@
   state: DL
   url: https://dsssb.delhi.gov.in/dsssb-vacancies
   job_links: 32
+- id: sarkariresult
+  name: SarkariResult
+  group: aggregator
+  state: IN
+  url: https://www.sarkariresult.com/latestjob/
+  churn_limit: 150   # aggregator: dozens of new posts a day are normal
+  note: safety net for notices the official sources miss; may repeat an official alert

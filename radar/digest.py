@@ -68,7 +68,7 @@ def build(store: Store, today=None) -> tuple[str, list[int]]:
         src = store.source_of(r["source_id"])
         area = "Chhattisgarh districts" if src["grp"] == "district" else {
             "cg-state": "Chhattisgarh state", "central": "Central government", "academic": "IITs, NITs & institutes",
-            "psu": "PSUs & banks", "state-board": "Neighbouring states"}.get(src["grp"], src["grp"] or "Other")
+            "psu": "PSUs & banks", "state-board": "Other state boards", "aggregator": "SarkariResult (all India)"}.get(src["grp"], src["grp"] or "Other")
         by_area[area].append(r)
 
     lines = [f"<b>Job Radar digest · {today.strftime('%a %d %b %Y')}</b>"]

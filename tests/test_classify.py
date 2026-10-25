@@ -151,5 +151,6 @@ def test_old_reference_dates_are_not_deadlines(clf):
 def test_job_word_filter_for_announcements(clf):
     assert clf.is_job_related("Advertisement for recruitment to vacant contractual posts")
     assert clf.is_job_related("रिक्त पदों पर संविदा भर्ती हेतु विज्ञापन")
+    assert clf.is_job_related("UP Police Constable Online Form 2026")      # aggregator wording
     assert not clf.is_job_related("Information regarding vacant Nazul land in Raipur district")
     assert not clf.is_job_related("Uploading of the Awaas Plus list under Pradhan Mantri Awas Yojana")

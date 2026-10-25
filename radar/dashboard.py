@@ -12,7 +12,7 @@ WINDOW_DAYS = 120
 
 AREA = {
     "district": "CG districts", "cg-state": "CG state", "central": "Central govt",
-    "academic": "Institutes", "psu": "PSUs & banks", "state-board": "Neighbour states",
+    "academic": "Institutes", "psu": "PSUs & banks", "state-board": "State boards", "aggregator": "Aggregator",
 }
 
 

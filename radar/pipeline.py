@@ -26,7 +26,7 @@ from .store import Store
 from .textutil import today_ist
 
 MAX_INDIVIDUAL_ALERTS = 10
-CHURN_LIMIT = 25
+
 
 
 @dataclass
@@ -115,9 +115,10 @@ def _ingest(ctx: _Run, s, status: str, items, doc_texts: dict | None = None):
     churn = None
     if not baseline and s.kind == "watch":
         unseen = len(store.unknown_keys(i.key for i in items))
-        if unseen > CHURN_LIMIT:
-            # A real careers page never posts dozens of notices between two runs; this is
-            # the site changing its link format. Absorb silently and flag it for review.
+        if unseen > s.churn_limit:
+            # A careers page never posts dozens of notices between two runs (aggregators
+            # get a higher per-source limit); this is the site changing its link format.
+            # Absorb silently and flag it for review.
             baseline, churn = True, f"{unseen} links changed at once; absorbed without alerts"
     for item in items:
         text, doc_status = (doc_texts or {}).get(item.key, ("", None))

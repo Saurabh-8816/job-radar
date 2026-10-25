@@ -56,6 +56,13 @@ def test_stable_query_urls_are_untouched():
     assert items[0].key == "https://x.ac.in/jobs.php?id=12"
 
 
+def test_aggregator_row_deadline_becomes_end_date():
+    html = ('<ul><li><a href="/2026/up-dairy-deo-sept26/">UP Dairy Development DEO Data Entry Operator '
+            'Recruitment 2026 | Last Date : 18/09/2026</a></li></ul>')
+    item = watch.parse(html, "https://www.sarkariresult.com/latestjob/", _src()).items[0]
+    assert item.end_date == "2026-09-18"
+
+
 def test_legacy_hindi_font_is_not_useful_text():
     kruti = "dk;kZy; ftyk iapk;r dksaMkxkao NRrhlx<+ fokKkiu lgk;d izksxzkej in gsrq vkosnu i= " * 6
     assert looks_legacy_font(kruti)

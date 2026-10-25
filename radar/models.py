@@ -20,6 +20,7 @@ class Source:
     selector: str | None = None  # watch pages: CSS scope to ignore menus
     enabled: bool = True
     runner: str = "cloud"        # "local": blocks GitHub's servers, fetched by the laptop relay
+    churn_limit: int = 25        # more new links than this in one run = link-format change, absorbed
 
 
 @dataclass

@@ -23,6 +23,10 @@ PHRASES = [
     "Master's degree in Computer Science", "Masters in Computer Science",
     "Master of Science (Information Technology)", "Post Graduation in Computer Application",
     "Bachelor of Technology in Information Technology",
+    "Bachelors in Computer Science", "bachelors computer science", "Bachelor in Computer Science",
+    "Bachelor's in Computer Science", "BACHELORS COMPUTER SCIENCE", "bachelors in computer applications",
+    "bachelors computer applications", "Masters Computer Science", "masters in computer applications",
+    "masters computer applications", "Master's in Computer Applications",
     # Hindi
     "एम.सी.ए.", "बी.सी.ए.", "एमसीए", "बीसीए", "कम्प्यूटर साइंस में स्नातक", "कंप्यूटर साइंस",
     "सूचना प्रौद्योगिकी में बी.ई./बी.टेक", "कम्प्यूटर एप्लीकेशन में स्नातकोत्तर", "कंप्यूटर एप्लीकेशन",

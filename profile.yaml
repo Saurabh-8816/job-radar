@@ -42,6 +42,41 @@ job_words:
   - चयन सूची
   - मेरिट सूची
 
+# Notices that aren't jobs at all: school/college admissions, entrance tests for students,
+# scholarships. Applied to the title/description, and only when no job word below is also
+# there, so "Teacher for class 1-5 भर्ती" stays a job. Such notices are stored as tier C.
+not_job_words:
+  - re:\badmissions?\b
+  - re:(?-i:\b(LEST|JNVST|NEET|JEE|CUET)\b)   # uppercase only: "Viksit Bharat-Jee Ram Ji" is a job scheme
+  - re:\bcet\s+for\s+admission\b
+  - re:\bclass\s+(vi|vii|viii|ix|x|xi|xii|[1-9]|1[0-2])(st|nd|rd|th)?\b
+  - re:\bscholarships?\b
+  - re:\bstudents?\s+(admission|registration|enrol+ment|counsel+ing)\b
+  - re:\b(selection|entrance)\s+test\b
+  - कक्षा
+  - re:प्रवेश(?!\s*पत्र)            # admission, but not प्रवेश पत्र (admit card)
+  - छात्रवृत्ति
+job_core_words:
+  - re:\brecruit\w*            # recruit, recruitment, recruiting
+  - re:\bvacanc(y|ies)\b
+  - re:\bposts?\s+of\b
+  - re:\bwalk[\s-]?in\b
+  - re:\b(engagement|contractual|appointment|faculty|teacher|lecturer|programmer|engineer)\b
+  - भर्ती
+  - रिक्त
+  - संविदा
+  - शिक्षक
+  - पदों
+  - नियुक्ति
+
+# Boilerplate removed from advert text before matching: it names a computing term without
+# being about the job (e.g. every Aadhaar clause cites MeitY).
+body_ignore:
+  - re:ministry\s+of\s+electronics\s*(&|and)\s*information\s+technology
+  - re:electronics\s*(&|and)\s*information\s+technology
+  - re:information\s+technology\s+act(,?\s*\d{4})?
+  - re:\bIT\s+Act\b
+
 # Notices about an existing drive (lists, results, schedules). They go to the digest
 # as "update", never as an instant alert. Checked against head only.
 update_words:

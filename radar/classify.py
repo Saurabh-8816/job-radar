@@ -81,6 +81,9 @@ class Classifier:
         self.tier_c = TermSet(p.get("tier_c"))
         self.deadline_before = TermSet(p.get("deadline_before"))
         self.deadline_after = TermSet(p.get("deadline_after"))
+        self.not_job = TermSet(p.get("not_job_words"))
+        self.job_core = TermSet(p.get("job_core_words"))
+        self.body_ignore = [Term(s).rx for s in (p.get("body_ignore") or []) if Term(s).rx]
         region = p.get("region_filter") or {}
         self.region_keep = TermSet(region.get("keep"))
         self.region_block = TermSet(region.get("block"))
@@ -90,8 +93,12 @@ class Classifier:
         with open(path, encoding="utf-8") as f:
             return cls(yaml.safe_load(f))
 
+    def is_not_a_job(self, text: str) -> bool:
+        """Admissions, student entrance tests, scholarships: no job word anywhere."""
+        return self.not_job.first(text) is not None and self.job_core.first(text) is None
+
     def is_job_related(self, text: str) -> bool:
-        return self.job.first(text) is not None
+        return self.job.first(text) is not None and not self.is_not_a_job(text)
 
     def in_region(self, title: str) -> bool:
         """For all-India aggregators: False when the title names another state or its
@@ -104,6 +111,10 @@ class Classifier:
                  end_date: str | None = None, body_status: str | None = None,
                  today: date | None = None) -> Verdict:
         head = f"{title} {description}"
+        if self.is_not_a_job(head):
+            return Verdict("new", "C", [], ["admission / student notice, not a job"], end_date)
+        for rx in self.body_ignore:
+            body = rx.sub(" ", body)
         everything = f"{head} {body}"
         kind = "update" if self.update.first(head) else "new"
 

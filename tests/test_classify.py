@@ -184,6 +184,40 @@ def test_wanted_regions_and_all_india_posts_are_kept(clf, title):
     assert clf.in_region(title)
 
 
+@pytest.mark.parametrize("title", [
+    "कक्षा IX LEST 2027 हेतु आवेदन करने के लिए यहाँ क्लिक करें।",       # the real NVS notices
+    "कक्षा XI LEST 2027 हेतु आवेदन करने के लिए यहाँ क्लिक करें।",
+    "JNVST Class VI Admission 2027 Online Form",
+    "Admission notice for B.Tech (CSE) 2026-27",
+    "Post Matric Scholarship online application 2026",
+    "प्रवेश परीक्षा 2027 हेतु आवेदन",
+])
+def test_admission_notices_are_not_jobs(clf, title):
+    assert not clf.is_job_related(title)
+    v = clf.classify(title, "", "BCA MCA Information Technology", None, "text", TODAY)
+    assert v.tier == "C"                      # never alerted, whatever the PDF mentions
+
+
+@pytest.mark.parametrize("title", [
+    "Recruitment of Assistant Teacher for Class I to V",
+    "कक्षा 1 से 5 हेतु अतिथि शिक्षक भर्ती 2026",
+    "Walk-in interview for Lecturer (Computer Science) for classes XI-XII",
+    "CG Vyapam प्रवेश पत्र: Assistant Programmer exam",          # admit card, not admission
+    # real Balrampur notice: "Jee" is the scheme name, not the JEE exam
+    "Panchayat and Rural Development Department. Advertisement for the recruitment of vacant "
+    "posts approved under the Viksit Bharat-Jee Ram Ji Yojana.",
+])
+def test_jobs_mentioning_classes_or_admit_cards_stay_jobs(clf, title):
+    assert not clf.is_not_a_job(title)
+
+
+def test_meity_boilerplate_is_not_an_it_qualification(clf):
+    body = ("Aadhaar authentication under section 7 for which Ministry of Electronics & Information "
+            "Technology (MeitY) has notified ... Information Technology Act, 2000 ... IT Act")
+    v = clf.classify("Recruitment of Accountant (Contractual)", "", body, None, "text", TODAY)
+    assert v.tier != "A", v.matched
+
+
 def test_job_word_filter_for_announcements(clf):
     assert clf.is_job_related("Advertisement for recruitment to vacant contractual posts")
     assert clf.is_job_related("रिक्त पदों पर संविदा भर्ती हेतु विज्ञापन")

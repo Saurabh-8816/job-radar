@@ -158,6 +158,18 @@ Install once (PowerShell, in this folder):
 powershell -ExecutionPolicy Bypass -File tools\install_relay_task.ps1
 ```
 Run it by hand any time with `python -m radar.main relay --push`. The log is in `data/relay.log`.
+
+### 24/7 relay on a free Oracle Cloud server in India (optional)
+The laptop relay only runs while the laptop is on. An Oracle Cloud "Always Free" Ubuntu
+server in the Mumbai or Hyderabad region can run the same relay around the clock:
+```bash
+scp -i <ssh-key> tools/oracle_setup.sh ubuntu@<server-ip>:
+ssh -i <ssh-key> ubuntu@<server-ip>
+bash oracle_setup.sh
+```
+The script installs everything, asks you to add a GitHub deploy key (write access to this
+repo only), tests which sources answer from the server's Indian IP, and schedules the relay
+every 2 hours with cron. Both relays can run together; duplicates are merged by GitHub.
 To move another site to the laptop, add `runner: local` to its entry.
 
 ## Layout

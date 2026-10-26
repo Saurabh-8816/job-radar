@@ -87,9 +87,14 @@ tier_a:
     - re:\bdata\s*entry\b
     - re:\bcomputer\s+(operator|programmer|assistant|instructor|teacher|science|applications?|engineer|faculty)\b
     - re:\b(m|b)\.?\s?c\.?\s?a\.?\b
-    - re:\b(m|b)\.?\s?sc\.?\s*\(?\s*(it|cs|computer|information)
-    - re:\b(b|m)\.?\s?tech\.?\s*\(?\s*(cs|cse|it|computer|information)
-    - re:\b(b|m)\.?\s?e\.?\s*\(?\s*(cs|cse|it|computer)
+    # Saurabh treats all of these as one qualification: BCA, B.Sc IT/CS, MCA, M.Sc IT/CS,
+    # B.Tech/M.Tech CSE/IT, B.E./M.E. CS, Bachelor's/Master's in Computer Science or
+    # Computer Applications. Any of them anywhere in an advert is a match.
+    # "(in|-)?" covers "B.Tech in IT", "M.Sc.-IT"; "\(?" covers "B.Sc. (IT)".
+    # "IT" and "B.E."/"M.E." are case-sensitive so English like "be it a graduate…" can't match.
+    - re:\b(m|b)\.?\s?sc\.?\s*(-|in\s+)?\(?\s*((?-i:IT)|cs|computer|information)\b
+    - re:\b(b|m)\.?\s?tech\.?\s*(-|in\s+)?\(?\s*(cs|cse|(?-i:IT)|computer|information)\b
+    - re:(?-i:\b[BM]\.?\s?E\b)\.?\s*(-|in\s+)?\(?\s*(cs|cse|(?-i:IT)|computer|information)\b
     - re:\b(pgdca|dca|o\s*level|a\s*level)\b
     - re:\binformation\s+technology\b
     - re:\bsoftware\b
@@ -123,6 +128,12 @@ tier_a:
     - कंप्यूटर ऑपरेटर
     - कम्प्यूटर साइंस
     - कंप्यूटर साइंस
+    - कम्प्यूटर एप्लीकेशन
+    - कंप्यूटर एप्लीकेशन
+    - कम्प्यूटर एप्लिकेशन
+    - कंप्यूटर एप्लिकेशन
+    - कम्प्यूटर अनुप्रयोग
+    - कंप्यूटर अनुप्रयोग
     - उप अभियंता
     - उपअभियंता
     - सब इंजीनियर

@@ -111,7 +111,7 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
 
     fallback = sum(1 for s in sources if s.runner != "local")
     print(f"Relay: fetching {len(sources)} sources GitHub can't reach "
-          f"({len(sources) - fallback} laptop-only, {fallback} GitHub is failing on)…")
+          f"({len(sources) - fallback} laptop-only, {fallback} GitHub is failing on)...")
     responses = fetch_many([s.url for s in sources if not s.render], timeout=25)
     responses.update(render.render_many([s.url for s in sources if s.render]))
     entries, to_read = [], []
@@ -143,7 +143,7 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
     later = to_read[doc_limit:]
     to_read = to_read[:doc_limit]
     if to_read:
-        print(f"  reading {len(to_read)} new adverts, every page…")
+        print(f"  reading {len(to_read)} new adverts, every page...")
         deadline = time.monotonic() + time_budget
 
         def read(row):
@@ -176,7 +176,7 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
         for row in e["items"]:
             cache[Item(**_item_fields(row)).key] = now
     _save_cache(cache)
-    print(f"  {ok}/{len(entries)} sources answered, {shipped} new notices → {path.name}")
+    print(f"  {ok}/{len(entries)} sources answered, {shipped} new notices -> {path.name}")
 
     if push:
         _push(path)

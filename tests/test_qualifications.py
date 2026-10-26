@@ -50,14 +50,14 @@ def test_qualification_deep_in_advert_is_tier_a(clf, phrase):
     "Bachelor of Commerce",
     "it is mandatory to attach a self attested copy",
 ])
+def test_other_degrees_are_not_mistaken_for_computing(clf, text):
+    v = clf.classify("Recruitment of Assistant", "", text, None, "text", TODAY)
+    assert not any(m.lower() in ("bca", "mca", "it", "computer science") for m in v.matched), v.matched
+
+
 @pytest.mark.parametrize("text", [
     "Be it a graduate or a post-graduate, candidates must apply online",
     "The selected candidate will be in it for two years",
 ])
 def test_english_be_it_is_not_a_degree(clf, text):
     assert clf.classify("Recruitment of Assistant", "", text, None, "text", TODAY).tier != "A"
-
-
-def test_other_degrees_are_not_mistaken_for_computing(clf, text):
-    v = clf.classify("Recruitment of Assistant", "", text, None, "text", TODAY)
-    assert not any(m.lower() in ("bca", "mca", "it", "computer science") for m in v.matched), v.matched

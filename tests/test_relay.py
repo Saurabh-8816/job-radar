@@ -92,6 +92,44 @@ def test_laptop_never_modifies_the_shared_database(env):
     assert db.read_bytes() == before                  # a changed jobs.db would block `git pull`
 
 
+def test_laptop_takes_over_sources_github_cannot_reach(monkeypatch, tmp_path):
+    from radar.models import Source
+    durg = Source(id="cg-durg-recruitment", name="Durg district", kind="s3waas",
+                  url="https://durg.gov.in/en/notice_category/recruitment/", group="district")
+    korba = Source(id="cg-korba-recruitment", name="Korba district", kind="s3waas",
+                   url="https://korba.gov.in/en/notice_category/recruitment/", group="district")
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, runner=None: [durg, korba])
+    monkeypatch.setattr(relay, "load_sources",
+                        lambda runner=None: [VYAPAM] if runner == "local" else [durg, korba])
+    monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {
+        u: (Response(u, False, error="ConnectTimeout") if "durg" in u else Response(u, True, 200, text="<p>No notices found</p>"))
+        for u in urls})
+    db = tmp_path / "jobs.db"
+    pipeline.run(pipeline.RunOptions(read_docs=False, build_site=False, db_path=db, runner="cloud", dry_run=True))
+    picked = [s.id for s in relay.select_sources(db)]
+    assert picked == ["cg-vyapam", "cg-durg-recruitment"]          # Korba works from GitHub: not relayed
+
+    store = Store(db)
+    assert store.cloud_streaks()["cg-durg-recruitment"] == 1
+    store.close()
+
+
+def test_blocked_sites_get_only_a_quick_retry(monkeypatch, tmp_path):
+    from radar.models import Source
+    durg = Source(id="cg-durg-recruitment", name="Durg district", kind="s3waas",
+                  url="https://durg.gov.in/en/notice_category/recruitment/", group="district")
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, runner=None: [durg])
+    calls = []
+    monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: calls.append((list(urls), kw)) or {
+        u: Response(u, False, error="ConnectTimeout") for u in urls})
+    db = tmp_path / "jobs.db"
+    for _ in range(4):
+        pipeline.run(pipeline.RunOptions(read_docs=False, build_site=False, db_path=db, runner="cloud", dry_run=True))
+    last_run = calls[-2:]                                      # (normal batch, quick-retry batch)
+    assert last_run[0][0] == [] and last_run[1][0] == [durg.url]
+    assert last_run[1][1]["timeout"] == 8 and last_run[1][1]["retries"] == 0
+
+
 def test_digest_warns_when_laptop_is_silent(tmp_path):
     text, _ = digest.build(Store(tmp_path / "d.db"), today=TODAY)
     assert "laptop hasn't checked in" in text

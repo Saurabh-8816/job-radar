@@ -15,7 +15,8 @@ CREATE TABLE IF NOT EXISTS sources (
     last_run TEXT, last_ok TEXT, last_status TEXT, last_error TEXT,
     last_item_count INTEGER DEFAULT 0,
     consecutive_failures INTEGER DEFAULT 0,
-    note TEXT                -- kept until the digest reports it (e.g. link-format churn)
+    note TEXT,               -- kept until the digest reports it (e.g. link-format churn)
+    cloud_fail_streak INTEGER DEFAULT 0   -- GitHub's own failures in a row; >=1 means the laptop relay takes over
 );
 CREATE TABLE IF NOT EXISTS items (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,8 +48,10 @@ class Store:
         self.db.row_factory = sqlite3.Row
         self.db.executescript(SCHEMA)
         cols = {r["name"] for r in self.db.execute("PRAGMA table_info(sources)")}
-        if "note" not in cols:  # databases created before the column existed
+        if "note" not in cols:  # databases created before these columns existed
             self.db.execute("ALTER TABLE sources ADD COLUMN note TEXT")
+        if "cloud_fail_streak" not in cols:
+            self.db.execute("ALTER TABLE sources ADD COLUMN cloud_fail_streak INTEGER DEFAULT 0")
 
     def close(self):
         self.db.commit()
@@ -91,6 +94,18 @@ class Store:
             """UPDATE sources SET last_run=?, last_status=?, last_error=?,
                consecutive_failures=consecutive_failures+1 WHERE id=?""",
             (now_ist_iso(), status, error, source_id))
+
+    def cloud_result(self, source_id: str, ok: bool):
+        """GitHub's own fetch outcome, kept apart from overall health (which the laptop's
+        successes reset) so the relay knows what GitHub currently can't reach."""
+        if ok:
+            self.db.execute("UPDATE sources SET cloud_fail_streak=0 WHERE id=?", (source_id,))
+        else:
+            self.db.execute("UPDATE sources SET cloud_fail_streak=cloud_fail_streak+1 WHERE id=?", (source_id,))
+
+    def cloud_streaks(self) -> dict[str, int]:
+        return {r["id"]: r["cloud_fail_streak"] or 0
+                for r in self.db.execute("SELECT id, cloud_fail_streak FROM sources")}
 
     def flag_source(self, source_id: str, message: str):
         self.db.execute("UPDATE sources SET note=? WHERE id=?",

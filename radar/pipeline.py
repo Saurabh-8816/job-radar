@@ -68,12 +68,18 @@ def run(opts: RunOptions) -> Counter:
         store.sync_source(s)
     store.commit()
 
-    print(f"Fetching {len(sources)} sources…")
+    # Sites that have refused GitHub for 3+ runs get one quick attempt (the laptop relay
+    # is covering them); normal sites get the full timeout. Keeps dead sites cheap.
+    streaks = store.cloud_streaks()
+    blocked = {s.url for s in sources if streaks.get(s.id, 0) >= 3}
+    print(f"Fetching {len(sources)} sources ({len(blocked)} quick retries of sites blocking GitHub)…")
     started = time.monotonic()
-    responses = fetch_many([s.url for s in sources], workers=opts.workers, timeout=25)
+    responses = fetch_many([s.url for s in sources if s.url not in blocked], workers=opts.workers, timeout=25)
+    responses.update(fetch_many(list(blocked), workers=opts.workers, timeout=8, retries=0, total_timeout=12))
     print(f"  fetched in {time.monotonic() - started:.0f}s")
     for s in sources:
         r = responses[s.url]
+        store.cloud_result(s.id, r.ok)
         if not r.ok:
             store.source_failed(s.id, r.error or "fetch failed")
             stats["sources_failed"] += 1

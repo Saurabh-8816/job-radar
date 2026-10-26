@@ -56,6 +56,27 @@ def _read_state(db_path: Path, source_ids) -> tuple[set, set]:
         db.close()
 
 
+def cloud_blocked_ids(db_path: Path) -> set[str]:
+    """Sources GitHub failed to fetch on its last run (read-only)."""
+    if not Path(db_path).exists():
+        return set()
+    db = sqlite3.connect(f"file:{Path(db_path).as_posix()}?mode=ro", uri=True)
+    try:
+        return {r[0] for r in db.execute("SELECT id FROM sources WHERE cloud_fail_streak >= 1")}
+    except sqlite3.OperationalError:   # database from before the column existed
+        return {r[0] for r in db.execute("SELECT id FROM sources WHERE last_status = 'failed'")}
+    finally:
+        db.close()
+
+
+def select_sources(db_path: Path = DEFAULT_DB) -> list[Source]:
+    """`runner: local` sources, plus any GitHub source that GitHub couldn't reach last
+    time (NIC blocks GitHub for some district sites, SarkariResult answers it 403...).
+    No manual list: if a site starts blocking GitHub, the laptop picks it up next run."""
+    blocked = cloud_blocked_ids(db_path)
+    return load_sources(runner="local") + [s for s in load_sources(runner="cloud") if s.id in blocked]
+
+
 def _load_cache() -> dict:
     try:
         data = json.loads(CACHE.read_text(encoding="utf-8"))
@@ -79,15 +100,17 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
             print("git pull failed; not relaying this time:\n" + pulled.stderr.strip())
             return None
 
-    sources = sources if sources is not None else load_sources(runner="local")
+    sources = sources if sources is not None else select_sources(db_path)
     if not sources:
-        print("No sources are marked `runner: local`.")
+        print("Nothing to relay: GitHub currently reaches every source.")
         return None
     known, baselined = _read_state(db_path, [s.id for s in sources])
     cache = _load_cache()
     clf = Classifier.load()
 
-    print(f"Relay: fetching {len(sources)} sources GitHub can't reach…")
+    fallback = sum(1 for s in sources if s.runner != "local")
+    print(f"Relay: fetching {len(sources)} sources GitHub can't reach "
+          f"({len(sources) - fallback} laptop-only, {fallback} GitHub is failing on)…")
     responses = fetch_many([s.url for s in sources], timeout=25)
     entries, to_read = [], []
     for s in sources:

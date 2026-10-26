@@ -22,6 +22,7 @@ from pathlib import Path
 from . import DATA_DIR, DEFAULT_DB, ROOT
 from .classify import Classifier
 from .docs import read_item_docs
+from . import render
 from .fetch import fetch_many
 from .models import Item, Source
 from .parsers import parse
@@ -111,7 +112,8 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
     fallback = sum(1 for s in sources if s.runner != "local")
     print(f"Relay: fetching {len(sources)} sources GitHub can't reach "
           f"({len(sources) - fallback} laptop-only, {fallback} GitHub is failing on)…")
-    responses = fetch_many([s.url for s in sources], timeout=25)
+    responses = fetch_many([s.url for s in sources if not s.render], timeout=25)
+    responses.update(render.render_many([s.url for s in sources if s.render]))
     entries, to_read = [], []
     for s in sources:
         r = responses[s.url]

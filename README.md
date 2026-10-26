@@ -26,6 +26,13 @@ Typed PDFs cost almost nothing (a 45-page advert reads in ~2 s). OCR is capped a
 10 minutes per run to stay inside GitHub's free minutes; anything left over is read
 on the next run, never skipped.
 
+## JavaScript-built sites
+SSC, NIELIT, MPSC, CG Health and others send an empty page that a browser then fills in.
+Sources marked `render: true` are opened in a headless browser (Chromium on GitHub; your
+installed Edge on the laptop, after `pip install playwright`). Pages render six at a time
+with images blocked, and are captured only once their list of links stops changing.
+`tools/discover_careers.py "<name>" --render` finds the careers page inside such a site.
+
 ## How notices are sorted
 
 | Tier | Meaning | You get |
@@ -80,7 +87,10 @@ the existing adverts is spread across the next few runs, 40 per run.
 From then on it runs by itself every 4 hours, and the digest arrives at 8 PM.
 
 ### 5. Dashboard (optional, free)
-`site/index.html` is rebuilt every run. Open it from the repo after `git pull`, or host it privately:
+`site/index.html` is rebuilt every run, and the laptop relay's `git pull` keeps your copy
+current, so the simplest dashboard is a bookmark:
+`file:///C:/Users/ASUS/Downloads/Suru_new/job-radar/site/index.html`.
+To see it on your phone too, host it privately:
 1. Create a free Cloudflare account → **Workers & Pages → Create → Pages → Direct upload**, name it `job-radar`.
 2. Create an API token with **Cloudflare Pages: Edit** permission; note your **Account ID**.
 3. Add GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The radar workflow then deploys every run.
@@ -129,7 +139,9 @@ whose page layout changed. Fix the URL in `sources/` and the next run picks it u
 ## Sites that block GitHub: the laptop relay
 About 40 sites (CG Vyapam, CGPSC, UPSC, MPPSC, MPESB, NTPC and others) refuse GitHub's
 non-Indian servers. They're marked `runner: local` in `sources/watch_pages.yaml`, and your
-laptop fetches them instead:
+laptop fetches them instead. **On top of that, anything GitHub failed to reach on its last
+run is picked up by the laptop automatically** (e.g. when NIC blocks a district site, or
+SarkariResult answers GitHub with 403), so no list needs maintaining:
 
 ```
 Laptop (every 2h while on)                      GitHub (every 4h, 24/7)

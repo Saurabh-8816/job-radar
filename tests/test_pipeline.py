@@ -128,6 +128,33 @@ def test_alerts_stay_queued_when_telegram_is_not_configured(monkeypatch, tmp_pat
     assert Store(tmp_path / "q.db").alerts_due(TODAY.isoformat()) == []
 
 
+def test_javascript_sources_go_through_the_browser(monkeypatch, tmp_path):
+    from radar.models import Source
+    from radar import render
+    plain = Source(id="plain", name="Plain", kind="watch", url="https://plain.example/jobs", group="central")
+    js = Source(id="nielit", name="NIELIT", kind="watch", url="https://www.nielit.gov.in/form?formName=Recruitments",
+                group="central", render=True)
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [plain, js])
+    fetched, rendered = [], []
+    monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: fetched.extend(urls) or {
+        u: Response(u, True, 200, text="<p>none</p>") for u in urls})
+    monkeypatch.setattr(render, "render_many", lambda urls, **kw: rendered.extend(urls) or {
+        u: Response(u, True, 200, text='<li><a href="/blog?x=1">Walk in Interview for Consultant (IT)</a></li>')
+        for u in urls})
+    monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
+    stats = pipeline.run(pipeline.RunOptions(dry_run=True, read_docs=False, build_site=False,
+                                             db_path=tmp_path / "r.db"))
+    assert fetched == [plain.url] and rendered == [js.url]
+    assert stats["items_baseline"] == 1
+
+
+def test_without_a_browser_rendered_sources_fail_softly(monkeypatch):
+    from radar import render
+    monkeypatch.setattr(render, "available", lambda: False)
+    out = render.render_many(["https://ssc.gov.in/"])
+    assert not out["https://ssc.gov.in/"].ok and "pip install playwright" in out["https://ssc.gov.in/"].error
+
+
 def test_failures_are_counted_for_health(monkeypatch, tmp_path):
     src = district_source("Kondagaon")
     monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])

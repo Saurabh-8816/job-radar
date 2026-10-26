@@ -4,16 +4,17 @@
 #   powershell -ExecutionPolicy Bypass -File tools\install_relay_task.ps1
 #
 # Runs every 2 hours while you're logged in, and at logon; missed runs (laptop asleep)
-# run as soon as it wakes. Remove with:  Unregister-ScheduledTask -TaskName JobRadarRelay
+# run as soon as it wakes. It runs hidden (no window); output goes to data\relay.log.
+# Re-running this script replaces the task. Remove with:
+#   Unregister-ScheduledTask -TaskName JobRadarRelay -Confirm:$false
 
 $ErrorActionPreference = "Stop"
 $repo = Split-Path -Parent $PSScriptRoot
-$python = (Get-Command python -ErrorAction Stop).Source
+$wrapper = Join-Path $PSScriptRoot "relay.cmd"
 $log = Join-Path $repo "data\relay.log"
 
-# cmd wrapper so each run's output is appended to data\relay.log for troubleshooting.
-$cmd = "/c cd /d `"$repo`" && `"$python`" -m radar.main relay --push >> `"$log`" 2>&1"
-$action = New-ScheduledTaskAction -Execute "cmd.exe" -Argument $cmd -WorkingDirectory $repo
+# conhost --headless runs the console program without opening a window (Windows 10 1809+).
+$action = New-ScheduledTaskAction -Execute "conhost.exe" -Argument "--headless `"$wrapper`"" -WorkingDirectory $repo
 
 $every2h = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) -RepetitionInterval (New-TimeSpan -Hours 2)
 $atLogon = New-ScheduledTaskTrigger -AtLogOn -User $env:USERNAME
@@ -26,6 +27,6 @@ Register-ScheduledTask -TaskName "JobRadarRelay" -Action $action -Trigger $every
     -Settings $settings -Description "Job Radar: relay sites that block GitHub (CG Vyapam, CGPSC, UPSC...)" `
     -Force | Out-Null
 
-Write-Host "Installed scheduled task 'JobRadarRelay' (every 2 hours + at logon)."
+Write-Host "Installed scheduled task 'JobRadarRelay' (every 2 hours + at logon, hidden)."
 Write-Host "First run in about 2 minutes. Log: $log"
 Write-Host "Run it now:   Start-ScheduledTask -TaskName JobRadarRelay"

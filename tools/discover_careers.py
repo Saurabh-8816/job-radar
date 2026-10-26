@@ -1,6 +1,8 @@
 """Find each organisation's careers page and write sources/watch_pages.yaml.
 
-Usage:  python tools/discover_careers.py [name-filter]
+Usage:  python tools/discover_careers.py [name-filter] [--render] [--timeout=N]
+
+--render opens pages in a headless browser, for sites built by JavaScript.
 
 For each entry in sources/candidates.yaml: fetch the homepage, follow links that
 look like careers/recruitment pages, and keep the page with the most job-related
@@ -20,6 +22,7 @@ from bs4 import BeautifulSoup
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from radar import SOURCES_DIR  # noqa: E402
 from radar.classify import Classifier  # noqa: E402
+from radar import render  # noqa: E402
 from radar.fetch import get  # noqa: E402
 from radar.models import Source  # noqa: E402
 from radar.parsers import watch  # noqa: E402
@@ -39,10 +42,17 @@ def _slug(text):
 
 
 TIMEOUT = 25
+RENDER = False   # --render: open pages in a headless browser (JavaScript-built sites)
+
+
+def _fetch(url: str):
+    if RENDER:
+        return render.render_many([url], timeout=TIMEOUT)[url]
+    return get(url, timeout=TIMEOUT, retries=1)
 
 
 def score_page(url: str) -> tuple[int, str | None]:
-    r = get(url, timeout=TIMEOUT, retries=1)
+    r = _fetch(url)
     if not r.ok:
         return -1, r.error
     src = Source(id="probe", name="probe", kind="watch", url=url)
@@ -51,7 +61,7 @@ def score_page(url: str) -> tuple[int, str | None]:
 
 
 def candidate_links(home: str) -> list[str]:
-    r = get(home, timeout=25, retries=1)
+    r = _fetch(home)
     if not r.ok:
         return []
     host = urlsplit(r.url if hasattr(r, "url") else home).netloc
@@ -98,18 +108,23 @@ def discover(entry: dict) -> dict:
 
 
 def main():
-    global TIMEOUT
-    args = [a for a in sys.argv[1:] if not a.startswith("--timeout=")]
+    global TIMEOUT, RENDER
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
     for a in sys.argv[1:]:
         if a.startswith("--timeout="):
             TIMEOUT = int(a.split("=", 1)[1])
+        elif a == "--render":
+            RENDER = True
     # Filter: comma-separated names (exact, case-insensitive) or a single substring.
     flt = args[0].lower() if args else ""
     names = {n.strip() for n in flt.split(",")} if "," in flt else None
     entries = [e for e in yaml.safe_load((SOURCES_DIR / "candidates.yaml").read_text(encoding="utf-8"))
                if (e["name"].lower() in names if names else flt in e["name"].lower())]
-    with ThreadPoolExecutor(max_workers=8) as pool:
+    with ThreadPoolExecutor(max_workers=3 if RENDER else 8) as pool:
         results = list(pool.map(discover, entries))
+    if RENDER:
+        for r in results:
+            r["render"] = True
     for r in results:
         flag = "OFF" if r.get("enabled") is False else f"{r['job_links']:>3}"
         print(f"  {flag}  {r['name'][:38]:38} {r['url']}")

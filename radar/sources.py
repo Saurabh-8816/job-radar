@@ -43,7 +43,7 @@ def _watch() -> list[Source]:
             category="careers", filter_jobs=w.get("filter_jobs", True),
             selector=w.get("selector"), enabled=w.get("enabled", True),
             runner=w.get("runner", "cloud"), churn_limit=w.get("churn_limit", 25),
-            region_filter=w.get("region_filter", False),
+            region_filter=w.get("region_filter", False), render=w.get("render", False),
         ))
     return out
 

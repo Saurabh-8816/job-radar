@@ -43,12 +43,22 @@ def rank_docs(docs: list, clf: Classifier) -> list:
     return (adverts or readable)[:MAX_DOCS]
 
 
-def _detail_page(url: str, clf: Classifier) -> tuple[str, list]:
-    """Text of an HTML detail page, and the advert documents it links to."""
-    resp = get(url, timeout=30, retries=1)
-    if not resp.ok or "html" not in (resp.content_type or "text/html"):
-        return "", []
-    soup = BeautifulSoup(resp.text, "lxml")
+def _is_pdf(resp) -> bool:
+    return "pdf" in (resp.content_type or "").lower() or resp.content[:5] == b"%PDF-"
+
+
+def _detail_page(url: str, clf: Classifier, ocr: bool, deadline) -> tuple[str, list, str]:
+    """Text of a linked page, and the advert documents it links to. The link may itself
+    be a PDF without a .pdf name (NIELIT 'Fileviewer?fileId=…', 'download.php?id=…')."""
+    resp = get(url, binary=True, max_bytes=20_000_000, timeout=30, retries=1, total_timeout=90)
+    if not resp.ok:
+        return "", [], "error"
+    if _is_pdf(resp):
+        doc = extract(resp.content, url, ocr=ocr, deadline=deadline)
+        return (doc.text if doc.status in ("text", "ocr") else ""), [], doc.status
+    if "html" not in (resp.content_type or "text/html").lower():
+        return "", [], "none"
+    soup = BeautifulSoup(resp.content.decode("utf-8", errors="replace"), "lxml")
     for tag in soup(["script", "style", "noscript", "nav", "header", "footer", "form"]):
         tag.decompose()
     docs = []
@@ -57,7 +67,7 @@ def _detail_page(url: str, clf: Classifier) -> tuple[str, list]:
         if href.startswith("http") and _is_readable(href):
             docs.append((clean(a.get_text(" ")) or "Document", href))
     text = clean((soup.find("main") or soup.body or soup).get_text(" "))[:PAGE_TEXT_LIMIT]
-    return text, rank_docs(list(dict.fromkeys(docs)), clf)[:3]
+    return text, rank_docs(list(dict.fromkeys(docs)), clf)[:3], "text" if text else "none"
 
 
 def read_item_docs(docs: list, clf: Classifier, ocr: bool = True, page_url: str | None = None,
@@ -67,10 +77,10 @@ def read_item_docs(docs: list, clf: Classifier, ocr: bool = True, page_url: str 
     texts, statuses = [], []
     targets = rank_docs(docs, clf)
     if not targets and page_url:
-        page_text, targets = _detail_page(page_url, clf)
+        page_text, targets, page_status = _detail_page(page_url, clf, ocr, deadline)
+        statuses.append(page_status)
         if page_text:
             texts.append(page_text)
-            statuses.append("text")
     for _label, url in targets:
         if deadline is not None and time.monotonic() > deadline:
             return "", "deferred"

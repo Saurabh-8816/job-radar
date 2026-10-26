@@ -40,6 +40,15 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: Cache headless browser
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+
+      - name: Install headless browser (for JavaScript-built sites like SSC, NIELIT)
+        run: python -m playwright install --with-deps chromium
+
       - name: Run radar
         run: python -m radar.main run --runner cloud ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
 

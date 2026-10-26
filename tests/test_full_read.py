@@ -49,13 +49,22 @@ def test_detail_page_and_its_pdf_are_read(monkeypatch, clf):
     def fake_get(url, **kw):
         if url.endswith(".pdf"):
             return Response(url, True, 200, content=DSSSB, content_type="application/pdf")
-        return Response(url, True, 200, text=page, content_type="text/html")
+        return Response(url, True, 200, text=page, content=page.encode(), content_type="text/html")
 
     monkeypatch.setattr(docs, "get", fake_get)
     text, status = docs.read_item_docs([], clf, ocr=False, page_url="https://vyapam.example/Post?PostID=AP1")
     assert status == "text"
     assert "Eligibility: BCA / MCA" in text                     # the detail page itself
     assert "Trained Graduate Teacher (Computer Science)" in text  # the PDF linked from it
+
+
+def test_pdf_behind_a_link_without_pdf_extension_is_read(monkeypatch, clf):
+    # NIELIT serves adverts as "Fileviewer?fileId=…"; only the content type says it's a PDF.
+    monkeypatch.setattr(docs, "get", lambda url, **kw: Response(url, True, 200, content=DSSSB,
+                                                                 content_type="application/octet-stream"))
+    text, status = docs.read_item_docs([], clf, ocr=False,
+                                       page_url="https://www.nielit.gov.in/Fileviewer?fileId=abc==")
+    assert status == "text" and "I.T. Assistant" in text
 
 
 def test_blank_application_forms_are_skipped_when_an_advert_exists(clf):

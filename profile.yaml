@@ -53,6 +53,11 @@ not_job_words:
   - re:\bscholarships?\b
   - re:\bstudents?\s+(admission|registration|enrol+ment|counsel+ing)\b
   - re:\b(selection|entrance)\s+test\b
+  # events and courses, not jobs: Faculty Development Programmes, workshops, webinars…
+  - re:\bfaculty\s+development\s+program(me)?s?\b
+  - re:(?-i:\bFDP\b)
+  - re:\b(workshop|webinar|seminar|symposium|conference|hackathon|summer\s+school|winter\s+school)s?\b
+  - re:\bshort[\s-]term\s+(course|training)\b
   - कक्षा
   - re:प्रवेश(?!\s*पत्र)            # admission, but not प्रवेश पत्र (admit card)
   - छात्रवृत्ति
@@ -61,7 +66,7 @@ job_core_words:
   - re:\bvacanc(y|ies)\b
   - re:\bposts?\s+of\b
   - re:\bwalk[\s-]?in\b
-  - re:\b(engagement|contractual|appointment|faculty|teacher|lecturer|programmer|engineer)\b
+  - re:\b(engagement|contract(ual)?|appointment|faculty(?!\s+development)|teacher|lecturer|professor|programmer|engineer)\b
   - भर्ती
   - रिक्त
   - संविदा
@@ -72,6 +77,8 @@ job_core_words:
 # Boilerplate removed from advert text before matching: it names a computing term without
 # being about the job (e.g. every Aadhaar clause cites MeitY).
 body_ignore:
+  - re:\b(https?://|www\.)\S+          # web addresses ("iiserkol.ac.in/web/…" isn't a web-development post)
+  - re:\b[\w.+-]+@[\w-]+\.[\w.-]+      # e-mail addresses
   - re:ministry\s+of\s+electronics\s*(&|and)\s*information\s+technology
   - re:electronics\s*(&|and)\s*information\s+technology
   - re:information\s+technology\s+act(,?\s*\d{4})?
@@ -194,19 +201,22 @@ tier_a:
         - re:\bproject\s+(staff|associate|assistant|engineer|fellow|scientist|manager|officer|consultant|technician)\b
         - re:\bresearch\s+(associate|assistant|scientist|engineer|fellow)\b
         - re:(?-i:\b(RA|PA|JPA|SPA|PE)\s*-\s*(I{1,3}|1|2|3)\b)   # "RA-II", "PA-1"; strict so OCR noise like "Ra 2" doesn't count
+      # Evidence that the post is in YOUR field. Only specific terms: words like "data",
+      # "web", "network" or "cloud" turn up in biology, climate and survey projects (and
+      # in website addresses), so they don't count.
       with: &computing
         - re:\bcomput\w*
         - cs:CS
         - cs:CSE
         - cs:IT
-        - cs:ECE
         - cs:AI
         - cs:ML
         - cs:IoT
         - cs:NLP
-        - cs:GIS
+        - cs:MCA
+        - cs:BCA
         - software
-        - re:\b(data|database|machine\s+learning|deep\s+learning|artificial\s+intelligence|cyber|network\w*|programming|coding|python|java|web|cloud|blockchain|vlsi|embedded)\b
+        - re:\b(machine\s+learning|deep\s+learning|artificial\s+intelligence|data\s+science|cyber\s*security|programming|python|java|full[\s-]?stack|database\s+(management|administration))\b
         - re:\binformation\s+technology\b
         - कम्प्यूटर
         - कंप्यूटर

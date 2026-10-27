@@ -15,7 +15,8 @@ import yaml
 from . import PROFILE_PATH
 from .textutil import all_dates, today_ist
 
-_DEVANAGARI = re.compile(r"[ऀ-ॿ]")
+_DEVANAGARI = re.compile(r"[\u0900-\u097F]")
+_WALK_IN = re.compile(r"\bwalk[\s-]*in\b", re.I)
 
 
 class Term:
@@ -147,7 +148,7 @@ class Classifier:
         matched = _dedupe(matched)
         if tier == "A" and body:
             reasons += _evidence(body, head, matched)
-        deadline = self._deadline(body, end_date, today or today_ist())
+        deadline = self._deadline(body, end_date, today or today_ist(), head)
         return Verdict(kind, tier, matched, reasons, deadline)
 
     def body_deadline(self, body: str, today: date) -> str | None:
@@ -165,9 +166,13 @@ class Classifier:
             return None
         return max(Counter(hits).items(), key=lambda kv: (kv[1], kv[0]))[0]
 
-    def _deadline(self, body, end_date, today) -> str | None:
+    def _deadline(self, body, end_date, today, head: str = "") -> str | None:
         found = self.body_deadline(body, today)
         dates = [d for d in (found, end_date) if d]
+        if not dates and _WALK_IN.search(head):
+            # "Walk-in-interview 28.10.2026": the interview date is the last chance to apply.
+            floor = (today - timedelta(days=30)).isoformat()
+            dates = [iso for iso, _s, _e in all_dates(head) if iso >= floor][:1]
         return min(dates) if dates else None
 
 

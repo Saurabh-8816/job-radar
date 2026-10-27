@@ -87,6 +87,30 @@ def test_ocr_noise_is_not_a_project_post(clf):
     assert classify(clf, "Walk-in for RA-II in computer vision").tier == "A"
 
 
+def test_iiser_kolkata_climate_project_is_not_a_computing_post(clf):
+    # The real alert: "Why: Project Associate, web" -- "web" came from the institute's URL.
+    title = ("Walk-in-interview for the post of PA in the Dept of Biological Sciences Prof. Punyasloke "
+             "Bhadury Biological Sciences Walk-in-interview 28.10.2026 Click Here")
+    body = ("Walk-in interview for the position of Project Associate in a project to be undertaken in the "
+            "Centre for Climate and Environmental Studies at IISER Kolkata. Qualifications: Master's degree in "
+            "Natural or Agricultural Sciences/MVSc or Bachelor's degree in Engineering or Technology or Medicine. "
+            "Experience with field sampling, data collection in coastal ocean biotopes or biodiscovery of "
+            "microbes from the mangroves. The venue can be accessed at: "
+            "https://www.iiserkol.ac.in/web/en/contact-us/how-reach/#gsc.tab=0 or mail pa.jobs@iiserkol.ac.in")
+    v = clf.classify(title, "", body, None, "text", TODAY)
+    assert v.tier == "B", v.matched
+    assert v.deadline == "2026-10-28"                       # walk-in date from the title
+
+
+@pytest.mark.parametrize("body", [
+    "Project Associate-I for a machine learning project; B.Tech CSE or MCA",
+    "Project Assistant in software development for the e-governance portal",
+    "JRF in Data Science and Artificial Intelligence",
+])
+def test_research_posts_in_real_computing_fields_stay_tier_a(clf, body):
+    assert clf.classify("Walk-in for project staff", "", body, None, "text", TODAY).tier == "A"
+
+
 def test_research_post_outside_computing_goes_to_digest(clf):
     v = classify(clf, "Project Associate-I in Organic Chemistry")
     assert v.tier == "B"
@@ -182,6 +206,15 @@ def test_other_states_are_dropped(clf, title):
 ])
 def test_wanted_regions_and_all_india_posts_are_kept(clf, title):
     assert clf.in_region(title)
+
+
+def test_training_events_are_not_jobs(clf):
+    for title in ['ONLINE FACULTY DEVELOPMENT PROGRAMME (FDP) ON "Applied Data Science for Engineers"',
+                  "Two-day workshop on Machine Learning with Python",
+                  "National Webinar on Cyber Security"]:
+        assert clf.classify(title, "", "", None, None, TODAY).tier == "C", title
+    # a real job announced alongside an event word stays a job
+    assert clf.classify("Recruitment of Workshop Instructor (Computer Science)", "", "", None, None, TODAY).tier == "A"
 
 
 @pytest.mark.parametrize("title", [

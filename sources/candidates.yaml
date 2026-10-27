@@ -194,3 +194,10 @@
 
 # ---- Aggregators (safety net) -----------------------------------------------------
 - {name: SarkariResult, home: "https://www.sarkariresult.com/", url: "https://www.sarkariresult.com/latestjob/", group: aggregator}
+- {name: "FreeJobAlert (All India)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/government-jobs/", group: aggregator, state: IN}
+- {name: "FreeJobAlert (Chhattisgarh)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/chhattisgarh-government-jobs/", group: aggregator, state: CG}
+- {name: "FreeJobAlert (Madhya Pradesh)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/mp-government-jobs/", group: aggregator, state: MP}
+- {name: "FreeJobAlert (Odisha)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/odisha-government-jobs/", group: aggregator, state: OD}
+- {name: "FreeJobAlert (Delhi)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/delhi-government-jobs/", group: aggregator, state: DL}
+- {name: "FreeJobAlert (Maharashtra)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/maharashtra-government-jobs/", group: aggregator, state: MH}
+- {name: "FreeJobAlert (Telangana)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/telangana-government-jobs/", group: aggregator, state: TG}

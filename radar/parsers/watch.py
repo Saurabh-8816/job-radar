@@ -63,16 +63,43 @@ def _context_element(a):
     return a.find_parent(["p", "dd", "td"])
 
 
+_DEADLINE_HEADER = re.compile(r"last\s*date|closing\s*date|अंतिम\s*(तिथि|दिनांक)", re.I)
+
+
+def _table_deadline(a) -> str | None:
+    """Deadline from a 'Last Date' / 'Closing Date' column of the link's table row."""
+    tr = a.find_parent("tr")
+    table = tr.find_parent("table") if tr else None
+    if table is None:
+        return None
+    header = table.find("tr")
+    if header is None or header is tr:
+        return None
+    names = [clean(c.get_text(" ")) for c in header.find_all(["th", "td"])]
+    col = next((i for i, n in enumerate(names) if _DEADLINE_HEADER.search(n)), None)
+    cells = tr.find_all(["td", "th"])
+    if col is None or col >= len(cells):
+        return None
+    return parse_date(cells[col].get_text(" "))
+
+
+def _scopes(soup, selector):
+    """Every element the selector matches (pages often split jobs across several
+    tables), else the whole body."""
+    if selector:
+        found = soup.select(selector)
+        if found:
+            return found
+    return [soup.body or soup]
+
+
 def parse(html: str, page_url: str, source) -> ParseResult:
     soup = BeautifulSoup(html, "lxml")
     for tag in soup(["script", "style", "noscript", "template"]):
         tag.decompose()
-    scope = (soup.select_one(source.selector) if source.selector else None) or soup.body or soup
-    if scope is None:
-        return ParseResult("unrecognized", [])
 
     items, seen = [], set()
-    for a in scope.find_all("a", href=True):
+    for a in (a for scope in _scopes(soup, source.selector) for a in scope.find_all("a", href=True)):
         href = a["href"].strip()
         if not href or href.lower().startswith(_SKIP_SCHEMES):
             continue
@@ -95,7 +122,8 @@ def parse(html: str, page_url: str, source) -> ParseResult:
             notice_url=page_url,
             docs=[(text or "Document", url)] if is_document(url) else [],
             start_date=parse_date(context),
-            end_date=parse_date(m.group(1)) if (m := _LAST_DATE.search(context)) else None,
+            end_date=(parse_date(m.group(1)) if (m := _LAST_DATE.search(context)) else None)
+                     or _table_deadline(a),
             key_hint=stable_key(url, text, context),
         ))
     return ParseResult("ok" if items else "empty", items)

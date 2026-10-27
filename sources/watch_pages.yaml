@@ -1170,3 +1170,53 @@
   churn_limit: 150
   region_filter: true
   note: safety net for notices the official sources miss; may repeat an official alert
+- id: freejobalert-all-india
+  name: FreeJobAlert (All India)
+  group: aggregator
+  state: IN
+  url: https://www.freejobalert.com/government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150
+  region_filter: true
+- id: freejobalert-chhattisgarh
+  name: FreeJobAlert (Chhattisgarh)
+  group: aggregator
+  state: CG
+  url: https://www.freejobalert.com/chhattisgarh-government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150
+- id: freejobalert-mp
+  name: FreeJobAlert (Madhya Pradesh)
+  group: aggregator
+  state: MP
+  url: https://www.freejobalert.com/mp-government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150
+- id: freejobalert-odisha
+  name: FreeJobAlert (Odisha)
+  group: aggregator
+  state: OD
+  url: https://www.freejobalert.com/odisha-government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150
+- id: freejobalert-delhi
+  name: FreeJobAlert (Delhi)
+  group: aggregator
+  state: DL
+  url: https://www.freejobalert.com/delhi-government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150
+- id: freejobalert-maharashtra
+  name: FreeJobAlert (Maharashtra)
+  group: aggregator
+  state: MH
+  url: https://www.freejobalert.com/maharashtra-government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150
+- id: freejobalert-telangana
+  name: FreeJobAlert (Telangana)
+  group: aggregator
+  state: TG
+  url: https://www.freejobalert.com/telangana-government-jobs/
+  selector: table.kar-jobs
+  churn_limit: 150

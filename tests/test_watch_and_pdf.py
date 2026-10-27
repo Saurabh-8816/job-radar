@@ -63,6 +63,32 @@ def test_aggregator_row_deadline_becomes_end_date():
     assert item.end_date == "2026-09-18"
 
 
+FJA = """<html><body><nav><a href="/bank-jobs/">Bank Jobs</a></nav>
+<table class="kar-table kar-jobs"><tr><th>Post Date</th><th>Job Title</th><th>Post name</th><th>Vacancies</th>
+<th>Qualification</th><th>Last Date</th><th>Notification</th></tr>
+<tr><td>26/10/2026</td><td>PRSU Vacancy 2026 - 2 Junior Research Fellow</td><td>Junior Research Fellow</td>
+<td>2 Posts</td><td>M.Sc, M.A</td><td>26-11-2026</td><td><a href="/articles/prsu-jrf-3074161">View</a></td></tr></table>
+<table class="kar-table kar-jobs"><tr><th>Post Date</th><th>Job Title</th><th>Post name</th><th>Vacancies</th>
+<th>Qualification</th><th>Last Date</th><th>Notification</th></tr>
+<tr><td>25/10/2026</td><td>CHiPS Recruitment 2026</td><td>Programmer</td><td>5 Posts</td><td>MCA, B.Tech</td>
+<td>15-11-2026</td><td><a href="/articles/chips-3074200">View</a></td></tr></table>
+<table class="kar-table"><tr><th>Post Date</th><th>Title</th><th>Action</th></tr>
+<tr><td>26/10/2026</td><td>Admit Card</td><td><a href="/articles/admit-1">View</a></td></tr></table></body></html>"""
+
+
+def test_selector_reads_every_matching_table_and_skips_menus():
+    src = Source(id="fja", name="FJA", kind="watch", url="https://www.freejobalert.com/x/", selector="table.kar-jobs")
+    items = watch.parse(FJA, src.url, src).items
+    assert [i.url.rsplit("/", 1)[-1] for i in items] == ["prsu-jrf-3074161", "chips-3074200"]
+    assert "Programmer" in items[1].title and "MCA" in items[1].title     # row text, not just "View"
+
+
+def test_last_date_column_becomes_the_deadline():
+    src = Source(id="fja", name="FJA", kind="watch", url="https://www.freejobalert.com/x/", selector="table.kar-jobs")
+    items = watch.parse(FJA, src.url, src).items
+    assert [i.end_date for i in items] == ["2026-11-26", "2026-11-15"]
+
+
 def test_legacy_hindi_font_is_not_useful_text():
     kruti = "dk;kZy; ftyk iapk;r dksaMkxkao NRrhlx<+ fokKkiu lgk;d izksxzkej in gsrq vkosnu i= " * 6
     assert looks_legacy_font(kruti)

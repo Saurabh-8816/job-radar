@@ -1220,3 +1220,12 @@
   url: https://www.freejobalert.com/telangana-government-jobs/
   selector: table.kar-jobs
   churn_limit: 150
+- id: servicesetu-jobs
+  name: ServiceSetu (academic jobs)
+  kind: servicesetu
+  group: academic
+  state: IN
+  url: https://app.servicesetu.org/api/jobs?page=1&limit=100
+  filter_jobs: false   # the jobs feed only; workshops/papers/PhD admissions are separate feeds
+  churn_limit: 150
+  note: JSON feed behind servicesetu.org/jobs (project staff, JRF/SRF, research, faculty)

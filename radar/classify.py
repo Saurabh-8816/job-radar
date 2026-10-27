@@ -76,7 +76,9 @@ class Classifier:
         a = p.get("tier_a", {})
         self.strong = TermSet(a.get("strong"))
         self.weak = TermSet(a.get("weak"))
-        self.combos = {name: (TermSet(c.get("role")), TermSet(c.get("with")))
+        # (role, with, also): a role word AND a field word, AND (when given) an "also" word
+        self.combos = {name: (TermSet(c.get("role")), TermSet(c.get("with")),
+                              TermSet(c.get("also")) if c.get("also") else None)
                        for name, c in (a.get("combos") or {}).items()}
         self.tier_b = TermSet(p.get("tier_b"))
         self.tier_c = TermSet(p.get("tier_c"))
@@ -121,20 +123,33 @@ class Classifier:
 
         matched = self.strong.all(everything) + self.weak.all(head)
         reasons, partial = [], []
-        for name, (role, needs) in self.combos.items():
+        for name, (role, needs, also) in self.combos.items():
             roles = role.all(everything)
             if not roles:
                 continue
             computing = needs.all(everything)
-            if computing:
-                matched += roles + computing
+            extra = also.all(everything) if also else []
+            if computing and (also is None or extra):
+                matched += roles + computing + extra
                 reasons.append(f"{name} post in a computing field")
+            elif computing:
+                partial += roles
+                reasons.append(f"{name} post in computing, but no sign it's open to MCA/NET holders")
             else:
                 partial += roles
                 reasons.append(f"{name} post, field unclear")
 
-        if matched:
+        # The post itself is a professor / faculty post (named in the title) with no sign it's
+        # open to MCA / NET holders: that's a PhD-level post, whatever departments it lists.
+        prof = self.combos.get("professor")
+        phd_level = bool(prof and prof[2] and prof[0].first(head) and not prof[2].first(everything))
+        if phd_level:
+            reasons.append("faculty post with no sign it's open to MCA/NET holders (likely PhD)")
+
+        if matched and not phd_level:
             tier = "A"
+        elif phd_level:
+            tier, matched = "B", prof[0].all(head)
         elif (b := self.tier_b.all(everything)) or partial:
             tier, matched = "B", (b or []) + partial
         elif c := self.tier_c.all(head):

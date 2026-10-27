@@ -79,6 +79,7 @@ job_core_words:
 body_ignore:
   - re:\b(https?://|www\.)\S+          # web addresses ("iiserkol.ac.in/web/…" isn't a web-development post)
   - re:\b[\w.+-]+@[\w-]+\.[\w.-]+      # e-mail addresses
+  - re:\binstitutes?\s+of\s+information\s+technology\b   # IIIT names: "Indian Institute of Information Technology Dharwad"
   - re:ministry\s+of\s+electronics\s*(&|and)\s*information\s+technology
   - re:electronics\s*(&|and)\s*information\s+technology
   - re:information\s+technology\s+act(,?\s*\d{4})?
@@ -139,7 +140,7 @@ tier_a:
     - re:(?-i:\b[BM]\.?\s?E\b)\.?\s*(-|in\s+)?\(?\s*(cs|cse|(?-i:IT)|computer|information)\b
     - re:\b(pgdca|dca|o\s*level|a\s*level)\b
     - re:\binformation\s+technology\b
-    - re:\bsoftware\b
+    - re:\bsoftware\s+(engineer|developer|development|engineering|programmer|tester|testing|professional|specialist)s?\b
     - re:\bsystem(s)?\s+(analyst|administrator|engineer|manager|officer)\b
     - re:\b(network|database|db)\s+(administrator|engineer|manager)\b
     - re:\b(it|i\.t\.)\s+(officer|assistant|manager|executive|consultant|coordinator|expert|professional|specialist|support)\b
@@ -149,7 +150,8 @@ tier_a:
     - re:\bscientist\s*/\s*engineer\b
     - re:\b(sub[\s-]?engineer|junior\s+engineer|je|assistant\s+engineer)\s*[-(]?\s*civil
     - re:\bdiploma\s+(in\s+)?civil\b
-    - re:\bcivil\s+engineer(ing)?\b
+    # (plain "Civil Engineering" only counts in the title/description: weak `civil` below.
+    #  Inside an advert it's usually a department list in an IIT faculty notice.)
     # Statewide 2026 drive hiring Assistant Programmers in every Janpad. Districts spell it
     # many ways: VB-G-RAM-G, VB-GRAMG, VB-G Ram-G, Vikasit Bharat-Ji Ram-Ji, Viksit Bharat Guarantee Mission…
     - re:\b(vb[\s-]*)?g[\s-]*ram[\s-]*g\b
@@ -182,15 +184,16 @@ tier_a:
     - रोजगार एवं आजीविका
   # Weak terms: too common inside PDFs ("computer knowledge required"), so they
   # only promote to tier A when they appear in the title/description.
+  # (Plain "civil" is not here: a "JRF in Civil Engineering" needs a civil degree. Civil
+  #  posts you can reach, Sub-Engineer / JE / diploma, are matched specifically above.)
   weak:
     - computer
+    - software             # in the title only; inside adverts "software tools" is everywhere
     - cs:IT
     - cs:CSE
-    - re:\bcivil\b
     - re:\btechnical\s+assistant\b
     - कम्प्यूटर
     - कंप्यूटर
-    - सिविल
   # Combos: tier A only when a role word AND a computing word both appear (head or PDF).
   # A role word without the computing word goes to tier B.
   combos:
@@ -201,34 +204,47 @@ tier_a:
         - re:\bproject\s+(staff|associate|assistant|engineer|fellow|scientist|manager|officer|consultant|technician)\b
         - re:\bresearch\s+(associate|assistant|scientist|engineer|fellow)\b
         - re:(?-i:\b(RA|PA|JPA|SPA|PE)\s*-\s*(I{1,3}|1|2|3)\b)   # "RA-II", "PA-1"; strict so OCR noise like "Ra 2" doesn't count
-      # Evidence that the post is in YOUR field. Only specific terms: words like "data",
-      # "web", "network" or "cloud" turn up in biology, climate and survey projects (and
-      # in website addresses), so they don't count.
+      # Evidence that the post is in YOUR field: the discipline or qualification, not a
+      # passing mention. "software tools", "programming", "computational biology", "data",
+      # "web", bare "AI" turn up in electrical, biology, climate and finance projects.
       with: &computing
-        - re:\bcomput\w*
+        - re:\bcomputer\s+(science|applications?|engineering|vision)\b
+        - re:\bcomputing\b
         - cs:CS
         - cs:CSE
         - cs:IT
-        - cs:AI
-        - cs:ML
-        - cs:IoT
-        - cs:NLP
+        - re:(?-i:\bAI\s*(/|&|and)\s*ML\b)
         - cs:MCA
         - cs:BCA
-        - software
-        - re:\b(machine\s+learning|deep\s+learning|artificial\s+intelligence|data\s+science|cyber\s*security|programming|python|java|full[\s-]?stack|database\s+(management|administration))\b
+        - re:\bM\.?\s?C\.?\s?A\b
+        - re:\bsoftware\s+(engineering|development|developer)\b
+        - re:\b(machine\s+learning|deep\s+learning|artificial\s+intelligence|data\s+science|cyber\s*security|full[\s-]?stack|database\s+(management|administration))\b
         - re:\binformation\s+technology\b
-        - कम्प्यूटर
-        - कंप्यूटर
+        - कम्प्यूटर साइंस
+        - कंप्यूटर साइंस
+        - कम्प्यूटर एप्लीकेशन
+        - सूचना प्रौद्योगिकी
     teaching:
+      # Lecturer / guest faculty / instructor posts in CS: within reach with MCA.
       role:
-        - re:\b(assistant|associate)\s+professor\b
-        - re:\b(lecturer|guest\s+faculty|guest\s+lecturer|faculty|teaching\s+assistant|instructor|tutor)\b
+        - re:\b(lecturer|guest\s+faculty|guest\s+lecturer|teaching\s+assistant|instructor|tutor)\b
         - व्याख्याता
         - अतिथि शिक्षक
         - अतिथि व्याख्याता
+      with: *computing
+    professor:
+      # Assistant / Associate Professor posts at IITs, NITs, central universities need a PhD.
+      # College-level posts open to MCA holders mention NET / SET / SLET (UGC norms), so a
+      # professor post counts only with a computing field AND one of those.
+      role:
+        - re:\b(assistant|associate)\s+professor\b
+        - re:\bfaculty\s+(positions?|posts?|recruitment|vacanc\w*)\b
         - सहायक प्राध्यापक
       with: *computing
+      also:
+        - re:(?-i:\b(NET|SET|SLET|UGC[\s-]NET|CSIR[\s-]NET)\b)
+        - cs:MCA
+        - re:\bM\.?\s?C\.?\s?A\b
 
 # Tier B = daily digest. Any-graduate posts and anything uncertain.
 tier_b:

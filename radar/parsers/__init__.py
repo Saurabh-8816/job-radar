@@ -1,6 +1,6 @@
-from . import s3waas, watch
+from . import s3waas, servicesetu, watch
 
-PARSERS = {"s3waas": s3waas.parse, "watch": watch.parse}
+PARSERS = {"s3waas": s3waas.parse, "watch": watch.parse, "servicesetu": servicesetu.parse}
 
 
 def parse(source, html: str, page_url: str):

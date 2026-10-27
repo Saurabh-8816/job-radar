@@ -53,3 +53,4 @@ class Item:
 class ParseResult:
     status: str                  # "ok" | "empty" | "unrecognized"
     items: list[Item]
+    texts: dict = field(default_factory=dict)  # item key -> (advert text, status) when the source supplies it

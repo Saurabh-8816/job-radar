@@ -132,8 +132,11 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
         for item in items:
             if item.key in cache or (item.key in known and not first_contact):
                 continue
-            row = {**asdict(item), "doc_text": "", "doc_status": None}
+            text, status = result.texts.get(item.key, ("", None))
+            row = {**asdict(item), "doc_text": text[:SHIP_TEXT_LIMIT], "doc_status": status}
             entry["items"].append(row)
+            if status:          # the source already supplied the advert text
+                continue
             if (item.docs or item.url != item.notice_url) and not first_contact:
                 to_read.append(row)
 

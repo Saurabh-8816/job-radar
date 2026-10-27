@@ -201,3 +201,4 @@
 - {name: "FreeJobAlert (Delhi)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/delhi-government-jobs/", group: aggregator, state: DL}
 - {name: "FreeJobAlert (Maharashtra)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/maharashtra-government-jobs/", group: aggregator, state: MH}
 - {name: "FreeJobAlert (Telangana)", home: "https://www.freejobalert.com/", url: "https://www.freejobalert.com/telangana-government-jobs/", group: aggregator, state: TG}
+- {name: "ServiceSetu (academic jobs)", home: "https://www.servicesetu.org/", url: "https://app.servicesetu.org/api/jobs?page=1&limit=100", group: academic}

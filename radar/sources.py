@@ -38,7 +38,7 @@ def _watch() -> list[Source]:
     out = []
     for w in yaml.safe_load(path.read_text(encoding="utf-8")) or []:
         out.append(Source(
-            id=w.get("id") or _slug(w["name"]), name=w["name"], kind="watch", url=w["url"],
+            id=w.get("id") or _slug(w["name"]), name=w["name"], kind=w.get("kind", "watch"), url=w["url"],
             state=w.get("state", "IN"), district=w.get("district"), group=w.get("group", "central"),
             category="careers", filter_jobs=w.get("filter_jobs", True),
             selector=w.get("selector"), enabled=w.get("enabled", True),

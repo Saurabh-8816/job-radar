@@ -91,7 +91,7 @@ def run(opts: RunOptions) -> Counter:
             stats["sources_failed"] += 1
             continue
         result = parse(s, r.text, s.url)
-        _ingest(ctx, s, result.status, result.items)
+        _ingest(ctx, s, result.status, result.items, result.texts)
 
     if opts.ingest_inbox:
         _ingest_inbox(ctx)

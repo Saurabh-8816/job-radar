@@ -257,3 +257,17 @@ def test_job_word_filter_for_announcements(clf):
     assert clf.is_job_related("UP Police Constable Online Form 2026")      # aggregator wording
     assert not clf.is_job_related("Information regarding vacant Nazul land in Raipur district")
     assert not clf.is_job_related("Uploading of the Awaas Plus list under Pradhan Mantri Awas Yojana")
+
+
+@pytest.mark.parametrize("title", [
+    "SSC MTS Syllabus 2026 PDF, Paper 1 Exam Pattern and Passing Marks",
+    "Telangana Police SI Salary 2026, Salary Structure, Allowances, Job Profile",
+    "RRB NTPC Previous Year Question Papers For Graduate and Undergraduate, Download All PDFs",
+    "RRB JE Exam Analysis 2026 For 27 October Shift 1 Paper",
+])
+def test_exam_prep_articles_are_not_jobs(clf, title):
+    assert clf.is_not_a_job(title)
+
+
+def test_job_post_mentioning_salary_is_still_a_job(clf):
+    assert not clf.is_not_a_job("LIC ADO Notification 2026-27 Soon: 10000+ Vacancies, Eligibility, Salary")

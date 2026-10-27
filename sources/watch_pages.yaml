@@ -1229,3 +1229,54 @@
   filter_jobs: false   # the jobs feed only; workshops/papers/PhD admissions are separate feeds
   churn_limit: 150
   note: JSON feed behind servicesetu.org/jobs (project staff, JRF/SRF, research, faculty)
+- id: adda247-all-india
+  name: Adda247 (Recruitment, all India)
+  group: aggregator
+  state: IN
+  url: https://www.adda247.com/jobs/category/recruitment/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150
+  region_filter: true
+  note: exam-prep articles (syllabus, salary, old papers) are dropped by not_job_words
+- id: adda247-chhattisgarh
+  name: Adda247 (Chhattisgarh)
+  group: aggregator
+  state: CG
+  url: https://www.adda247.com/exams/chhattisgarh/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150
+- id: adda247-mp
+  name: Adda247 (MP)
+  group: aggregator
+  state: MP
+  url: https://www.adda247.com/exams/mp/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150
+- id: adda247-odisha
+  name: Adda247 (Odisha)
+  group: aggregator
+  state: OD
+  url: https://www.adda247.com/exams/odisha/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150
+- id: adda247-maharashtra
+  name: Adda247 (Maharashtra)
+  group: aggregator
+  state: MH
+  url: https://www.adda247.com/exams/maharashtra/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150
+- id: adda247-telangana
+  name: Adda247 (Telangana)
+  group: aggregator
+  state: TG
+  url: https://www.adda247.com/exams/telangana/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150
+- id: adda247-delhi
+  name: Adda247 (Delhi)
+  group: aggregator
+  state: DL
+  url: https://www.adda247.com/exams/delhi/
+  selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
+  churn_limit: 150

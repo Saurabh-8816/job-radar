@@ -115,7 +115,7 @@ class Classifier:
                  today: date | None = None) -> Verdict:
         head = f"{title} {description}"
         if self.is_not_a_job(head):
-            return Verdict("new", "C", [], ["admission / student notice, not a job"], end_date)
+            return Verdict("new", "C", [], ["not a job: admission, event or exam-prep article"], end_date)
         for rx in self.body_ignore:
             body = rx.sub(" ", body)
         everything = f"{head} {body}"

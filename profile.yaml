@@ -58,6 +58,9 @@ not_job_words:
   - re:(?-i:\bFDP\b)
   - re:\b(workshop|webinar|seminar|symposium|conference|hackathon|summer\s+school|winter\s+school)s?\b
   - re:\bshort[\s-]term\s+(course|training)\b
+  # exam-prep articles on aggregators (Adda247...): syllabus, salary, old papers…
+  - re:\b(syllabus|exam\s+pattern|exam\s+analysis|previous\s+year|question\s+papers?|memory[\s-]based|mock\s+tests?|preparation|books?\s+(list|for))\b
+  - re:\b(salary|in[\s-]hand|pay\s+scale|job\s+profile)\b
   - कक्षा
   - re:प्रवेश(?!\s*पत्र)            # admission, but not प्रवेश पत्र (admit card)
   - छात्रवृत्ति

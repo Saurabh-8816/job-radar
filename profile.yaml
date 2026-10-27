@@ -150,8 +150,6 @@ tier_a:
     - re:\bscientist\s*/\s*engineer\b
     - re:\b(sub[\s-]?engineer|junior\s+engineer|je|assistant\s+engineer)\s*[-(]?\s*civil
     - re:\bdiploma\s+(in\s+)?civil\b
-    # (plain "Civil Engineering" only counts in the title/description: weak `civil` below.
-    #  Inside an advert it's usually a department list in an IIT faculty notice.)
     # Statewide 2026 drive hiring Assistant Programmers in every Janpad. Districts spell it
     # many ways: VB-G-RAM-G, VB-GRAMG, VB-G Ram-G, Vikasit Bharat-Ji Ram-Ji, Viksit Bharat Guarantee Mission…
     - re:\b(vb[\s-]*)?g[\s-]*ram[\s-]*g\b

@@ -182,7 +182,8 @@ class Classifier:
         return max(Counter(hits).items(), key=lambda kv: (kv[1], kv[0]))[0]
 
     def _deadline(self, body, end_date, today, head: str = "") -> str | None:
-        found = self.body_deadline(body, today)
+        # The title counts too: "…Last date of receiving application: 15th November, 2026".
+        found = self.body_deadline(f"{head}\n{body}" if head else body, today)
         dates = [d for d in (found, end_date) if d]
         if not dates and _WALK_IN.search(head):
             # "Walk-in-interview 28.10.2026": the interview date is the last chance to apply.

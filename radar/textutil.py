@@ -27,23 +27,49 @@ def strip_size(label: str) -> str:
     return _SIZE_SUFFIX.sub("", label).strip()
 
 
+_MONTHS = {
+    "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3, "apr": 4, "april": 4,
+    "may": 5, "jun": 6, "june": 6, "jul": 7, "july": 7, "aug": 8, "august": 8, "sep": 9, "sept": 9,
+    "september": 9, "oct": 10, "october": 10, "nov": 11, "november": 11, "dec": 12, "december": 12,
+    "जनवरी": 1, "फरवरी": 2, "फ़रवरी": 2, "मार्च": 3, "अप्रैल": 4, "अप्रेल": 4, "मई": 5, "जून": 6,
+    "जुलाई": 7, "अगस्त": 8, "सितंबर": 9, "सितम्बर": 9, "अक्टूबर": 10, "अक्तूबर": 10,
+    "नवंबर": 11, "नवम्बर": 11, "दिसंबर": 12, "दिसम्बर": 12,
+}
+_MONTH = "(" + "|".join(sorted((re.escape(m) for m in _MONTHS), key=len, reverse=True)) + r")\.?"
+_ORD = r"(?:st|nd|rd|th)?"
+# "15th November, 2026", "15 Nov 2026", "15-Nov-2026", "15 नवंबर 2026"
+_DMY_WORD = re.compile(rf"(?<!\d)(\d{{1,2}}){_ORD}\s*(?:of\s+)?[-/.,\s]*{_MONTH}(?![a-z])[-/.,\s]*(\d{{4}})(?!\d)", re.I)
+# "November 15, 2026", "Nov. 15th 2026"
+_MDY_WORD = re.compile(rf"(?<![a-z]){_MONTH}(?![a-z])\s*(\d{{1,2}}){_ORD},?\s+(\d{{4}})(?!\d)", re.I)
+_HINDI_DIGITS = str.maketrans("०१२३४५६७८९", "0123456789")
+
+
 def parse_date(text: str | None) -> str | None:
-    """First dd/mm/yyyy-style date in text, as ISO 'YYYY-MM-DD'."""
-    if not text:
-        return None
-    m = _DATE.search(text)
-    return _iso(*m.groups()) if m else None
+    """First date in text (15/11/2026, 15th November 2026, Nov 15, 2026...), as ISO."""
+    return next((iso for iso, _s, _e in all_dates(text)), None)
 
 
 def all_dates(text: str):
-    """Yield (iso_date, start, end) for every valid numeric date in text."""
-    for m in _DATE.finditer(text or ""):
-        iso = _iso(*m.groups())
-        if iso:
-            yield iso, m.start(), m.end()
+    """Yield (iso_date, start, end) for every valid date in text, in order: numeric
+    (15.11.2026) or with the month written out, in English or Hindi."""
+    text = (text or "").translate(_HINDI_DIGITS)     # same length, so positions still match
+    found = []
+    for m in _DATE.finditer(text):
+        found.append((m.start(), m.end(), _iso(*m.groups())))
+    for m in _DMY_WORD.finditer(text):
+        d, mon, y = m.groups()
+        found.append((m.start(), m.end(), _iso(d, _MONTHS[mon.lower()], y)))
+    for m in _MDY_WORD.finditer(text):
+        mon, d, y = m.groups()
+        found.append((m.start(), m.end(), _iso(d, _MONTHS[mon.lower()], y)))
+    last_end = -1
+    for start, end, iso in sorted(found):
+        if iso and start >= last_end:
+            last_end = end
+            yield iso, start, end
 
 
-def _iso(d: str, m: str, y: str) -> str | None:
+def _iso(d, m, y) -> str | None:
     try:
         return date(int(y), int(m), int(d)).isoformat()
     except ValueError:

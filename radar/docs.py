@@ -17,6 +17,8 @@ from .textutil import clean, join_url
 _FORM_LABEL = re.compile(r"आवेदन\s*(प्रारूप|पत्र|फार्म|फॉर्म)|प्रारूप|application\s*form|format|proforma", re.I)
 _ADVERT_LABEL = re.compile(r"विज्ञापन|भर्ती|advertis|advt|notification|recruit|vacanc|notice|view", re.I)
 _READABLE = (".pdf", ".jpg", ".jpeg", ".png")
+_SIDEBAR = re.compile(r"sidebar|widget|related|recent[-_]?post|popular|trending|latest[-_]?(post|job|news)|"
+                      r"yarpp|share|social|comment|breadcrumb", re.I)
 MAX_DOCS = 5
 PAGE_TEXT_LIMIT = 60_000
 
@@ -66,8 +68,33 @@ def _detail_page(url: str, clf: Classifier, ocr: bool, deadline) -> tuple[str, l
         href = join_url(url, a["href"].strip())
         if href.startswith("http") and _is_readable(href):
             docs.append((clean(a.get_text(" ")) or "Document", href))
+    _strip_link_lists(soup)
     text = clean((soup.find("main") or soup.body or soup).get_text(" "))[:PAGE_TEXT_LIMIT]
     return text, rank_docs(list(dict.fromkeys(docs)), clf)[:3], "text" if text else "none"
+
+
+def _strip_link_lists(soup):
+    """Drop sidebars and "related / latest posts" blocks before reading a page's text:
+    on aggregator pages they name other jobs ("NRLM Karnataka … MIS Coordinator…"),
+    which would otherwise read as part of this advert."""
+    for tag in soup.find_all("aside"):
+        tag.decompose()
+    for tag in soup.find_all(True):
+        if tag.decomposed:
+            continue
+        names = " ".join(tag.get("class") or []) + " " + (tag.get("id") or "")
+        if _SIDEBAR.search(names):
+            tag.decompose()
+    for block in soup.find_all(["ul", "ol", "table", "div"]):
+        if block.decomposed:
+            continue
+        links = block.find_all("a")
+        if len(links) < 5:
+            continue
+        total = len(clean(block.get_text(" ")))
+        linked = sum(len(clean(a.get_text(" "))) for a in links)
+        if total and linked / total > 0.75:
+            block.decompose()
 
 
 def read_item_docs(docs: list, clf: Classifier, ocr: bool = True, page_url: str | None = None,

@@ -47,7 +47,8 @@ job_words:
 # there, so "Teacher for class 1-5 भर्ती" stays a job. Such notices are stored as tier C.
 not_job_words:
   - re:\badmissions?\b
-  - re:(?-i:\b(LEST|JNVST|NEET|JEE|CUET)\b)   # uppercase only: "Viksit Bharat-Jee Ram Ji" is a job scheme
+  - re:(?-i:\b(LEST|JNVST|NEET|JEE|CUET|CLAT|GATE|UCEED|CEED|AIAPGET|SRMJEEE)\b)   # uppercase only: "Viksit Bharat-Jee Ram Ji" is a job scheme
+  - re:\b(counsel+ing|prospectus|time\s*table|board\s+registration)\b    # student news on exam sites (PW...)
   - re:\bcet\s+for\s+admission\b
   - re:\bclass\s+(vi|vii|viii|ix|x|xi|xii|[1-9]|1[0-2])(st|nd|rd|th)?\b
   - re:\bscholarships?\b
@@ -70,6 +71,7 @@ job_core_words:
   - re:\bposts?\s+of\b
   - re:\bwalk[\s-]?in\b
   - re:\b(engagement|contract(ual)?|appointment|faculty(?!\s+development)|teacher|lecturer|professor|programmer|engineer)\b
+  - re:(?-i:\b(JRF|SRF)\b)|\bresearch\s+(fellow|associate|assistant)|\bproject\s+(staff|assistant|associate|scientist|engineer)|\bpositions?\b|\bopenings\b|\bjob\s+opening
   - भर्ती
   - रिक्त
   - संविदा

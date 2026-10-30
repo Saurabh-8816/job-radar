@@ -1308,3 +1308,12 @@
   url: https://www.adda247.com/exams/delhi/
   selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
   churn_limit: 150
+- id: pw-news
+  name: PW (Physics Wallah) exam news
+  kind: sitemap
+  group: aggregator
+  state: IN
+  url: https://www.pw.live/sitemaps/pwlive/news/sitemap_1.xml
+  churn_limit: 80
+  region_filter: true
+  note: news sitemap = PW's articles from the last day or two; job ones kept, other states' dropped

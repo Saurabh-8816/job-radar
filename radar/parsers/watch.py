@@ -29,6 +29,15 @@ _GENERIC = {
     "pdf", "link", "apply", "apply online", "apply here", "new", "notification",
     "advertisement", "advt", "view details", "देखें", "डाउनलोड", "यहाँ क्लिक करें",
 }
+# Longer button labels that still say nothing: "View Advertisement", "Download Notification (PDF)".
+_GENERIC_LABEL = re.compile(
+    r"^(click\s+here\s+(to|for)\s+)?(view|download|read|see|open|check)?\s*(the\s+)?"
+    r"(full\s+|detailed\s+|official\s+)?(advertisement|advt\.?|notification|notice|details|pdf|file|document|corrigendum)s?"
+    r"\s*(\(.{0,20}\))?\s*(here)?$", re.I)
+
+
+def _says_nothing(text: str) -> bool:
+    return text.lower() in _GENERIC or bool(_GENERIC_LABEL.match(text))
 
 
 def is_document(url: str) -> bool:
@@ -111,7 +120,7 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         text = clean(a.get_text(" ")) or clean(a.get("title")) or clean(a.get("aria-label"))
         row = _context_element(a)
         context = clean(row.get_text(" "))[:400] if row else text
-        title = text if (len(text) >= 12 and text.lower() not in _GENERIC) else (context or text)
+        title = text if (len(text) >= 12 and not _says_nothing(text)) else (context or text)
         if not title:
             continue
         items.append(Item(

@@ -10,6 +10,7 @@ conflicts.
     python -m radar.main relay --push     # what the Windows scheduled task runs
 """
 
+import gzip
 import json
 import socket
 import sqlite3
@@ -48,11 +49,17 @@ def load_state():
     if _git("fetch", "-q", "origin", "state").returncode != 0:
         print("  no state branch to read; using the local copy")
         return
-    for name, dest in (("jobs.db", DEFAULT_DB), ("index.html", ROOT / "site" / "index.html")):
-        shown = subprocess.run(["git", "show", f"FETCH_HEAD:{name}"], cwd=ROOT, capture_output=True)
-        if shown.returncode == 0:
+
+    def show(name):
+        out = subprocess.run(["git", "show", f"FETCH_HEAD:{name}"], cwd=ROOT, capture_output=True)
+        return out.stdout if out.returncode == 0 else None
+
+    packed = show("jobs.db.gz")
+    db = gzip.decompress(packed) if packed is not None else show("jobs.db")   # older state: uncompressed
+    for data, dest in ((db, DEFAULT_DB), (show("index.html"), ROOT / "site" / "index.html")):
+        if data is not None:
             dest.parent.mkdir(parents=True, exist_ok=True)
-            dest.write_bytes(shown.stdout)
+            dest.write_bytes(data)
 
 
 def _read_state(db_path: Path, source_ids) -> tuple[set, set]:

@@ -14,7 +14,11 @@ case "${1:-}" in
   load)
     if git fetch -q origin state 2>/dev/null; then
       mkdir -p data site
-      git show FETCH_HEAD:jobs.db > data/jobs.db
+      if git cat-file -e FETCH_HEAD:jobs.db.gz 2>/dev/null; then
+        git show FETCH_HEAD:jobs.db.gz | gunzip > data/jobs.db
+      else   # state saved before compression
+        git show FETCH_HEAD:jobs.db > data/jobs.db
+      fi
       git show FETCH_HEAD:index.html > site/index.html 2>/dev/null || true
       echo "state loaded: $(git log -1 --format=%s FETCH_HEAD)"
     else
@@ -22,8 +26,9 @@ case "${1:-}" in
     fi
     ;;
   save)
-    db=$(git hash-object -w data/jobs.db)
-    entries=$(printf '100644 blob %s\tjobs.db' "$db")
+    # gzip: GitHub refuses files over 100 MB, and the database compresses about 5x.
+    db=$(gzip -c -6 data/jobs.db | git hash-object -w --stdin)
+    entries=$(printf '100644 blob %s\tjobs.db.gz' "$db")
     if [ -f site/index.html ]; then
       entries=$(printf '%s\n100644 blob %s\tindex.html' "$entries" "$(git hash-object -w site/index.html)")
     fi

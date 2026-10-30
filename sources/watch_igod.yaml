@@ -402,9 +402,9 @@
   name: All India Survey on Higher Education
   group: central
   state: IN
-  url: https://aishe.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://aishe.gov.in/jobs
+  job_links: 1
+  note: careers page found via sitemap / usual address
 - id: allahabad-museum-prayagraj
   name: Allahabad Museum, Prayagraj
   group: central
@@ -1976,9 +1976,9 @@
   name: Central Institute of Plastics Engineering and Technology (CIPET)
   group: central
   state: TN
-  url: https://www.cipet.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.cipet.gov.in/job-opportunities/contractual_positions.php
+  job_links: 19
+  note: careers page found via sitemap / usual address
 - id: central-institute-of-post-harvest-engineering-and-technology-ciphet
   name: Central Institute of Post Harvest Engineering and Technology (CIPHET)
   group: central
@@ -2232,9 +2232,9 @@
   name: Central Tasar Research and Training Institute, Ranchi
   group: central
   state: JH
-  url: https://ctrti.res.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://ctrti.res.in/career-opportunities/
+  job_links: 7
+  note: careers page found via sitemap / usual address
 - id: central-teacher-eligibility-test-ctet
   name: Central Teacher Eligibility Test (CTET)
   group: central
@@ -2764,9 +2764,9 @@
   name: Common University Entrance Test (UG)
   group: central
   state: IN
-  url: https://cuet.nta.nic.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://cuet.nta.nic.in/career
+  job_links: 3
+  note: careers page found via sitemap / usual address
 - id: competent-authority-ca-chennai
   name: Competent Authority (CA), Chennai
   group: central
@@ -2784,9 +2784,9 @@
   name: Composite Regional Center (CRC), Lucknow
   group: central
   state: IN
-  url: https://crclucknow.nic.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://crclucknow.nic.in/vacancy
+  job_links: 1
+  note: careers page found via sitemap / usual address
 - id: composite-regional-centre-for-persons-with-disabilities-crc-davangere
   name: Composite Regional Centre for Persons with Disabilities (CRC), Davangere
   group: central
@@ -4127,9 +4127,9 @@
   name: Directorate of Forest Education Dehradun
   group: central
   state: IN
-  url: https://dfe.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://dfe.gov.in/recruitment-rules
+  job_links: 8
+  note: careers page found via sitemap / usual address
 - id: directorate-of-jute-development
   name: Directorate of Jute Development
   group: central
@@ -4372,9 +4372,9 @@
   name: e-Counselling Division
   group: central
   state: IN
-  url: https://ecounselling.nic.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://ecounselling.nic.in/recruitment
+  job_links: 3
+  note: careers page found via sitemap / usual address
 - id: e-court-fee-payment
   name: E-Court Fee Payment
   group: central
@@ -5426,9 +5426,9 @@
   name: Human Resource Development
   group: central
   state: IN
-  url: https://hrd.mnre.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://hrd.mnre.gov.in/recruitment
+  job_links: 3
+  note: careers page found via sitemap / usual address
 - id: human-resource-development-hrda-ghaziabad
   name: Human Resource Development (HRDA), Ghaziabad
   group: central
@@ -5440,9 +5440,9 @@
   name: Human Resource Development Group (HRDG)
   group: central
   state: DL
-  url: https://www.csirhrdg.res.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.csirhrdg.res.in/careers
+  job_links: 33
+  note: careers page found via sitemap / usual address
 - id: human-space-flight-centre
   name: Human Space Flight Centre
   group: central
@@ -6752,9 +6752,9 @@
   name: Infrastructure Equipment Skill Council (IESC)
   group: central
   state: IN
-  url: https://iescindia.com/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://iescindia.com/openings/
+  job_links: 1
+  note: careers page found via sitemap / usual address
 - id: inland-waterways-authority-of-india-iwai
   name: Inland Waterways Authority of India (IWAI)
   group: central
@@ -7197,9 +7197,9 @@
   name: International Institute for Population Sciences (IIPS)
   group: central
   state: IN
-  url: https://www.iipsdata.ac.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.iipsdata.ac.in/career
+  job_links: 10
+  note: careers page found via sitemap / usual address
 - id: international-solar-alliance-isa
   name: International Solar Alliance (ISA)
   group: central
@@ -7236,9 +7236,9 @@
   name: Jago Grahak Jago
   group: central
   state: IN
-  url: https://jagograhakjago.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://jagograhakjago.gov.in/vacancy
+  job_links: 3
+  note: careers page found via sitemap / usual address
 - id: jagriti-yatra
   name: Jagriti Yatra
   group: central
@@ -8446,9 +8446,9 @@
   name: Ministry of Panchayati Raj (MoPR)
   group: central
   state: IN
-  url: https://panchayat.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://panchayat.gov.in/vacancy
+  job_links: 1
+  note: careers page found via sitemap / usual address
 - id: ministry-of-parliamentary-affairs-mpa
   name: Ministry of Parliamentary Affairs (MPA)
   group: central
@@ -8931,9 +8931,9 @@
   name: National Atmospheric Research Laboratory (NARL)
   group: central
   state: IN
-  url: https://www.narl.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.narl.gov.in/vacancy
+  job_links: 1
+  note: careers page found via sitemap / usual address
 - id: national-awards-intra-portal
   name: National Awards Intra Portal
   group: central
@@ -8992,9 +8992,9 @@
   name: National Brain Research Centre
   group: central
   state: IN
-  url: https://www.nbrc.ac.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.nbrc.ac.in/careers
+  job_links: 7
+  note: careers page found via sitemap / usual address
 - id: national-buildings-organisation
   name: National Buildings Organisation
   group: central
@@ -9035,9 +9035,9 @@
   name: National Capital Region Planning Board
   group: central
   state: IN
-  url: https://ncrpbprojects.mohua.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://ncrpbprojects.mohua.gov.in/recruitment
+  job_links: 1
+  note: careers page found via sitemap / usual address
 - id: national-capital-region-planning-board-ncrpb
   name: National Capital Region Planning Board (NCRPB)
   group: central
@@ -9859,9 +9859,9 @@
   name: National Institute of Design (NID)
   group: central
   state: IN
-  url: https://www.nid.edu/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.nid.edu/career.html
+  job_links: 3
+  note: careers page found via sitemap / usual address
 - id: national-institute-of-design-andhra-pradesh
   name: National Institute of Design, Andhra Pradesh
   group: central
@@ -10006,9 +10006,9 @@
   name: National Institute of Occupational Health (NIOH), ICMR, Ahmedabad
   group: central
   state: IN
-  url: https://www.nioh.org/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://nioh.org/recruitments/
+  job_links: 57
+  note: careers page found via sitemap / usual address
 - id: national-institute-of-ocean-technology
   name: National Institute of Ocean Technology
   group: central
@@ -10766,9 +10766,9 @@
   name: NCERT Journals
   group: central
   state: IN
-  url: https://ejournals.ncert.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://ejournals.ncert.gov.in/jobs
+  job_links: 4
+  note: careers page found via sitemap / usual address
 - id: nehru-institute-of-mountaineering-nim-uttarkashi
   name: Nehru Institute of Mountaineering (NIM), Uttarkashi
   group: central
@@ -11374,9 +11374,9 @@
   name: Pharmaceuticals Export Promotion Council of India (PHARMEXCIL)
   group: central
   state: IN
-  url: https://pharmexcil.com/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://pharmexcil.com/en/notice-category/recruitment
+  job_links: 2
+  note: careers page found via sitemap / usual address
 - id: pharmacopoeia-commission-for-indian-medicine-and-homoeopathy-pcimh
   name: Pharmacopoeia Commission for Indian Medicine and Homoeopathy (PCIMH)
   group: central
@@ -12455,9 +12455,9 @@
   name: Register as COVID-19 Volunteer (Individuals and Organisations)
   group: central
   state: IN
-  url: https://self4society.mygov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://self4society.mygov.in/career
+  job_links: 2
+  note: careers page found via sitemap / usual address
 - id: registered-vehicle-scrapping-facility
   name: Registered Vehicle Scrapping Facility
   group: central
@@ -13054,9 +13054,9 @@
   name: Sixteenth Finance Commission of India
   group: central
   state: DL
-  url: https://fincomindia.nic.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://fincomindia.nic.in/vacancy
+  job_links: 7
+  note: careers page found via sitemap / usual address
 - id: skill-india-digital-hub-sidh
   name: Skill India Digital Hub (SIDH)
   group: central

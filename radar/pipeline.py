@@ -73,14 +73,20 @@ def run(opts: RunOptions) -> Counter:
 
     # Sites that have refused GitHub for 3+ runs get one quick attempt (the laptop relay
     # is covering them); normal sites get the full timeout. Keeps dead sites cheap.
+    # The bulk directory lists get one short try too: there are thousands, many NIC-hosted
+    # ones refuse GitHub, and a site missed now is simply due again next run.
     streaks = store.cloud_streaks()
     blocked = {s.url for s in sources if streaks.get(s.id, 0) >= 3}
+    bulk = {s.url for s in sources if s.every_hours} - blocked
     rendered = [s for s in sources if s.render]
     plain = [s for s in sources if not s.render]
-    print(f"Fetching {len(sources)} sources ({len(blocked)} quick retries of sites blocking GitHub, "
-          f"{len(rendered)} JavaScript sites in a browser)…")
+    print(f"Fetching {len(sources)} sources ({len(bulk)} from the bulk lists, {len(blocked)} quick retries "
+          f"of sites blocking GitHub, {len(rendered)} JavaScript sites in a browser)…")
     started = time.monotonic()
-    responses = fetch_many([s.url for s in plain if s.url not in blocked], workers=opts.workers, timeout=25)
+    responses = fetch_many([s.url for s in plain if s.url not in blocked and s.url not in bulk],
+                           workers=opts.workers, timeout=25)
+    responses.update(fetch_many([s.url for s in plain if s.url in bulk],
+                                workers=opts.workers, timeout=12, retries=0, total_timeout=20))
     responses.update(fetch_many([s.url for s in plain if s.url in blocked],
                                 workers=opts.workers, timeout=8, retries=0, total_timeout=12))
     responses.update(render.render_many([s.url for s in rendered if s.url not in blocked]))

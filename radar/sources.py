@@ -68,7 +68,7 @@ def _watch_source(w: dict) -> Source:
     )
 
 
-def due(sources: list[Source], last_runs: dict, now: datetime, limit: int = 1500) -> list[Source]:
+def due(sources: list[Source], last_runs: dict, now: datetime, limit: int = 700) -> list[Source]:
     """Sources to fetch this run. An `every_hours` source is skipped until that long has
     passed since its last check (30 min early is fine: cron start times drift). At most
     `limit` of them per run, longest-waiting first, so a newly added list of thousands

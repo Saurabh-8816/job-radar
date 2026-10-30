@@ -149,7 +149,7 @@ Without OCR, scanned adverts are marked "check manually" and go to the digest, s
       python tools/discover_careers.py --from=kv_candidates.yaml --to=watch_kv.yaml --workers=10
 
   These bulk lists are checked less often than `watch_pages.yaml` (every 6 h and 12 h,
-  at most 1,500 sites per run, longest-waiting first; see `WATCH_FILES` in
+  at most 700 sites per run, one short try each, longest-waiting first; see `WATCH_FILES` in
   `radar/sources.py`). KVs outside CG/MP/OD/MH/TG/DL alert only clear computer posts;
   their other notices stay on the dashboard.
 

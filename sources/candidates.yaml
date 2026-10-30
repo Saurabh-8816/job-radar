@@ -31,6 +31,7 @@
 - {name: UPSC exams, home: "https://upsc.gov.in/", url: "https://upsc.gov.in/examinations/active-exams", group: central}
 - {name: SSC, home: "https://ssc.gov.in/", group: central}
 - {name: IBPS, home: "https://www.ibps.in/", group: central}
+- {name: "IBPS (all recruitments it conducts)", home: "https://www.ibps.in/", url: "https://www.ibps.in/index.php/recruitment", group: central}
 - {name: Employment News, home: "https://employmentnews.gov.in/", group: central}
 - {name: ISRO, home: "https://www.isro.gov.in/", url: "https://www.isro.gov.in/Careers.html", group: central}
 - {name: ISRO VSSC, home: "https://www.vssc.gov.in/", group: central}

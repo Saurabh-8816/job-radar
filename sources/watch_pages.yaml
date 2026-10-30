@@ -179,6 +179,14 @@
   state: IN
   url: https://www.ibps.in/
   job_links: 13
+- id: ibps-recruitment
+  name: IBPS (all recruitments it conducts)
+  group: central
+  state: IN
+  url: https://www.ibps.in/index.php/recruitment
+  render: true
+  churn_limit: 60
+  note: the homepage shows only the latest few; this is the 'View All' list (built by JavaScript)
 - id: employment-news
   name: Employment News
   group: central

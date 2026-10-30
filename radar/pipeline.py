@@ -21,9 +21,9 @@ from .fetch import fetch_many
 from .notify import Telegram, format_alert, format_line
 from .parsers import parse
 from .pdftext import ocr_languages
-from .sources import load_sources
+from .sources import due, load_sources
 from .store import Store
-from .textutil import today_ist
+from .textutil import now_ist, today_ist
 
 MAX_INDIVIDUAL_ALERTS = 10
 
@@ -38,7 +38,7 @@ class RunOptions:
     all_new: bool = False          # backtest: treat every item as new (use with a scratch DB)
     doc_item_limit: int = 40       # adverts read per run; the rest wait for the next run
     doc_time_budget: int = 600     # seconds of advert reading (mostly OCR) per run; leftovers wait
-    workers: int = 16
+    workers: int = 32               # different sites, so many at once is polite enough
     build_site: bool = True
     db_path: Path = DEFAULT_DB
     runner: str = "all"            # "cloud" on GitHub: skip sources only the laptop can reach
@@ -54,6 +54,7 @@ class _Run:
     new_ids: list = field(default_factory=list)
     baselined_now: list = field(default_factory=list)
     full_text: dict = field(default_factory=dict)   # row id -> relay advert text before DB truncation
+    quiet: set = field(default_factory=set)         # sources whose partial matches skip the digest
 
 
 def run(opts: RunOptions) -> Counter:
@@ -64,6 +65,8 @@ def run(opts: RunOptions) -> Counter:
 
     commands.process(tg, store)
     sources = load_sources(opts.only, runner=None if opts.runner == "all" else opts.runner)
+    ctx.quiet = {s.id for s in sources if not s.digest}
+    sources = due(sources, store.last_runs(), now_ist())
     for s in sources:
         store.sync_source(s)
     store.commit()
@@ -100,11 +103,11 @@ def run(opts: RunOptions) -> Counter:
     for row_id in ctx.new_ids:  # first pass: listing text, plus advert text the relay sent
         row = store.get(row_id)
         body = ctx.full_text.get(row_id) or row["doc_text"] or ""
-        _classify(store, clf, row, today, body, row["doc_status"] if body else None)
+        _classify(store, clf, row, today, body, row["doc_status"] if body else None, quiet=ctx.quiet)
     store.commit()
 
     if opts.read_docs:
-        stats.update(read_documents(store, clf, opts, today))
+        stats.update(read_documents(store, clf, opts, today, ctx.quiet))
     stats["duplicates"] = _dedupe(store, ctx.new_ids)
     store.commit()
 
@@ -160,6 +163,8 @@ def _ingest_inbox(ctx: _Run):
     for path, generated, entries in relay.load_inbox():
         for source, status, error, items, doc_texts in entries:
             ctx.store.sync_source(source)
+            if not source.digest:
+                ctx.quiet.add(source.id)
             if status == "failed":
                 ctx.store.source_failed(source.id, f"from laptop: {error or 'fetch failed'}")
                 ctx.stats["sources_failed"] += 1
@@ -175,9 +180,13 @@ def _ingest_inbox(ctx: _Run):
             path.unlink()
 
 
-def _classify(store, clf, row, today, body="", body_status=None, save_doc=False):
+def _classify(store, clf, row, today, body="", body_status=None, save_doc=False, quiet=()):
     verdict = clf.classify(row["title"], row["description"] or "", body,
                            row["end_date"], body_status, today)
+    if verdict.tier == "B" and row["source_id"] in quiet:
+        # e.g. a KV walk-in in another state: kept on the dashboard, alerted only if it's a clear match
+        verdict.tier = "C"
+        verdict.reasons.append("far-away school: only computer posts are alerted")
     if save_doc:
         store.save_verdict(row["id"], verdict, doc_status=body_status, doc_text=body)
     else:
@@ -185,7 +194,7 @@ def _classify(store, clf, row, today, body="", body_status=None, save_doc=False)
     return verdict
 
 
-def read_documents(store, clf, opts: RunOptions, today) -> Counter:
+def read_documents(store, clf, opts: RunOptions, today, quiet=()) -> Counter:
     rows = store.pending_docs(opts.doc_item_limit, today.isoformat())
     if not rows:
         return Counter()
@@ -205,7 +214,7 @@ def read_documents(store, clf, opts: RunOptions, today) -> Counter:
             if status == "deferred":      # time budget spent: stays pending for the next run
                 counts["docs_deferred"] += 1
                 continue
-            _classify(store, clf, row, today, text, status, save_doc=True)
+            _classify(store, clf, row, today, text, status, save_doc=True, quiet=quiet)
             counts[f"docs_{status}"] += 1
     store.commit()
     return counts

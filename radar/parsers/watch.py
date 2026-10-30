@@ -8,12 +8,12 @@ scan to the content area when menus add noise.
 
 import hashlib
 import re
-from urllib.parse import parse_qsl, urlencode, urljoin, urlsplit, urlunsplit
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from bs4 import BeautifulSoup
 
 from ..models import Item, ParseResult
-from ..textutil import clean, normalize_url, parse_date
+from ..textutil import clean, join_url, normalize_url, parse_date
 
 # Query parameters that change on every page load (NTPC signs each link with a fresh token).
 _VOLATILE_PARAMS = {"token", "sid", "session", "sessionid", "phpsessid", "jsessionid",
@@ -103,7 +103,7 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         href = a["href"].strip()
         if not href or href.lower().startswith(_SKIP_SCHEMES):
             continue
-        url = urljoin(page_url, href)
+        url = join_url(page_url, href)
         if not url.startswith("http") or url in seen:
             continue
         seen.add(url)

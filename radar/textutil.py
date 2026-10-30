@@ -3,7 +3,7 @@
 import re
 import unicodedata
 from datetime import date, datetime, timedelta, timezone
-from urllib.parse import urlsplit, urlunsplit, unquote
+from urllib.parse import urlsplit, urlunsplit, unquote, urljoin
 
 IST = timezone(timedelta(hours=5, minutes=30))
 
@@ -54,8 +54,21 @@ def today_ist() -> date:
     return datetime.now(IST).date()
 
 
+def join_url(base: str, href: str) -> str:
+    """urljoin that returns "" for a broken link (e.g. "http://[broken") instead of raising:
+    one malformed href on a page must not lose the whole page."""
+    try:
+        return urljoin(base, href)
+    except ValueError:
+        return ""
+
+
+def now_ist() -> datetime:
+    return datetime.now(IST)
+
+
 def now_ist_iso() -> str:
-    return datetime.now(IST).isoformat(timespec="seconds")
+    return now_ist().isoformat(timespec="seconds")
 
 
 def days_left(deadline: str | None, today: date | None = None) -> int | None:

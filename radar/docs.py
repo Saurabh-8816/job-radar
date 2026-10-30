@@ -5,14 +5,14 @@ page's text plus the PDFs linked from it."""
 
 import re
 import time
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urlsplit
 
 from bs4 import BeautifulSoup
 
 from .classify import Classifier
 from .fetch import get
 from .pdftext import PAGE_BREAK, extract
-from .textutil import clean
+from .textutil import clean, join_url
 
 _FORM_LABEL = re.compile(r"आवेदन\s*(प्रारूप|पत्र|फार्म|फॉर्म)|प्रारूप|application\s*form|format|proforma", re.I)
 _ADVERT_LABEL = re.compile(r"विज्ञापन|भर्ती|advertis|advt|notification|recruit|vacanc|notice|view", re.I)
@@ -63,7 +63,7 @@ def _detail_page(url: str, clf: Classifier, ocr: bool, deadline) -> tuple[str, l
         tag.decompose()
     docs = []
     for a in soup.find_all("a", href=True):
-        href = urljoin(url, a["href"].strip())
+        href = join_url(url, a["href"].strip())
         if href.startswith("http") and _is_readable(href):
             docs.append((clean(a.get_text(" ")) or "Document", href))
     text = clean((soup.find("main") or soup.body or soup).get_text(" "))[:PAGE_TEXT_LIMIT]

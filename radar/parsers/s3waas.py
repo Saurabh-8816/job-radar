@@ -6,12 +6,11 @@ header text. A category with no active notices has no table at all, only a
 "no notices found" message; that is a healthy empty page, not a broken source.
 """
 
-from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
 
 from ..models import Item, ParseResult
-from ..textutil import clean, parse_date, strip_size
+from ..textutil import clean, join_url, parse_date, strip_size
 
 _EMPTY_MARKERS = (
     "कोई नोटिस नहीं",            # Hindi: no notice found
@@ -57,7 +56,7 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         docs = []
         for a in file_td.find_all("a", href=True):
             label = strip_size(clean(a.get_text(" "))) or "Document"
-            docs.append((label, urljoin(page_url, a["href"].strip())))
+            docs.append((label, join_url(page_url, a["href"].strip())))
 
         title = clean(tds[cols["title"]].get_text(" "))
         desc = clean(tds[cols["desc"]].get_text(" ")) if cols["desc"] is not None else ""

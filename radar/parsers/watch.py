@@ -36,6 +36,12 @@ _GENERIC_LABEL = re.compile(
     r"\s*(\(.{0,20}\))?\s*(here)?$", re.I)
 
 
+# Page-number links of a paged list ("Page 2", "Current page 1", "Last page »", "›").
+_PAGER = re.compile(
+    r"^(?:[\s«»‹›<>|.…�-]*(?:current|go\s+to|page|\d{1,3}|next|prev(?:ious)?|first|last|older|newer|"
+    r"पिछला|अगला|अंतिम|प्रथम|पृष्ठ)(?![a-z]))*[\s«»‹›<>|.…�-]*$", re.I)
+
+
 def _says_nothing(text: str) -> bool:
     return text.lower() in _GENERIC or bool(_GENERIC_LABEL.match(text))
 
@@ -118,6 +124,8 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         seen.add(url)
 
         text = clean(a.get_text(" ")) or clean(a.get("title")) or clean(a.get("aria-label"))
+        if text and _PAGER.match(text):
+            continue
         row = _context_element(a)
         context = clean(row.get_text(" "))[:400] if row else text
         title = text if (len(text) >= 12 and not _says_nothing(text)) else (context or text)

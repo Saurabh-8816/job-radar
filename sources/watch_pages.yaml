@@ -362,9 +362,10 @@
   name: NABARD
   group: central
   state: IN
-  url: https://www.nabard.org/
-  job_links: 0
+  url: https://www.nabard.org/careers-notices1.aspx?cid=693&id=26
+  job_links: 77
   runner: local
+  note: homepage menus are built by JavaScript; this is the Career Notices list
 - id: sbi-careers
   name: SBI Careers
   group: central

@@ -100,3 +100,15 @@ def test_real_text_is_useful():
     hindi = "सहायक प्रोग्रामर के पद हेतु आवेदन पत्र आमंत्रित किये जाते हैं। " * 4
     assert is_useful(english) and is_useful(hindi)
     assert not looks_legacy_font(english)
+
+
+def test_page_number_links_are_not_notices():
+    from radar.models import Source
+    from radar.parsers import watch
+    html = """<div class="view-content"><table><tr><td>Revival of 11 vacancies, Post Code 68/24 Junior Environmental Engineer
+      <a href="/sites/default/files/68-24.pdf">Download</a></td></tr></table></div>
+      <nav class="pager"><a href="?page=0">Current page 1</a> <a href="?page=1">Page 2</a> <a href="?page=2">3</a>
+      <a href="?page=1">Next ›</a> <a href="?page=9">Last page Last »</a></nav>"""
+    src = Source(id="dsssb", name="DSSSB", kind="watch", url="https://dsssb.delhi.gov.in/dsssb-vacancies")
+    titles = [i.title for i in watch.parse(html, src.url, src).items]
+    assert len(titles) == 1 and "Junior Environmental Engineer" in titles[0]

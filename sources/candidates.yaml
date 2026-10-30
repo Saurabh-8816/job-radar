@@ -58,7 +58,7 @@
 - {name: CRIS (Railway IT), home: "https://cris.org.in/", group: central}
 - {name: BECIL, home: "https://www.becil.com/", group: central}
 - {name: RBI, home: "https://opportunities.rbi.org.in/", group: central}
-- {name: NABARD, home: "https://www.nabard.org/", group: central}
+- {name: NABARD, home: "https://www.nabard.org/", url: "https://www.nabard.org/careers-notices1.aspx?cid=693&id=26", group: central}
 - {name: SBI Careers, home: "https://sbi.co.in/web/careers", group: central}
 - {name: LIC, home: "https://licindia.in/", group: central}
 - {name: AAI, home: "https://www.aai.aero/", url: "https://www.aai.aero/en/careers/recruitment", group: central}

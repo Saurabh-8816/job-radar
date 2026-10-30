@@ -70,6 +70,10 @@ class Store:
 
     # ---- sources ----------------------------------------------------------
     def sync_source(self, s: Source):
+        # A source moved to a new page (homepage -> careers page) starts over: what's on
+        # the new page is indexed quietly first, like a brand-new source.
+        self.db.execute("UPDATE sources SET baselined=0, cloud_fail_streak=0, consecutive_failures=0 "
+                        "WHERE id=? AND url<>?", (s.id, s.url))
         self.db.execute(
             """INSERT INTO sources(id, name, kind, url, state, district, grp, category)
                VALUES(?,?,?,?,?,?,?,?)

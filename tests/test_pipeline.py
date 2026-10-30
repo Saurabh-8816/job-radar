@@ -167,3 +167,15 @@ def test_failures_are_counted_for_health(monkeypatch, tmp_path):
     unhealthy = store.unhealthy_sources()
     assert [s["id"] for s in unhealthy] == [src.id]
     assert unhealthy[0]["consecutive_failures"] == 3
+
+
+def test_source_moved_to_a_new_page_is_indexed_quietly_again(tmp_path):
+    from dataclasses import replace
+    store = Store(tmp_path / "m.db")
+    src = district_source("Durg")
+    store.sync_source(src)
+    store.source_ok(src.id, "ok", 3, baselined=True)
+    store.sync_source(src)                              # same page: stays baselined
+    assert store.is_baselined(src.id)
+    store.sync_source(replace(src, url="https://durg.gov.in/en/careers/"))
+    assert not store.is_baselined(src.id)

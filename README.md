@@ -3,7 +3,7 @@
 A personal alert system for government, PSU and academic job notices — including the
 ones that only ever appear on a district website.
 
-Every 4 hours it reads all 33 Chhattisgarh district recruitment pages, CG Vyapam, CGPSC
+Every hour it reads all 33 Chhattisgarh district recruitment pages, CG Vyapam, CGPSC
 and other state bodies, central recruiters (UPSC, SSC, ISRO, DRDO, C-DAC, NIELIT…),
 PSUs, IITs, NITs, IIITs and central universities, plus state-level boards of MP, Odisha,
 Maharashtra and Telangana. It reads the advert PDFs (OCR for scanned Hindi adverts),
@@ -84,7 +84,7 @@ If something important works locally but not in the cloud, see *Blocked sites* b
 (nothing old is replayed) and sends you the matching jobs that are **still open**. Reading
 the existing adverts is spread across the next few runs, 40 per run.
 
-From then on it runs by itself every 4 hours, and the digest arrives at 8 PM.
+From then on it runs by itself every hour, and the digest arrives at 8 PM.
 
 ### 5. Dashboard (optional, free)
 `site/index.html` is rebuilt every run, and the laptop relay copies the latest one from the
@@ -107,7 +107,7 @@ Each alert ends with `#ID` and tappable commands:
 | `/hide_12` | Not interested |
 | `/unhide_12` | Undo |
 
-Commands are read at the start of each run, so they take effect within 4 hours. Only your own chat ID is obeyed.
+Commands are read at the start of each run, so they take effect within about an hour. Only your own chat ID is obeyed.
 
 ## Running locally
 
@@ -139,7 +139,7 @@ Without OCR, scanned adverts are marked "check manually" and go to the digest, s
       python tools/discover_careers.py --from=igod_candidates.yaml --to=watch_igod.yaml --workers=32 --timeout=15
       python tools/discover_careers.py --from=kv_candidates.yaml --to=watch_kv.yaml --workers=10
 
-  These bulk lists are checked less often than `watch_pages.yaml` (every 12 h and daily,
+  These bulk lists are checked less often than `watch_pages.yaml` (every 6 h and 12 h,
   at most 1,500 sites per run, longest-waiting first; see `WATCH_FILES` in
   `radar/sources.py`). KVs outside CG/MP/OD/MH/TG/DL alert only clear computer posts;
   their other notices stay on the dashboard.
@@ -156,7 +156,7 @@ run is picked up by the laptop automatically** (e.g. when NIC blocks a district 
 SarkariResult answers GitHub with 403), so no list needs maintaining:
 
 ```
-Laptop (every 2h while on)                      GitHub (every 4h, 24/7)
+Laptop (every 2h while on)                      GitHub (hourly, 24/7)
   fetch the blocked sites, read new adverts  ──►  ingest data/inbox/*.json like any other page
   push a small file to data/inbox/                 classify · alert · digest · dashboard
 ```
@@ -191,7 +191,7 @@ sources/                  district registry, watched pages, candidate lists, bul
 radar/                    fetch · parsers (s3waas, watch) · pdftext (OCR) · classify · store · notify · digest · dashboard
 tools/                    source discovery, reachability spike
 tests/                    pytest suite with real saved pages and OCR output
-.github/workflows/        radar (4-hourly) · digest (8 PM IST) · spike · tests
+.github/workflows/        radar (hourly) · digest (8 PM IST) · spike · tests
 data/jobs.db              state  } kept on the `state` branch as one commit each run replaces
 site/index.html           dashboard } (tools/state.sh), so history doesn't grow by the database
 ```

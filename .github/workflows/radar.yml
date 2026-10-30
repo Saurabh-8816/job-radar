@@ -2,7 +2,7 @@ name: radar
 
 on:
   schedule:
-    - cron: "15 */4 * * *"        # every 4 hours (UTC), 15 past to dodge the top-of-hour queue
+    - cron: "17 * * * *"          # hourly (public repo: Actions minutes are free); 17 past dodges the top-of-hour queue
   workflow_dispatch:
     inputs:
       only:

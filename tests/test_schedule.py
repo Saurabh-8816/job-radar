@@ -35,7 +35,7 @@ def test_a_new_bulk_list_spreads_over_several_runs():
     assert [s.id for s in picked] == ["regular", "kv0", "kv1", "kv2", "kv3"]
 
 
-def test_kv_lists_default_to_daily_and_far_kvs_are_quiet(monkeypatch, tmp_path):
+def test_bulk_list_schedules_and_far_kvs_are_quiet(monkeypatch, tmp_path):
     (tmp_path / "watch_kv.yaml").write_text(yaml.safe_dump([
         {"id": "kv-bhilai", "name": "KV Bhilai", "url": "https://bhilai.kvs.ac.in/recruitment/", "group": "kv", "state": "CG"},
         {"id": "kv-agra", "name": "KV Agra", "url": "https://agra.kvs.ac.in/recruitment/", "group": "kv", "state": "UP"},
@@ -45,9 +45,9 @@ def test_kv_lists_default_to_daily_and_far_kvs_are_quiet(monkeypatch, tmp_path):
     ]), encoding="utf-8")
     monkeypatch.setattr(sources, "SOURCES_DIR", tmp_path)
     got = {s.id: s for s in sources.load_sources()}
-    assert got["kv-bhilai"].every_hours == 24 and got["kv-bhilai"].digest
+    assert got["kv-bhilai"].every_hours == 12 and got["kv-bhilai"].digest
     assert not got["kv-agra"].digest
-    assert got["iffco"].every_hours == 12 and got["iffco"].digest
+    assert got["iffco"].every_hours == 6 and got["iffco"].digest
 
 
 KV_PAGE = """<table class="documents-table"><tr><th>Name</th><th>Published On</th><th>View</th></tr>

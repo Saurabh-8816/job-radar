@@ -33,12 +33,12 @@ def _districts() -> list[Source]:
 
 
 # Watch lists and their defaults. The two bulk lists come from the official Union
-# Government directory (tools/import_igod.py): ~2,400 central bodies / PSUs, checked twice
-# a day, and ~1,300 Kendriya Vidyalayas, checked daily.
+# Government directory (tools/import_igod.py): ~2,400 central bodies / PSUs, checked every
+# 6 hours, and ~1,300 Kendriya Vidyalayas, checked twice a day.
 WATCH_FILES = {
     "watch_pages.yaml": {},
-    "watch_igod.yaml": {"every_hours": 12},
-    "watch_kv.yaml": {"every_hours": 24},
+    "watch_igod.yaml": {"every_hours": 6},
+    "watch_kv.yaml": {"every_hours": 12},
 }
 # A KV walk-in far from home is only worth hearing about when it's a computer post.
 KV_HOME_STATES = {"CG", "MP", "OD", "MH", "TG", "DL"}

@@ -1,6 +1,6 @@
 """Command line entry point.
 
-  python -m radar.main run --runner cloud   # the 4-hourly GitHub job
+  python -m radar.main run --runner cloud   # the hourly GitHub job
   python -m radar.main relay --push         # laptop: fetch sites that block GitHub, push to data/inbox/
   python -m radar.main run --dry-run        # local test: print alerts instead of sending
   python -m radar.main run --only cg        # just Chhattisgarh sources (also: district, academic, durg…)

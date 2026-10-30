@@ -3,6 +3,12 @@ name: radar
 on:
   schedule:
     - cron: "17 * * * *"          # hourly (public repo: Actions minutes are free); 17 past dodges the top-of-hour queue
+  push:
+    # GitHub drops scheduled runs when it's busy. The laptop relay's push of an inbox file
+    # (every 2 h while the laptop is on) always starts a run, and its pages get ingested at once.
+    # This workflow's own commits say [skip ci], so it never triggers itself.
+    branches: [main]
+    paths: ["data/inbox/**"]
   workflow_dispatch:
     inputs:
       only:

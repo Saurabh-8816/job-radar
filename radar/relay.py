@@ -227,7 +227,9 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
 def _push(path: Path):
     rel = path.relative_to(ROOT).as_posix()
     _git("add", rel)
-    commit = _git("commit", "-q", "-m", f"relay: {path.stem} [skip ci]")
+    # No [skip ci]: this push starts a radar run (radar.yml), which GitHub's own
+    # schedule doesn't always do.
+    commit = _git("commit", "-q", "-m", f"relay: {path.stem}")
     if commit.returncode != 0:
         print("git commit failed:\n" + commit.stderr.strip())
         return

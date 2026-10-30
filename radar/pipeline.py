@@ -64,6 +64,7 @@ def run(opts: RunOptions) -> Counter:
     today = today_ist()
 
     commands.process(tg, store)
+    _backfill_deadlines(store, clf, today)
     sources = load_sources(opts.only, runner=None if opts.runner == "all" else opts.runner)
     ctx.quiet = {s.id for s in sources if not s.digest}
     sources = due(sources, store.last_runs(), now_ist())
@@ -184,6 +185,26 @@ def _ingest_inbox(ctx: _Run):
     if not ctx.opts.dry_run:
         for path in done:
             path.unlink()
+
+
+def _backfill_deadlines(store, clf, today):
+    """One-off: deadlines written in words ("15th November, 2026") weren't recognised
+    before; re-read them from the advert text already stored. Runs once."""
+    if store.get_meta("deadline_backfill") == "words-v1":
+        return
+    since = (today - timedelta(days=60)).isoformat()
+    rows = store.db.execute(
+        """SELECT id, title, description, doc_text, end_date FROM items
+           WHERE deadline IS NULL AND kind='new' AND tier IN ('A','B') AND first_seen >= ?""", (since,)).fetchall()
+    found = 0
+    for r in rows:
+        d = clf._deadline(r["doc_text"] or "", r["end_date"], today, f"{r['title']} {r['description'] or ''}")
+        if d:
+            store.db.execute("UPDATE items SET deadline=? WHERE id=?", (d, r["id"]))
+            found += 1
+    store.set_meta("deadline_backfill", "words-v1")
+    store.commit()
+    print(f"Deadline backfill: {found} of {len(rows)} undated notices got a last date")
 
 
 def _classify(store, clf, row, today, body="", body_status=None, save_doc=False, quiet=()):

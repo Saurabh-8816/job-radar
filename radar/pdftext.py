@@ -73,9 +73,15 @@ def is_useful(text: str) -> bool:
     return len(_LETTERS.findall(text)) >= 80 and not looks_legacy_font(text)
 
 
+OCR_PAGE_TIMEOUT = 90   # seconds; Tesseract can stall on a malformed scan
+
+
 def _ocr_image(image, langs: str) -> str:
     import pytesseract
-    return pytesseract.image_to_string(image.convert("L"), lang=langs)
+    try:
+        return pytesseract.image_to_string(image.convert("L"), lang=langs, timeout=OCR_PAGE_TIMEOUT)
+    except RuntimeError:   # pytesseract's timeout: treat the page as unreadable
+        return ""
 
 
 PAGE_BREAK = "\n\f\n"     # pages are joined with a form feed, so a match's page number is recoverable

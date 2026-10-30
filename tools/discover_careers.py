@@ -136,11 +136,86 @@ def discover(entry: dict) -> dict:
             best_url, best_score = link, score
     if best_url is None:
         out.update(url=home, job_links=0, enabled=False, note=f"unreachable: {home_err}")
-    else:
-        out.update(url=best_url, job_links=best_score)
-        if best_score == 0:
-            out["note"] = "no job links found yet (page may be built with JavaScript); review"
+        return out
+    if best_score == 0:
+        # Nothing linked from the homepage (menus built by JavaScript, or careers kept off
+        # the front page): look in the sitemap and at the usual addresses.
+        found = deep_search(home)
+        if found:
+            best_url, best_score, how = found
+            out["note"] = f"careers page found via {how}"
+    out.update(url=best_url, job_links=best_score)
+    if best_score == 0 and "note" not in out:
+        out["note"] = "no job links found yet (page may be built with JavaScript); review"
     return out
+
+
+COMMON_PATHS = (
+    "careers", "career", "recruitment", "recruitments", "vacancies", "vacancy", "jobs",
+    "careers.php", "career.php", "recruitment.php", "vacancy.php", "vacancies.php", "jobs.php",
+    "careers.html", "career.html", "recruitment.html", "vacancy.html", "careers.aspx", "career.aspx",
+    "recruitment.aspx", "Recruitment.aspx", "en/careers", "en/career", "en/recruitment", "en/vacancies",
+    "en/notice-category/recruitment", "notice-category/recruitment", "hi/recruitment",
+)
+_NOT_FOUND = re.compile(r"\b(404|page not found|not found|does not exist|error)\b", re.I)
+
+
+def _fingerprint(html: str) -> tuple:
+    soup = BeautifulSoup(html, "lxml")
+    title = soup.title.get_text(" ", strip=True) if soup.title else ""
+    return title, len(soup.get_text(" ", strip=True)) // 500
+
+
+def _real_page(r, home_print) -> bool:
+    """200, not redirected to the homepage, and not the homepage served at any address."""
+    if not r.ok or urlsplit(r.url).path in ("", "/") or not r.text:
+        return False
+    title, size = _fingerprint(r.text)
+    return (title, size) != home_print and not _NOT_FOUND.search(title)
+
+
+def _sitemap_links(home: str, limit: int = 3) -> list[str]:
+    maps = [join_url(home, "sitemap.xml")]
+    robots = get(join_url(home, "robots.txt"), timeout=TIMEOUT, retries=0)
+    if robots.ok:
+        maps = re.findall(r"(?im)^\s*sitemap:\s*(\S+)", robots.text) or maps
+    links, seen = [], set()
+    while maps and len(seen) < 6:
+        url = maps.pop(0)
+        if url in seen:
+            continue
+        seen.add(url)
+        r = get(url, timeout=TIMEOUT, retries=0)
+        if not r.ok:
+            continue
+        locs = re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", r.text)
+        maps += [u for u in locs if u.endswith(".xml")][:limit]
+        links += [u for u in locs if not u.endswith(".xml") and CAREER_LINK.search(u) and not NOT_CAREER.search(u)]
+    return list(dict.fromkeys(links))[:8]
+
+
+def deep_search(home: str):
+    """(url, job_links, how) for the careers page of a site whose homepage links none."""
+    r = _fetch(home)
+    if not r.ok:
+        return None
+    home_print = _fingerprint(r.text)
+    tried = []
+    for how, urls in (("sitemap", _sitemap_links(home)), ("usual address", [join_url(home, p) for p in COMMON_PATHS])):
+        for url in urls:
+            page = get(url, timeout=TIMEOUT, retries=0)
+            if not _real_page(page, home_print):
+                continue
+            src = Source(id="probe", name="probe", kind="watch", url=page.url)
+            score = sum(clf.is_job_related(f"{i.title} {i.description} {i.url}")
+                        for i in watch.parse(page.text, page.url, src).items)
+            tried.append((score, page.url, how))
+            if score >= 3:
+                return page.url, score, how
+    if tried:   # a real careers page with no vacancies today still beats the homepage
+        score, url, how = max(tried, key=lambda t: (t[0], -len(t[1])))
+        return url, score, how
+    return None
 
 
 _done = {"n": 0, "of": 0}

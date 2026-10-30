@@ -82,9 +82,10 @@
   name: CSVTU Bhilai
   group: cg-state
   state: CG
-  url: https://csvtu.ac.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.csvtu.ac.in/ew/notices/
+  job_links: 12
+  render: true
+  note: careers page found by hand (homepage had no job links); built by JavaScript
 - id: hemchand-yadav-university-durg
   name: Hemchand Yadav University Durg
   group: cg-state
@@ -126,8 +127,15 @@
   name: Guru Ghasidas University Bilaspur
   group: academic
   state: CG
-  url: https://www.ggu.ac.in/
-  job_links: 0
+  url: https://ggu.ac.in/recruitment/teaching/
+  job_links: 53
+  note: careers page found by hand (homepage had no job links)
+- id: ggu-non-teaching
+  name: Guru Ghasidas University Bilaspur (non-teaching)
+  group: academic
+  state: CG
+  url: https://ggu.ac.in/recruitment/non-teaching/
+  job_links: 41
 - id: secl-bilaspur
   name: SECL Bilaspur
   group: psu
@@ -246,20 +254,18 @@
   name: IIRS Dehradun
   group: central
   state: IN
-  url: https://www.iirs.gov.in/
+  url: https://www.iirs.gov.in/Vacancies
   job_links: 0
-  enabled: false
-  note: 'unreachable: HTTP 403'
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: drdo
   name: DRDO
   group: central
   state: IN
-  url: https://www.drdo.gov.in/
+  url: https://drdo.gov.in/drdo/en/offerings/vacancies
   job_links: 0
-  enabled: false
-  note: 'unreachable: ConnectTimeout'
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: barc
   name: BARC
   group: central
@@ -363,9 +369,9 @@
   name: RBI
   group: central
   state: IN
-  url: https://opportunities.rbi.org.in/
+  url: https://opportunities.rbi.org.in/jobs.php
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  note: careers page found via usual address
 - id: nabard
   name: NABARD
   group: central
@@ -396,8 +402,9 @@
   name: FCI
   group: central
   state: IN
-  url: https://fci.gov.in/
-  job_links: 0
+  url: https://fci.gov.in/recruitment/
+  job_links: 4
+  note: careers page found via sitemap
 - id: esic
   name: ESIC
   group: central
@@ -431,9 +438,10 @@
   name: BHEL
   group: psu
   state: IN
-  url: https://careers.bhel.in/
-  job_links: 0
+  url: https://www.bhel.com/recruitment
+  job_links: 5
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: ntpc
   name: NTPC
   group: psu
@@ -451,8 +459,10 @@
   name: HAL
   group: psu
   state: IN
-  url: https://hal-india.co.in/
+  url: https://hal-india.co.in/career
   job_links: 0
+  render: true
+  note: careers page found by hand (homepage had no job links); built by JavaScript
 - id: iocl
   name: IOCL
   group: psu
@@ -490,35 +500,34 @@
   name: POWERGRID
   group: psu
   state: IN
-  url: https://www.powergrid.in/
-  job_links: 0
-  enabled: false
-  note: 'unreachable: ConnectTimeout'
+  url: https://www.powergrid.in/en/job-opportunities
+  job_links: 411
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: ecil
   name: ECIL
   group: psu
   state: IN
-  url: https://www.ecil.co.in/
-  job_links: 0
+  url: https://www.ecil.co.in/jobopenings
+  job_links: 24
+  note: careers page found via sitemap
 - id: railtel
   name: RailTel
   group: psu
   state: IN
-  url: https://www.railtel.in/
+  url: https://www.railtel.in/current-job-openings.html
   job_links: 0
-  enabled: false
-  note: 'unreachable: SSL: HTTPSConnectionPool(host=''www.railtel.in'', port=443):
-    Max retries exceeded with url: / (Caused by SSLError(SSLError(1, ''[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE]
-    sslv3 alert handshake failure (_ssl.c:1028)'')))'
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: nlc-india
   name: NLC India
   group: psu
   state: IN
-  url: https://www.nlcindia.in/
-  job_links: 0
+  url: https://www.nlcindia.in/website/en/careers/jobs/currentopenings.html
+  job_links: 105
   runner: local
+  render: true
+  note: careers page found by hand (homepage had no job links); built by JavaScript
 - id: hpcl
   name: HPCL
   group: psu
@@ -555,11 +564,10 @@
   name: BDL
   group: psu
   state: IN
-  url: https://bdl-india.in/
+  url: https://bdl-india.in/recruitments
   job_links: 0
-  enabled: false
-  note: 'unreachable: ConnectTimeout'
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: irctc
   name: IRCTC
   group: psu
@@ -610,10 +618,11 @@
   name: TGPSC
   group: state-board
   state: TG
-  url: https://www.tgpsc.gov.in/
+  url: https://websitenew.tgpsc.gov.in/notifications
   job_links: 0
-  note: 'unreachable: render: TimeoutError'
   runner: local
+  render: true
+  note: careers page found by hand (homepage had no job links); TGPSC's new site, built by JavaScript
 - id: tg-police-recruitment-board
   name: TG Police Recruitment Board
   group: state-board
@@ -853,8 +862,10 @@
   name: NIT Jalandhar
   group: academic
   state: IN
-  url: https://www.nitj.ac.in/
-  job_links: 0
+  url: https://www.nitj.ac.in/research/jobs.html
+  job_links: 328
+  render: true
+  note: careers page found by hand (homepage had no job links); built by JavaScript
 - id: nit-kurukshetra
   name: NIT Kurukshetra
   group: academic
@@ -946,11 +957,10 @@
   name: NIT Andhra Pradesh
   group: academic
   state: IN
-  url: https://www.nitandhra.ac.in/
-  job_links: 0
-  enabled: false
-  note: 'unreachable: ConnectionError'
+  url: https://nitandhra.ac.in/main/careers.php
+  job_links: 2
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: iiit-hyderabad
   name: IIIT Hyderabad
   group: academic
@@ -973,11 +983,10 @@
   name: IIIT Allahabad
   group: academic
   state: IN
-  url: https://www.iiita.ac.in/
-  job_links: 0
-  enabled: false
-  note: 'unreachable: ConnectionError'
+  url: https://www.iiita.ac.in/-announcements
+  job_links: 6
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: abv-iiitm-gwalior
   name: ABV-IIITM Gwalior
   group: academic
@@ -988,9 +997,9 @@
   name: IIITDM Jabalpur
   group: academic
   state: IN
-  url: https://www.iiitdmj.ac.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://www.iiitdmj.ac.in/jobs.php
+  job_links: 10
+  note: careers page found via usual address
 - id: iiitdm-kancheepuram
   name: IIITDM Kancheepuram
   group: academic
@@ -1043,15 +1052,24 @@
   name: IIIT Kota
   group: academic
   state: IN
-  url: https://www.iiitkota.ac.in/
-  job_links: 0
-  note: 'unreachable: render: Error'
+  url: https://iiitkota.ac.in/recruitment
+  job_links: 1
+  note: careers page found by hand (homepage had no job links)
 - id: iiit-bhopal
   name: IIIT Bhopal
   group: academic
   state: IN
-  url: https://iiitbhopal.ac.in/
-  job_links: 0
+  url: https://iiitbhopal.ac.in/quick-links/recruitment/research-staff-recruitment
+  job_links: 31
+  render: true
+  note: careers page found by hand (homepage had no job links); built by JavaScript
+- id: iiit-bhopal-non-faculty
+  name: IIIT Bhopal (non-faculty)
+  group: academic
+  state: MP
+  url: https://iiitbhopal.ac.in/quick-links/recruitment/non-faculty-recruitment
+  job_links: 90
+  render: true
 - id: iiit-guwahati
   name: IIIT Guwahati
   group: academic
@@ -1142,8 +1160,10 @@
   name: Banaras Hindu University
   group: academic
   state: IN
-  url: https://www.bhu.ac.in/
-  job_links: 0
+  url: https://www.bhu.ac.in/Site/Page/1_3355_6220_Recruitment-and-Assessment-Cell-Non-T
+  job_links: 85
+  render: true
+  note: careers page found by hand (homepage had no job links); built by JavaScript
 - id: jnu
   name: JNU
   group: academic
@@ -1160,11 +1180,10 @@
   name: IGNOU
   group: academic
   state: IN
-  url: http://www.ignou.ac.in/
-  job_links: 0
-  enabled: false
-  note: 'unreachable: ConnectionError'
+  url: https://www.ignou.ac.in/pages/5
+  job_links: 18
   runner: local
+  note: careers page found by hand (homepage had no job links)
 - id: dsssb-delhi
   name: DSSSB (Delhi)
   group: state-board

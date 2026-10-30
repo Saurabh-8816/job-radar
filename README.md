@@ -86,16 +86,25 @@ the existing adverts is spread across the next few runs, 40 per run.
 
 From then on it runs by itself every hour, and the digest arrives at 8 PM.
 
-### 5. Dashboard (optional, free)
-`site/index.html` is rebuilt every run, and the laptop relay copies the latest one from the
-`state` branch each time it runs, so the simplest dashboard is a bookmark:
-`file:///C:/Users/ASUS/Downloads/Suru_new/job-radar/site/index.html`.
-To see it on your phone too, host it privately:
-1. Create a free Cloudflare account → **Workers & Pages → Create → Pages → Direct upload**, name it `job-radar`.
-2. Create an API token with **Cloudflare Pages: Edit** permission; note your **Account ID**.
-3. Add GitHub secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`. The radar workflow then deploys every run.
-4. **Zero Trust → Access → Applications → Add (self-hosted)** for `job-radar.pages.dev`, with a
-   policy allowing only your Gmail address. Login becomes an emailed one-time code.
+### 5. Dashboard app (free)
+Every run builds an installable web app (PWA) in `site/` and publishes it to GitHub Pages:
+**https://saurabh-8816.github.io/job-radar/**. Switch it on once: repository **Settings →
+Pages → Build and deployment → Source: GitHub Actions**. The next radar run deploys it.
+
+- **On the phone:** open the link in Chrome → menu → **Add to Home screen** (or the
+  Install button in the app bar). It opens like an app and works offline with the last list.
+- **Views:** For you (clear matches) · Closing soon (≤ 7 days) · Worth a look (digest
+  posts) · Updates (results, lists, date changes) · Saved · All · Sources (site health).
+- **Save / Applied / Hide** take effect on the phone at once. "Sync to bot" opens Telegram
+  with `/start star_12`, so reminders and the 8 PM digest know too. 📅 adds the last date
+  to Google Calendar; share sends the post to WhatsApp or anywhere.
+- **On the laptop:** the relay copies the latest page from the `state` branch, so
+  `file:///C:/Users/ASUS/Downloads/Suru_new/job-radar/site/index.html` works offline too.
+
+The repository is public, so the app's address is public too (job adverts and what you
+saved). For a login-protected copy, Cloudflare Pages + Access still works: add secrets
+`CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` (a Pages project named `job-radar`) and put
+**Zero Trust → Access** in front of `job-radar.pages.dev` with only your Gmail allowed.
 
 ## Telegram commands
 Each alert ends with `#ID` and tappable commands:

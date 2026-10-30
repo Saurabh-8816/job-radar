@@ -3,8 +3,9 @@ __pycache__/
 .pytest-tmp/
 .tessdata/
 
-# State (data/jobs.db, site/index.html) lives on the `state` branch: tools/state.sh
+# State (data/jobs.db, site/index.html) lives on the `state` branch: tools/state.sh.
+# site/ is the built dashboard app, published to GitHub Pages by the workflow.
 data/*.db
-site/index.html
+site/
 data/*.log
 data/relay_cache.json

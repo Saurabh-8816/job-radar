@@ -12,6 +12,8 @@ on:
 
 permissions:
   contents: write
+  pages: write        # the dashboard app on GitHub Pages
+  id-token: write
 
 concurrency:
   group: jobradar-db              # radar and digest both commit the database; never overlap
@@ -73,3 +75,21 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy site --project-name=job-radar --branch=main
+
+      - name: Package the dashboard app for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  publish:
+    # https://saurabh-8816.github.io/job-radar/ — needs Settings → Pages → Source: "GitHub Actions"
+    # once. Until then this job fails on its own; the radar run above is unaffected.
+    needs: radar
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

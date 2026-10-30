@@ -12,6 +12,7 @@ conflicts.
 
 import gzip
 import json
+import shutil
 import socket
 import sqlite3
 import subprocess
@@ -23,6 +24,7 @@ from pathlib import Path
 
 from . import DATA_DIR, DEFAULT_DB, ROOT
 from .classify import Classifier
+from .dashboard import STATIC
 from .docs import read_item_docs
 from . import render
 from .fetch import fetch_many
@@ -60,6 +62,8 @@ def load_state():
         if data is not None:
             dest.parent.mkdir(parents=True, exist_ok=True)
             dest.write_bytes(data)
+    for f in STATIC.iterdir():   # icons etc., so the dashboard file opens complete on this laptop
+        shutil.copyfile(f, ROOT / "site" / f.name)
 
 
 def _read_state(db_path: Path, source_ids) -> tuple[set, set]:

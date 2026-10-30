@@ -1,0 +1,22 @@
+{
+  "name": "Job Radar",
+  "short_name": "Job Radar",
+  "description": "Govt, PSU and research jobs that match your profile: CG districts, central bodies, IITs/NITs.",
+  "id": "./",
+  "start_url": "./?source=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c2340",
+  "theme_color": "#0c2340",
+  "categories": ["productivity", "education"],
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ],
+  "shortcuts": [
+    {"name": "Closing soon", "url": "./?tab=closing", "icons": [{"src": "icon-192.png", "sizes": "192x192"}]},
+    {"name": "Saved jobs", "url": "./?tab=saved", "icons": [{"src": "icon-192.png", "sizes": "192x192"}]}
+  ]
+}

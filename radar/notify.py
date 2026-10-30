@@ -56,6 +56,15 @@ class Telegram:
                 return False
         return True
 
+    def username(self) -> str | None:
+        if not self.configured:
+            return None
+        try:
+            data = self._call("getMe")
+        except (requests.RequestException, ValueError):
+            return None
+        return ((data or {}).get("result") or {}).get("username")
+
     def updates(self, offset: int) -> list:
         if not self.live:
             return []

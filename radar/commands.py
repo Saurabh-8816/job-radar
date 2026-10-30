@@ -6,6 +6,9 @@
   /unhide_12    undo hide/applied/star
   /help
 
+The dashboard app's buttons send the same through a link (t.me/<bot>?start=star_12),
+which arrives as "/start star_12".
+
 Only messages from TELEGRAM_CHAT_ID are obeyed; anyone else who finds the bot is ignored.
 """
 
@@ -13,7 +16,7 @@ import re
 
 from .notify import Telegram
 
-_CMD = re.compile(r"^/(star|applied|hide|unhide)[_\s]+#?(\d+)", re.I)
+_CMD = re.compile(r"^/(?:start\s+)?/?(star|applied|hide|unhide)[_\s]+#?(\d+)", re.I)
 _STATUS = {"star": "starred", "applied": "applied", "hide": "hidden", "unhide": ""}
 _DONE = {"star": "★ Starred", "applied": "✓ Marked applied", "hide": "Hidden", "unhide": "Restored"}
 

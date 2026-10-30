@@ -10,7 +10,7 @@
 
 Outside GitHub Actions, `run` and `digest` use data/dryrun.db unless --db is given:
 the real data/jobs.db belongs to the workflow, and a locally modified copy would
-block the laptop relay's `git pull`.
+be overwritten by the next relay refresh from the `state` branch.
 """
 
 import argparse

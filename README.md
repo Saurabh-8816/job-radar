@@ -87,8 +87,8 @@ the existing adverts is spread across the next few runs, 40 per run.
 From then on it runs by itself every 4 hours, and the digest arrives at 8 PM.
 
 ### 5. Dashboard (optional, free)
-`site/index.html` is rebuilt every run, and the laptop relay's `git pull` keeps your copy
-current, so the simplest dashboard is a bookmark:
+`site/index.html` is rebuilt every run, and the laptop relay copies the latest one from the
+`state` branch each time it runs, so the simplest dashboard is a bookmark:
 `file:///C:/Users/ASUS/Downloads/Suru_new/job-radar/site/index.html`.
 To see it on your phone too, host it privately:
 1. Create a free Cloudflare account → **Workers & Pages → Create → Pages → Direct upload**, name it `job-radar`.
@@ -131,6 +131,18 @@ Without OCR, scanned adverts are marked "check manually" and go to the digest, s
 - **District sites:** `tools/discover_districts.py` regenerates `sources/s3waas_districts.yaml`.
   Every Indian district uses the same NIC S3WaaS template, so another state is just a
   list of district homepages.
+- **Every Union Government body and PSU:** `python tools/import_igod.py` reads the official
+  web directory (igod.gov.in) and writes `sources/igod_candidates.yaml` (ministries, offices,
+  statutory/autonomous bodies, PSUs/companies, institutes) and `sources/kv_candidates.yaml`
+  (Kendriya Vidyalayas). Then:
+
+      python tools/discover_careers.py --from=igod_candidates.yaml --to=watch_igod.yaml --workers=32 --timeout=15
+      python tools/discover_careers.py --from=kv_candidates.yaml --to=watch_kv.yaml --workers=10
+
+  These bulk lists are checked less often than `watch_pages.yaml` (every 12 h and daily,
+  at most 1,500 sites per run, longest-waiting first; see `WATCH_FILES` in
+  `radar/sources.py`). KVs outside CG/MP/OD/MH/TG/DL alert only clear computer posts;
+  their other notices stay on the dashboard.
 
 ## Health
 The digest ends with a coverage line, and flags any source that failed 3 runs in a row or
@@ -175,11 +187,11 @@ To move another site to the laptop, add `runner: local` to its entry.
 ## Layout
 ```
 profile.yaml              what counts as a match (English + Hindi keywords)
-sources/                  district registry, watched pages, candidate list
+sources/                  district registry, watched pages, candidate lists, bulk IGOD + KV lists
 radar/                    fetch · parsers (s3waas, watch) · pdftext (OCR) · classify · store · notify · digest · dashboard
 tools/                    source discovery, reachability spike
 tests/                    pytest suite with real saved pages and OCR output
 .github/workflows/        radar (4-hourly) · digest (8 PM IST) · spike · tests
-data/jobs.db              state, committed by the workflow
-site/index.html           dashboard, rebuilt each run
+data/jobs.db              state  } kept on the `state` branch as one commit each run replaces
+site/index.html           dashboard } (tools/state.sh), so history doesn't grow by the database
 ```

@@ -3,8 +3,8 @@ __pycache__/
 .pytest-tmp/
 .tessdata/
 
-# Local experiments; only data/jobs.db is the real state
+# State (data/jobs.db, site/index.html) lives on the `state` branch: tools/state.sh
 data/*.db
-!data/jobs.db
+site/index.html
 data/*.log
 data/relay_cache.json

@@ -20,7 +20,7 @@ concurrency:
 jobs:
   radar:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       PYTHONUNBUFFERED: "1"          # show progress lines live in the Actions log
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -49,6 +49,9 @@ jobs:
       - name: Install headless browser (for JavaScript-built sites like SSC, NIELIT)
         run: python -m playwright install --with-deps chromium
 
+      - name: Load state (database + dashboard from the state branch)
+        run: bash tools/state.sh load
+
       - name: Run radar
         run: python -m radar.main run --runner cloud ${{ inputs.only && format('--only {0}', inputs.only) || '' }}
 
@@ -56,9 +59,10 @@ jobs:
         run: |
           git config user.name "job-radar-bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -A data/ site/index.html   # includes inbox files the run consumed
+          bash tools/state.sh save "radar: $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git add -A data/   # relay inbox files this run consumed (the database itself is git-ignored)
           if ! git diff --cached --quiet; then
-            git commit -q -m "radar: $(date -u +'%Y-%m-%d %H:%M') UTC [skip ci]"
+            git commit -q -m "radar: consumed relay inbox [skip ci]"
             git pull -q --rebase && git push -q
           fi
 

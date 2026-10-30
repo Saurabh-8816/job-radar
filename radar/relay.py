@@ -3,8 +3,9 @@
 The laptop fetches only `runner: local` sources, reads new adverts (with OCR), and
 pushes the result as a small JSON file in data/inbox/. The next GitHub run ingests
 those files exactly like pages it fetched itself, so classification, alerts, the
-digest and the dashboard stay in one place. The laptop never writes jobs.db and
-never needs the Telegram token. New files only, so git never conflicts.
+digest and the dashboard stay in one place. The laptop only reads jobs.db (a copy of
+the `state` branch) and never needs the Telegram token. New files only, so git never
+conflicts.
 
     python -m radar.main relay --push     # what the Windows scheduled task runs
 """
@@ -26,8 +27,8 @@ from . import render
 from .fetch import fetch_many
 from .models import Item, Source
 from .parsers import parse
-from .sources import load_sources
-from .textutil import IST, now_ist_iso
+from .sources import due, load_sources
+from .textutil import IST, now_ist, now_ist_iso
 
 INBOX = DATA_DIR / "inbox"
 CACHE = DATA_DIR / "relay_cache.json"      # keys already shipped (local only, git-ignored)
@@ -39,6 +40,19 @@ SHIP_TEXT_LIMIT = 120_000   # full advert text travels to GitHub; only the DB co
 
 def _git(*args) -> subprocess.CompletedProcess:
     return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+
+
+def load_state():
+    """Latest database and dashboard from the `state` branch (tools/state.sh). Both are
+    git-ignored here, so refreshing them never gets in the way of `git pull`."""
+    if _git("fetch", "-q", "origin", "state").returncode != 0:
+        print("  no state branch to read; using the local copy")
+        return
+    for name, dest in (("jobs.db", DEFAULT_DB), ("index.html", ROOT / "site" / "index.html")):
+        shown = subprocess.run(["git", "show", f"FETCH_HEAD:{name}"], cwd=ROOT, capture_output=True)
+        if shown.returncode == 0:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            dest.write_bytes(shown.stdout)
 
 
 def _read_state(db_path: Path, source_ids) -> tuple[set, set]:
@@ -70,12 +84,24 @@ def cloud_blocked_ids(db_path: Path) -> set[str]:
         db.close()
 
 
+def _last_runs(db_path: Path) -> dict[str, str]:
+    if not Path(db_path).exists():
+        return {}
+    db = sqlite3.connect(f"file:{Path(db_path).as_posix()}?mode=ro", uri=True)
+    try:
+        return {r[0]: r[1] for r in db.execute("SELECT id, last_run FROM sources WHERE last_run IS NOT NULL")}
+    finally:
+        db.close()
+
+
 def select_sources(db_path: Path = DEFAULT_DB) -> list[Source]:
     """`runner: local` sources, plus any GitHub source that GitHub couldn't reach last
     time (NIC blocks GitHub for some district sites, SarkariResult answers it 403...).
-    No manual list: if a site starts blocking GitHub, the laptop picks it up next run."""
+    No manual list: if a site starts blocking GitHub, the laptop picks it up next run.
+    Twice-a-day / daily sources (the bulk directory lists) wait until they're due."""
     blocked = cloud_blocked_ids(db_path)
-    return load_sources(runner="local") + [s for s in load_sources(runner="cloud") if s.id in blocked]
+    picked = load_sources(runner="local") + [s for s in load_sources(runner="cloud") if s.id in blocked]
+    return due(picked, _last_runs(db_path), now_ist(), limit=400)
 
 
 def _load_cache() -> dict:
@@ -100,6 +126,7 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
         if pulled.returncode != 0:
             print("git pull failed; not relaying this time:\n" + pulled.stderr.strip())
             return None
+        load_state()
 
     sources = sources if sources is not None else select_sources(db_path)
     if not sources:

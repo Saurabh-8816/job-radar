@@ -1,4 +1,4 @@
-"""SQLite state. The workflow commits data/jobs.db back to the repo after each run."""
+"""SQLite state. The workflow saves data/jobs.db to the `state` branch after each run (tools/state.sh)."""
 
 import json
 import sqlite3
@@ -102,6 +102,10 @@ class Store:
             self.db.execute("UPDATE sources SET cloud_fail_streak=0 WHERE id=?", (source_id,))
         else:
             self.db.execute("UPDATE sources SET cloud_fail_streak=cloud_fail_streak+1 WHERE id=?", (source_id,))
+
+    def last_runs(self) -> dict[str, str]:
+        return {r["id"]: r["last_run"] for r in self.db.execute("SELECT id, last_run FROM sources")
+                if r["last_run"]}
 
     def cloud_streaks(self) -> dict[str, int]:
         return {r["id"]: r["cloud_fail_streak"] or 0

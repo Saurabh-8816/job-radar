@@ -7577,8 +7577,11 @@
   name: Kendriya Vidyalaya Sangathan, Regional Office, Raipur, Chhattisgarh
   group: central
   state: CG
-  url: https://roraipur.kvs.gov.in/%e0%a4%b0%e0%a4%be%e0%a4%af%e0%a4%aa%e0%a5%81%e0%a4%b0-%e0%a4%95%e0%a5%8d%e0%a4%b7%e0%a5%87%e0%a4%a4%e0%a5%8d%e0%a4%b0-%e0%a4%ae%e0%a5%87%e0%a4%82-%e0%a4%aa%e0%a5%80%e0%a4%9c%e0%a5%80%e0%a4%9f/
-  job_links: 1
+  url: https://roraipur.kvs.gov.in/recruitment/
+  job_links: 6
+  selector: table.documents-table
+  filter_jobs: false
+  note: KVS Raipur region recruitment notices table (was one old notice page)
 - id: kendriya-vidyalaya-sangathan-regional-office-ranchi-jharkhand
   name: Kendriya Vidyalaya Sangathan, Regional Office, Ranchi, Jharkhand
   group: central

@@ -1317,3 +1317,31 @@
   churn_limit: 80
   region_filter: true
   note: news sitemap = PW's articles from the last day or two; job ones kept, other states' dropped
+- id: sainik-school-ambikapur
+  name: Sainik School Ambikapur
+  group: central
+  state: CG
+  url: https://www.sainikschoolambikapur.org.in/
+  job_links: 4
+  note: recruitment PDFs are linked from the homepage (Recruitment of Staff, selection test, results)
+- id: nvs-contract-teachers
+  name: NVS contract teachers (all regions, incl. Bhopal region = CG JNVs)
+  group: central
+  state: IN
+  url: https://trschooms.in/
+  job_links: 2
+  note: NVS hires JNV contract PGT/TGT region-wise through this portal
+- id: cg-emrs-eklavya
+  name: CG EMRS / Prayas schools (Tribal Department)
+  group: cg-state
+  state: CG
+  url: https://eklavya.cg.nic.in/
+  job_links: 6
+  note: state EMRS staff exams and Prayas school notices; admission lists are filtered out
+- id: cg-higher-education
+  name: CG Higher Education Department
+  group: cg-state
+  state: CG
+  url: https://highereducation.cg.gov.in/
+  job_links: 0
+  note: guest lecturer (atithi vyakhyata) and college recruitment notices

@@ -29,12 +29,13 @@
   job_links: 2
   runner: local
 - id: cg-power-companies
-  name: CG Power Companies
+  name: CG Power Companies (CSPDCL / CSPTCL / CSPGCL)
+  kind: cspdcl
   group: cg-state
   state: CG
-  url: https://www.cspc.co.in/
-  job_links: 11
-  runner: local
+  url: https://escapi.cspdcl.co.in/api/api/recruitment/pagination?page=1&limit=20
+  filter_jobs: false   # the recruitment feed only; every file is a notice, corrigendum, syllabus or result
+  note: JSON feed behind web.cspdcl.co.in/#/FrmViewRecruitment (cspc.co.in's homepage only had menu links)
 - id: cg-apex-cooperative-bank
   name: CG Apex Cooperative Bank
   group: cg-state

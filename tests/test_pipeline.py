@@ -179,3 +179,28 @@ def test_source_moved_to_a_new_page_is_indexed_quietly_again(tmp_path):
     assert store.is_baselined(src.id)
     store.sync_source(replace(src, url="https://durg.gov.in/en/careers/"))
     assert not store.is_baselined(src.id)
+
+
+def test_a_crashing_parser_fails_only_its_own_source(monkeypatch, tmp_path, capsys):
+    def boom(source, html, url):
+        raise ValueError("odd page")
+    monkeypatch.setattr(pipeline, "parse", boom)
+    stats, out = _run(monkeypatch, tmp_path, "<html></html>", capsys)
+    assert stats["sources_unrecognized"] == 1 and "parser crashed" in out
+
+
+def test_a_crashing_advert_reader_marks_only_that_notice(monkeypatch, tmp_path, capsys):
+    def boom(*a, **kw):
+        raise RuntimeError("bad pdf")
+    monkeypatch.setattr(pipeline, "read_item_docs", boom)
+    src = district_source("Kondagaon")
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])
+    monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
+    html = fixture_text("kondagaon_recruitment.html")
+    opts = pipeline.RunOptions(dry_run=True, read_docs=True, build_site=False, db_path=tmp_path / "t.db")
+    monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {u: Response(u, True, 200, text=html) for u in urls})
+    pipeline.run(opts)
+    with_new = html.replace("</tbody>", NEW_ROW + "</tbody>", 1)
+    monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {u: Response(u, True, 200, text=with_new) for u in urls})
+    stats = pipeline.run(opts)
+    assert stats["docs_error"] == 1 and "could not read the advert" in capsys.readouterr().out

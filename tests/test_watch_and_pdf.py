@@ -29,6 +29,14 @@ def test_watch_uses_row_context_for_generic_link_text():
     assert advt.docs and advt.start_date == "2026-11-05"
 
 
+def test_know_more_links_take_the_list_item_text():
+    # CWC careers: "<li>Advertisement No CWC/... <a>Click here to know more</a></li>"
+    html = ('<ul><li>Advertisement No CWC/I-Manpower/DR/Rectt/2026/01 '
+            '<a href="/Careers/Guidelines/45/45_Detailed Advertisement.pdf">Click here to know more</a></li></ul>')
+    items = watch.parse(html, "https://cwceportal.com/cwc_careers.html", _src()).items
+    assert items[0].title.startswith("Advertisement No CWC/I-Manpower/DR/Rectt/2026/01")
+
+
 def test_watch_skips_script_and_mail_links():
     urls = [i.url for i in watch.parse(PAGE, "https://example.ac.in/jobs", _src()).items]
     assert not any(u.startswith(("javascript", "mailto")) for u in urls)

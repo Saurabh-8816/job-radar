@@ -14626,9 +14626,10 @@
   name: Central Warehousing Corporation (CWC)
   group: psu
   state: DL
-  url: https://cewacor.nic.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://cwceportal.com/cwc_careers.html
+  selector: marquee.datashow1   # the scrolling list links each advert PDF; the table below only links /careers
+  job_links: 2
+  note: cewacor.nic.in is a JavaScript site; its careers link goes to this portal page
 - id: chennai-petroleum-corporation-limited-cpcl
   name: Chennai Petroleum Corporation Limited (CPCL)
   group: psu

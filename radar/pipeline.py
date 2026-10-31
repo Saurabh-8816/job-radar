@@ -100,7 +100,13 @@ def run(opts: RunOptions) -> Counter:
             store.source_failed(s.id, r.error or "fetch failed")
             stats["sources_failed"] += 1
             continue
-        result = parse(s, r.text, s.url)
+        try:
+            result = parse(s, r.text, s.url)
+        except Exception as e:   # one odd page must not stop every other source's alerts
+            print(f"  parser crashed on {s.id}: {e!r}")
+            store.source_failed(s.id, f"parser error: {e!r}"[:200], status="unrecognized")
+            stats["sources_unrecognized"] += 1
+            continue
         _ingest(ctx, s, result.status, result.items, result.texts)
 
     if opts.ingest_inbox:
@@ -232,7 +238,11 @@ def read_documents(store, clf, opts: RunOptions, today, quiet=()) -> Counter:
         docs = json.loads(row["docs"] or "[]")
         # A notice that's only a link to a detail page: read that page and its PDFs.
         page_url = row["url"] if (not docs and row["url"] and row["url"] != row["notice_url"]) else None
-        text, status = read_item_docs(docs, clf, opts.ocr, page_url=page_url, deadline=deadline)
+        try:
+            text, status = read_item_docs(docs, clf, opts.ocr, page_url=page_url, deadline=deadline)
+        except Exception as e:   # a broken advert is "error" for that notice, not the end of the run
+            print(f"  could not read the advert for #{row['id']}: {e!r}")
+            text, status = "", "error"
         return row, text, status
 
     counts = Counter()

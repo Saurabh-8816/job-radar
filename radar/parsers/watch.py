@@ -33,7 +33,8 @@ _GENERIC = {
 _GENERIC_LABEL = re.compile(
     r"^(click\s+here\s+(to|for)\s+)?(view|download|read|see|open|check)?\s*(the\s+)?"
     r"(full\s+|detailed\s+|official\s+)?(advertisement|advt\.?|notification|notice|details|pdf|file|document|corrigendum)s?"
-    r"\s*(\(.{0,20}\))?\s*(here)?$", re.I)
+    r"\s*(\(.{0,20}\))?\s*(here)?$"
+    r"|^(click\s+here\s+(to\s+)?)?(know|read|learn|view|see)\s+more$", re.I)   # CWC: "Click here to know more"
 
 
 # Page-number links of a paged list ("Page 2", "Current page 1", "Last page »", "›").

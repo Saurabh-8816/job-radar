@@ -8,16 +8,23 @@ from urllib.parse import urlsplit, urlunsplit, unquote, urljoin
 IST = timezone(timedelta(hours=5, minutes=30))
 
 _ZERO_WIDTH = re.compile(r"[​-‍⁠﻿­]")
+_SURROGATE = re.compile(r"[\ud800-\udfff]")
 _SPACES = re.compile(r"\s+")
 _DATE = re.compile(r"\b(\d{1,2})\s*[./-]\s*(\d{1,2})\s*[./-]\s*(\d{4})\b")
 _SIZE_SUFFIX = re.compile(r"\s*\(\s*[\d.,]+\s*(?:KB|MB|GB|bytes)\s*\)\s*$", re.I)
 
 
+def storable(text: str | None) -> str:
+    """Drop lone surrogates. Half an emoji from a broken page entity (&#55357;) can't be
+    written as UTF-8, and SQLite refuses the whole row (this stopped every run on 31 Oct)."""
+    return _SURROGATE.sub("", text) if text else ""
+
+
 def clean(text: str | None) -> str:
-    """NFC-normalise, drop zero-width characters, collapse whitespace."""
+    """NFC-normalise, drop zero-width characters and lone surrogates, collapse whitespace."""
     if not text:
         return ""
-    text = unicodedata.normalize("NFC", text)
+    text = unicodedata.normalize("NFC", storable(text))
     text = _ZERO_WIDTH.sub("", text)
     return _SPACES.sub(" ", text).strip()
 

@@ -204,3 +204,19 @@ def test_a_crashing_advert_reader_marks_only_that_notice(monkeypatch, tmp_path, 
     monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {u: Response(u, True, 200, text=with_new) for u in urls})
     stats = pipeline.run(opts)
     assert stats["docs_error"] == 1 and "could not read the advert" in capsys.readouterr().out
+
+
+def test_text_with_half_an_emoji_is_still_saved(tmp_path):
+    # A page with a broken "&#55357;" entity stopped every run on 31 Oct 2026.
+    from radar.classify import Verdict
+    from radar.models import Item
+    store = Store(tmp_path / "s.db")
+    src = district_source("Durg")
+    store.sync_source(src)
+    broken = "Walk-in for Programmer \ud83d on 10/11/2026"
+    row_id = store.insert_item(Item(source_id=src.id, title=broken, url="https://x/a.pdf", notice_url=src.url,
+                                    docs=[("View", "https://x/a.pdf")]), baseline=False)
+    store.save_verdict(row_id, Verdict("new", "A", [], [], None), doc_status="text", doc_text=broken)
+    store.commit()
+    row = store.get(row_id)
+    assert row["title"] == row["doc_text"] == "Walk-in for Programmer  on 10/11/2026"

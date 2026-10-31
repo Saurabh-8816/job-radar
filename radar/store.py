@@ -5,7 +5,7 @@ import sqlite3
 from pathlib import Path
 
 from .models import Item, Source
-from .textutil import now_ist_iso
+from .textutil import now_ist_iso, storable
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sources (
@@ -143,12 +143,12 @@ class Store:
             """INSERT OR IGNORE INTO items(key, source_id, title, description, url, notice_url, docs,
                  start_date, end_date, deadline, first_seen, last_seen, baseline, doc_status, doc_text)
                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
-            (item.key, item.source_id, item.title, item.description, item.url, item.notice_url,
+            (item.key, item.source_id, storable(item.title), storable(item.description), item.url, item.notice_url,
              json.dumps(item.docs, ensure_ascii=False), item.start_date, item.end_date,
              item.end_date, now, now, int(baseline),
              # documents to read, or a detail page to follow (watch links that aren't the page itself)
              doc_status if (item.docs or (item.url and item.url != item.notice_url)) else "none",
-             (doc_text or "")[:DOC_TEXT_LIMIT]))
+             storable(doc_text)[:DOC_TEXT_LIMIT]))
         if cur.rowcount:
             return cur.lastrowid
         self.db.execute("UPDATE items SET last_seen=? WHERE key=?", (now, item.key))
@@ -181,7 +181,7 @@ class Store:
             args.append(doc_status)
         if doc_text is not None:
             sets.append("doc_text=?")
-            args.append(doc_text[:DOC_TEXT_LIMIT])
+            args.append(storable(doc_text[:DOC_TEXT_LIMIT]))
         self.db.execute(f"UPDATE items SET {', '.join(sets)} WHERE id=?", (*args, item_id))
 
     def pending_docs(self, limit: int, today_iso: str):

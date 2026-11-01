@@ -5,9 +5,11 @@
   name: CG Vyapam
   group: cg-state
   state: CG
-  url: https://vyapamcg.cgstate.gov.in/
+  url: https://cgssb.cgstate.gov.in/
   job_links: 29
   runner: local
+  render: true       # rebuilt late Oct 2026 as a JavaScript app (now CG Staff Selection Board);
+  selector: main     # its notices and PDFs moved to cgssb.cgstate.gov.in
 - id: cgpsc
   name: CGPSC
   group: cg-state

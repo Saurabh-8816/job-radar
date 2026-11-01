@@ -37,6 +37,23 @@ def test_know_more_links_take_the_list_item_text():
     assert items[0].title.startswith("Advertisement No CWC/I-Manpower/DR/Rectt/2026/01")
 
 
+def test_links_after_an_early_end_of_page_are_kept():
+    # NITTTR Chennai prints a whole header page (ending </body></html>) before its table.
+    html = ('<html><body><a href="/about.php">About us</a></body></html>'
+            '<table><tr><td>Technical Officer (Workshop Superintendent)</td>'
+            '<td><a href="/rec2026/staff/syllabus.pdf">View</a></td></tr></table>')
+    items = watch.parse(html, "https://nitttrc.ac.in/nitttr_updated/rec_staff.php", _src()).items
+    assert [i.title for i in items if i.url.endswith("syllabus.pdf")] == [
+        "Technical Officer (Workshop Superintendent) View"]
+
+
+def test_view_links_in_a_card_take_the_card_caption():
+    html = ('<div class="common-document"><span>Advertisement 2026-27</span>'
+            '<span><a href="/rec2026/staff/advt.pdf">View</a></span></div>')
+    items = watch.parse(html, "https://nitttrc.ac.in/nitttr_updated/rec_staff.php", _src()).items
+    assert items[0].title == "Advertisement 2026-27 View"
+
+
 def test_watch_skips_script_and_mail_links():
     urls = [i.url for i in watch.parse(PAGE, "https://example.ac.in/jobs", _src()).items]
     assert not any(u.startswith(("javascript", "mailto")) for u in urls)

@@ -23,6 +23,7 @@ _RANDOMISH = re.compile(r"[A-Za-z0-9+/=_%.-]{20,}")
 _LAST_DATE = re.compile(r"(?:last|closing)\s*date\s*[:\-–]?\s*", re.I)   # date follows within ~40 chars
 
 _SKIP_SCHEMES = ("javascript:", "mailto:", "tel:", "#", "whatsapp:")
+_END_TAGS = re.compile(r"</(?:body|html)\s*>", re.I)
 _DOC_EXT = (".pdf", ".doc", ".docx", ".xls", ".xlsx", ".jpg", ".jpeg", ".png")
 _GENERIC = {
     "click here", "here", "view", "download", "details", "more", "read more",
@@ -76,7 +77,20 @@ def _context_element(a):
         parent = a.find_parent(tag)
         if parent is not None and len(parent.get_text(" ", strip=True)) <= 600:
             return parent
-    return a.find_parent(["p", "dd", "td"])
+    return a.find_parent(["p", "dd", "td"]) or _card(a)
+
+
+def _card(a):
+    """A small block around the link that also holds its caption: NITTTR Chennai's
+    document cards are <div><span>Advertisement 2026-27</span> <a>View</a></div>."""
+    own = len(a.get_text(" ", strip=True))
+    for parent in list(a.parents)[:3]:
+        size = len(parent.get_text(" ", strip=True))
+        if size > 300:
+            return None
+        if size > own + 3:
+            return parent
+    return None
 
 
 _DEADLINE_HEADER = re.compile(r"last\s*date|closing\s*date|अंतिम\s*(तिथि|दिनांक)", re.I)
@@ -109,8 +123,15 @@ def _scopes(soup, selector):
     return [soup.body or soup]
 
 
+def _soup(html: str):
+    """lxml stops reading at </html>. NITTTR Chennai prints its header include as a whole
+    page (ending </body></html>) before the recruitment table, which was lost; both end
+    tags are optional, so they're dropped first."""
+    return BeautifulSoup(_END_TAGS.sub("", html), "lxml")
+
+
 def parse(html: str, page_url: str, source) -> ParseResult:
-    soup = BeautifulSoup(html, "lxml")
+    soup = _soup(html)
     for tag in soup(["script", "style", "noscript", "template"]):
         tag.decompose()
 

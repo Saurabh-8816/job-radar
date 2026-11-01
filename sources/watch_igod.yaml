@@ -10155,9 +10155,23 @@
   name: National Institute of Technical Teachers Training and Research (NITTTR), Chennai
   group: central
   state: TN
-  url: https://nitttrc.ac.in/
+  url: https://nitttrc.ac.in/nitttr_updated/rec_staff.php
+  job_links: 18
+  note: the homepage is only a redirect; faculty posts are in the -faculty entry below
+- id: nitttr-chennai-faculty
+  name: NITTTR Chennai (faculty recruitment)
+  group: central
+  state: TN
+  url: https://nitttrc.ac.in/nitttr_updated/teaching.php
+  job_links: 1
+- id: nitttr-kolkata
+  name: National Institute of Technical Teachers Training and Research (NITTTR), Kolkata
+  group: central
+  state: WB
+  url: http://www.nitttrkol.ac.in/recruitment.php
+  runner: local
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  note: answered 403 / no connection to everyone on 2 Nov 2026; kept so it's read once it's back
 - id: national-institute-of-technology-nit-tiruchirappalli
   name: National Institute of Technology (NIT), Tiruchirappalli
   group: central

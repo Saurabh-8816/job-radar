@@ -35,6 +35,7 @@
   state: CG
   url: https://escapi.cspdcl.co.in/api/api/recruitment/pagination?page=1&limit=20
   filter_jobs: false   # the recruitment feed only; every file is a notice, corrigendum, syllabus or result
+  runner: local        # escapi.cspdcl.co.in times out from GitHub's servers
   note: JSON feed behind web.cspdcl.co.in/#/FrmViewRecruitment (cspc.co.in's homepage only had menu links)
 - id: cg-apex-cooperative-bank
   name: CG Apex Cooperative Bank

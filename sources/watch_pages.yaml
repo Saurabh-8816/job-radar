@@ -1284,6 +1284,14 @@
   url: https://www.adda247.com/exams/chhattisgarh/
   selector: .category_postlist, ul.lcp_catlist, .latest-posts   # post lists, not the menus
   churn_limit: 150
+- id: cgssbjobs
+  name: CGSSBJOBS.in (CG jobs blog)
+  group: aggregator
+  state: CG
+  url: https://cgssbjobs.in/
+  selector: .gb-query-loop-item h2   # post titles only; the menus link policy pages
+  churn_limit: 150
+  note: private WordPress blog, not the official CGSSB (that is cg-vyapam, cgssb.cgstate.gov.in)
 - id: adda247-mp
   name: Adda247 (MP)
   group: aggregator

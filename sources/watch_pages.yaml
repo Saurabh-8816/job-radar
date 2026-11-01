@@ -45,6 +45,13 @@
   state: CG
   url: https://www.cgapexbank.com/recruitment.php
   job_links: 52
+- id: cg-cooperation-dept
+  name: CG Department of Cooperation
+  group: cg-state
+  state: CG
+  url: https://coop.cg.gov.in/
+  job_links: 1
+  note: no recruitment page; new notices appear in the homepage's महत्वपूर्ण सूचना box (/hi/notifications only lists old ones)
 - id: cg-health-nhm
   name: CG Health / NHM
   group: cg-state

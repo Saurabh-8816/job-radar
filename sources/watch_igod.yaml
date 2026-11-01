@@ -9385,8 +9385,10 @@
   name: National Council of Educational Research and Training (NCERT)
   group: central
   state: IN
-  url: https://ncert.nic.in/
-  job_links: 198
+  url: https://ncert.nic.in/vacancies.php?ln=en
+  selector: "#accordionExample"   # academic, non-academic and project-staff lists
+  job_links: 116
+  note: the homepage only showed a few of these; vacancies.php has every advert
 - id: national-council-of-science-museums-ncsm
   name: National Council of Science Museums (NCSM)
   group: central

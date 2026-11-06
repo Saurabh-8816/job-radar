@@ -8,6 +8,18 @@ def parse(fixture, district):
     return s3waas.parse(fixture_text(fixture), src.url, src)
 
 
+def test_leading_serial_column_is_skipped():
+    # CG State Legal Services Authority puts क्रमांक before the usual five columns.
+    html = ("<table><tr><th>क्रमांक</th><th>Title</th><th>Description</th><th>Start Date</th>"
+            "<th>End Date</th><th>File</th></tr><tr><td>1</td><td>Advertisement for Permanent Lok Adalat</td>"
+            "<td></td><td>16/04/2025</td><td>12/05/2025</td><td><a href='/uploads/a.pdf'>View</a></td></tr></table>")
+    src = district_source("Kondagaon")
+    item = s3waas.parse(html, "https://chhattisgarh.nalsa.gov.in/notice-category/recruitments/", src).items[0]
+    assert item.title == "Advertisement for Permanent Lok Adalat"
+    assert (item.start_date, item.end_date) == ("2025-04-16", "2025-05-12")
+    assert item.docs[0][1].endswith("/uploads/a.pdf")
+
+
 def test_kondagaon_assistant_programmer_row():
     result = parse("kondagaon_recruitment.html", "Kondagaon")
     assert result.status == "ok"

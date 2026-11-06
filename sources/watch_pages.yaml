@@ -45,9 +45,20 @@
   name: CHiPS (CG Infotech)
   group: cg-state
   state: CG
-  url: https://chips.gov.in/en/careers
-  job_links: 2
+  url: https://chips.gov.in/en/notification/recruitments
+  job_links: 0
   runner: local
+  render: true      # the list is filled in from /en/ajax/grouped-notifications/recruitments
+  selector: main
+  note: /en/careers only had menu links; the recruitment list was empty on 7 Nov 2026
+- id: cg-legal-services-authority
+  name: CG State Legal Services Authority (CGSLSA)
+  kind: s3waas
+  group: cg-state
+  state: CG
+  url: https://chhattisgarh.nalsa.gov.in/notice-category/recruitments/
+  job_links: 0
+  note: S3WaaS table with a leading क्रमांक column; empty on 7 Nov 2026 (past ones under /past-notices/recruitments/)
 - id: cg-power-companies
   name: CG Power Companies (CSPDCL / CSPTCL / CSPGCL)
   kind: cspdcl

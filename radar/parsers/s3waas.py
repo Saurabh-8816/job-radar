@@ -7,6 +7,8 @@ header text. A category with no active notices has no table at all, only a
 """
 
 
+import re
+
 from bs4 import BeautifulSoup
 
 from ..models import Item, ParseResult
@@ -30,11 +32,16 @@ def _find_table(soup: BeautifulSoup):
     return None
 
 
+# A leading serial-number column (CG State Legal Services Authority: क्रमांक | Title | ...).
+_SERIAL = re.compile(r"^(?:s|sr|sl)\.?\s*no\.?$|^#$|^क्रमांक$|^क्र\.?\s*सं\.?$|^क्रम\s*संख्या$")
+
+
 def _columns(table) -> dict[str, int | None]:
     header = [clean(th.get_text()).lower() for th in table.find_all("th")]
-    if len(header) == 4:  # rare variant without a description column
-        return {"title": 0, "desc": None, "start": 1, "end": 2, "file": 3}
-    return {"title": 0, "desc": 1, "start": 2, "end": 3, "file": 4}
+    shift = 1 if header and _SERIAL.match(header[0]) else 0
+    if len(header) - shift == 4:  # rare variant without a description column
+        return {"title": shift, "desc": None, "start": 1 + shift, "end": 2 + shift, "file": 3 + shift}
+    return {"title": shift, "desc": 1 + shift, "start": 2 + shift, "end": 3 + shift, "file": 4 + shift}
 
 
 def parse(html: str, page_url: str, source) -> ParseResult:

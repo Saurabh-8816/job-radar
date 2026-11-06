@@ -17,6 +17,14 @@
   url: https://psc.cg.gov.in/Advertisement.php
   job_links: 128
   runner: local
+- id: cgpsc-notifications
+  name: CGPSC (notifications)
+  group: cg-state
+  state: CG
+  url: https://psc.cg.gov.in/Notifications.php
+  job_links: 89
+  runner: local
+  note: exam schedules, online-application notices and results; the adverts are on Advertisement.php
 - id: cg-high-court
   name: CG High Court
   group: cg-state

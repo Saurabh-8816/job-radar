@@ -9589,9 +9589,17 @@
   name: National Forensic Sciences University
   group: central
   state: IN
-  url: https://nfsu.mha.gov.in/
-  job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  url: https://nfsu.ac.in/Contractual_Recruitment
+  selector: .event-items fieldset   # the notices, not the menus
+  job_links: 285
+  note: every campus (Gandhinagar, Delhi, Goa, Bhopal, Pune, Nagpur...) posts here; regular posts in the entry below
+- id: nfsu-regular-recruitment
+  name: National Forensic Sciences University (regular posts)
+  group: central
+  state: IN
+  url: https://nfsu.ac.in/Regular_Recruitment
+  selector: .event-items fieldset
+  job_links: 91
 - id: national-foundation-for-communal-harmony-nfch
   name: National Foundation for Communal Harmony (NFCH)
   group: central

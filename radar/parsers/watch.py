@@ -130,10 +130,32 @@ def _soup(html: str):
     return BeautifulSoup(_END_TAGS.sub("", html), "lxml")
 
 
+def _section_headings(soup, sections):
+    """{block: heading text} for a source's `sections` blocks. CG High Court lists each
+    post as an accordion ("Translator") whose links only say "Notice" or "Merit List"."""
+    if not sections:
+        return {}
+    found = {}
+    for block in soup.select(sections):
+        heading = block.find(["h1", "h2", "h3", "h4", "h5", "h6", "button", "legend"])
+        if heading is not None:
+            found[id(block)] = clean(heading.get_text(" "))
+    return found
+
+
+def _section_of(a, headings) -> str:
+    return next((headings[id(p)] for p in a.parents if id(p) in headings), "")
+
+
 def parse(html: str, page_url: str, source) -> ParseResult:
     soup = _soup(html)
     for tag in soup(["script", "style", "noscript", "template"]):
         tag.decompose()
+    # "New" badges come and go; left in, they'd change a token link's identity when removed.
+    for tag in soup.select(".badge"):
+        if len(tag.get_text(strip=True)) <= 10:
+            tag.decompose()
+    headings = _section_headings(soup, getattr(source, "sections", None))
 
     items, seen = [], set()
     for a in (a for scope in _scopes(soup, source.selector) for a in scope.find_all("a", href=True)):
@@ -153,6 +175,8 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         title = text if (len(text) >= 12 and not _says_nothing(text)) else (context or text)
         if not title:
             continue
+        if (section := _section_of(a, headings)) and section not in title:
+            title = f"{section} – {title}"
         items.append(Item(
             source_id=source.id,
             title=title[:300],

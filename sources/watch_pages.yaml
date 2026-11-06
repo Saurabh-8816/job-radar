@@ -21,8 +21,18 @@
   name: CG High Court
   group: cg-state
   state: CG
-  url: https://highcourt.cg.gov.in/recruit/drt/page/recruitdrt.php
-  job_links: 236
+  url: https://highcourt.cg.gov.in/recruit/recruithc3.php
+  selector: "#accordionExample"
+  sections: .accordion-item   # one per post; its links only say "Notice", "Merit List"
+  job_links: 163
+  note: was the Pre/Post Retiral page (re-employing retired staff) until Nov 2026
+- id: cg-district-courts
+  name: CG District Courts (via High Court)
+  group: cg-state
+  state: CG
+  url: https://highcourt.cg.gov.in/recruit/recruitdc.php
+  selector: div.container.py-3
+  job_links: 114
 - id: chips-cg-infotech
   name: CHiPS (CG Infotech)
   group: cg-state

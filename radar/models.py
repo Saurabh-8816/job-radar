@@ -18,6 +18,7 @@ class Source:
     category: str = "recruitment"
     filter_jobs: bool = False    # keep only rows/links that look job-related
     selector: str | None = None  # watch pages: CSS scope to ignore menus
+    sections: str | None = None  # watch pages: CSS for blocks whose heading names the post
     enabled: bool = True
     runner: str = "cloud"        # "local": blocks GitHub's servers, fetched by the laptop relay
     churn_limit: int = 25        # more new links than this in one run = link-format change, absorbed

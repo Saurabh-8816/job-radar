@@ -54,6 +54,19 @@ def test_view_links_in_a_card_take_the_card_caption():
     assert items[0].title == "Advertisement 2026-27 View"
 
 
+def test_section_heading_names_the_post_and_badges_are_ignored():
+    # CG High Court: one accordion per post; the links only say "Merit List".
+    item = ('<div class="accordion-item"><h2><button>Translator<span class="badge">New</span></button></h2>'
+            '<ul><li>Merit List <a href="recruit/view_file_recruitment.php?token={t}">PDF</a>{b}</li></ul></div>')
+    page = lambda t, b: f'<div id="acc">{item.format(t=t, b=b)}</div>'
+    src = Source(id="cg-high-court", name="CG High Court", kind="watch", url="https://highcourt.cg.gov.in/x",
+                 selector="#acc", sections=".accordion-item")
+    first = watch.parse(page("AAAAAAAAAAAAAAAAAAAA1x", '<span class="badge">New</span>'), src.url, src).items[0]
+    later = watch.parse(page("BBBBBBBBBBBBBBBBBBBB2y", ""), src.url, src).items[0]
+    assert first.title == "Translator – Merit List PDF"
+    assert first.key_hint == later.key_hint
+
+
 def test_watch_skips_script_and_mail_links():
     urls = [i.url for i in watch.parse(PAGE, "https://example.ac.in/jobs", _src()).items]
     assert not any(u.startswith(("javascript", "mailto")) for u in urls)

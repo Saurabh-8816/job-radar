@@ -26,6 +26,7 @@ class Source:
     render: bool = False         # page is built by JavaScript: open it in a headless browser
     every_hours: int = 0         # 0 = every run; the bulk directory lists are checked less often
     digest: bool = True          # False: partial matches are stored quietly, only clear matches alert
+    alert_on: str | None = None  # regex: a title matching it is always an instant alert
 
 
 @dataclass

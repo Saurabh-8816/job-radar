@@ -51,6 +51,17 @@
   render: true      # the list is filled in from /en/ajax/grouped-notifications/recruitments
   selector: main
   note: /en/careers only had menu links; the recruitment list was empty on 7 Nov 2026
+- id: ctsp-typing-board
+  name: CG Shorthand & Typing Computer Skill Exam Board (CTSP)
+  group: cg-state
+  state: CG
+  url: https://ctsp.cg.nic.in/NotificationsPages/Notifications.aspx
+  selector: "#ContentPlaceHolder1_grdview"
+  job_links: 21
+  filter_jobs: false   # typing-test notices don't use job words
+  # A new typing/shorthand test session (advert or "exam organised" notice), not results.
+  alert_on: ^(?!.*(परिणाम|result|पुन[र्]?मू?ल्यांकन)).*(विज्ञापन|आयोजन|ऑनलाइन\s*आवेदन|online\s+application)
+  note: issues the typing certificate CG clerical/DEO posts require; sessions roughly twice a year
 - id: cg-legal-services-authority
   name: CG State Legal Services Authority (CGSLSA)
   kind: s3waas

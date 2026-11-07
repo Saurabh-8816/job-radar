@@ -64,7 +64,7 @@ def _watch_source(w: dict) -> Source:
         selector=w.get("selector"), sections=w.get("sections"), enabled=w.get("enabled", True),
         runner=w.get("runner", "cloud"), churn_limit=w.get("churn_limit", 25),
         region_filter=w.get("region_filter", False), render=w.get("render", False),
-        every_hours=w.get("every_hours", 0), digest=digest,
+        every_hours=w.get("every_hours", 0), digest=digest, alert_on=w.get("alert_on"),
     )
 
 

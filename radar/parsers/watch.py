@@ -19,6 +19,7 @@ from ..textutil import clean, join_url, normalize_url, parse_date
 _VOLATILE_PARAMS = {"token", "sid", "session", "sessionid", "phpsessid", "jsessionid",
                     "ts", "t", "timestamp", "_", "rand", "nocache", "cache", "v", "ver", "k", "key"}
 _RANDOMISH = re.compile(r"[A-Za-z0-9+/=_%.-]{20,}")
+_ROW_NUMBER = re.compile(r"^\s*\d{1,3}[.)]?\s+")
 # Aggregators print the deadline in the row: "Online Form 2026 | Last Date : 13/11/2026".
 _LAST_DATE = re.compile(r"(?:last|closing)\s*date\s*[:\-–]?\s*", re.I)   # date follows within ~40 chars
 
@@ -65,6 +66,8 @@ def stable_key(url: str, text: str, context: str) -> str | None:
     if len(kept) == len(params):
         return None
     base = normalize_url(urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(kept), "")))
+    # The row number shifts every time a notice is added on top (CTSP: "1 पुर्नमुल्यांकन…").
+    context = _ROW_NUMBER.sub("", context)
     digest = hashlib.sha1(f"{text}|{context}".encode("utf-8")).hexdigest()[:16]
     return f"w:{base}|{digest}"
 

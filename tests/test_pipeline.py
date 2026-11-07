@@ -97,6 +97,25 @@ def test_a_few_new_links_still_alert(monkeypatch, tmp_path):
     assert stats["items_new"] == 2 and stats["alerts"] == 2
 
 
+def test_alert_on_rule_and_shifting_row_numbers(monkeypatch, tmp_path):
+    # CTSP: numbered rows of token links; a new typing-test session pushes the old rows down.
+    from radar.models import Source
+    src = Source(id="ctsp", name="CTSP", kind="watch", url="https://ctsp.cg.nic.in/n.aspx", group="cg-state",
+                 filter_jobs=False, alert_on=r"^(?!.*परिणाम).*(विज्ञापन|आयोजन)")
+    row = '<tr><td>{n} {t} <a href="FileViewer.ashx?t={k}">क्लिक करे</a></td></tr>'
+    result = ("मई सेशन मुद्रलेखन 8000 की-डिप्रेशन कौशल परीक्षा परिणाम", "AbCdEfGhIjKlMnOpQrSt12345")
+    session = ("मुद्रलेखन 8000 की-डिप्रेशन कौशल परीक्षा आयोजन संबंधी सूचना", "ZyXwVuTsRqPoNmLkJiHg98765")
+    page = lambda rows: "<table>" + "".join(row.format(n=i + 1, t=t, k=k) for i, (t, k) in enumerate(rows)) + "</table>"
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])
+    monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
+    opts = pipeline.RunOptions(dry_run=True, read_docs=False, build_site=False, db_path=tmp_path / "c.db")
+    for rows in ([result], [session, result]):
+        monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {
+            u: Response(u, True, 200, text=page(rows)) for u in urls})
+        stats = pipeline.run(opts)
+    assert stats["items_new"] == 1 and stats["alerts"] == 1
+
+
 def test_same_notice_on_two_institute_pages_alerts_once(monkeypatch, tmp_path):
     empty = "<html><body><p>none</p></body></html>"
     _run_watch(monkeypatch, tmp_path, [empty, empty])

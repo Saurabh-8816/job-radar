@@ -5,6 +5,7 @@ go through the same `_ingest` path as pages fetched here.
 """
 
 import json
+import re
 import time
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
@@ -55,6 +56,7 @@ class _Run:
     baselined_now: list = field(default_factory=list)
     full_text: dict = field(default_factory=dict)   # row id -> relay advert text before DB truncation
     quiet: set = field(default_factory=set)         # sources whose partial matches skip the digest
+    alert_on: dict = field(default_factory=dict)    # source id -> title pattern that always alerts
 
 
 def run(opts: RunOptions) -> Counter:
@@ -67,6 +69,7 @@ def run(opts: RunOptions) -> Counter:
     _backfill_deadlines(store, clf, today)
     sources = load_sources(opts.only, runner=None if opts.runner == "all" else opts.runner)
     ctx.quiet = {s.id for s in sources if not s.digest}
+    ctx.alert_on = {s.id: re.compile(s.alert_on, re.I) for s in sources if s.alert_on}
     sources = due(sources, store.last_runs(), now_ist())
     for s in sources:
         store.sync_source(s)
@@ -116,11 +119,12 @@ def run(opts: RunOptions) -> Counter:
     for row_id in ctx.new_ids:  # first pass: listing text, plus advert text the relay sent
         row = store.get(row_id)
         body = ctx.full_text.get(row_id) or row["doc_text"] or ""
-        _classify(store, clf, row, today, body, row["doc_status"] if body else None, quiet=ctx.quiet)
+        _classify(store, clf, row, today, body, row["doc_status"] if body else None,
+                  quiet=ctx.quiet, alert_on=ctx.alert_on)
     store.commit()
 
     if opts.read_docs:
-        stats.update(read_documents(store, clf, opts, today, ctx.quiet))
+        stats.update(read_documents(store, clf, opts, today, ctx.quiet, ctx.alert_on))
     stats["duplicates"] = _dedupe(store, ctx.new_ids)
     store.commit()
 
@@ -178,6 +182,8 @@ def _ingest_inbox(ctx: _Run):
             ctx.store.sync_source(source)
             if not source.digest:
                 ctx.quiet.add(source.id)
+            if source.alert_on:
+                ctx.alert_on[source.id] = re.compile(source.alert_on, re.I)
             if status == "failed":
                 ctx.store.source_failed(source.id, f"from laptop: {error or 'fetch failed'}")
                 ctx.stats["sources_failed"] += 1
@@ -213,10 +219,14 @@ def _backfill_deadlines(store, clf, today):
     print(f"Deadline backfill: {found} of {len(rows)} undated notices got a last date")
 
 
-def _classify(store, clf, row, today, body="", body_status=None, save_doc=False, quiet=()):
+def _classify(store, clf, row, today, body="", body_status=None, save_doc=False, quiet=(), alert_on=None):
     verdict = clf.classify(row["title"], row["description"] or "", body,
                            row["end_date"], body_status, today)
-    if verdict.tier == "B" and row["source_id"] in quiet:
+    if (rule := (alert_on or {}).get(row["source_id"])) and rule.search(row["title"]):
+        # e.g. CTSP announcing a typing-test session: "कौशल परीक्षा" reads as an update elsewhere
+        verdict.kind, verdict.tier = "new", "A"
+        verdict.reasons.append("this source's notices of this kind are always alerted")
+    elif verdict.tier == "B" and row["source_id"] in quiet:
         # e.g. a KV walk-in in another state: kept on the dashboard, alerted only if it's a clear match
         verdict.tier = "C"
         verdict.reasons.append("far-away school: only computer posts are alerted")
@@ -227,7 +237,7 @@ def _classify(store, clf, row, today, body="", body_status=None, save_doc=False,
     return verdict
 
 
-def read_documents(store, clf, opts: RunOptions, today, quiet=()) -> Counter:
+def read_documents(store, clf, opts: RunOptions, today, quiet=(), alert_on=None) -> Counter:
     rows = store.pending_docs(opts.doc_item_limit, today.isoformat())
     if not rows:
         return Counter()
@@ -251,7 +261,7 @@ def read_documents(store, clf, opts: RunOptions, today, quiet=()) -> Counter:
             if status == "deferred":      # time budget spent: stays pending for the next run
                 counts["docs_deferred"] += 1
                 continue
-            _classify(store, clf, row, today, text, status, save_doc=True, quiet=quiet)
+            _classify(store, clf, row, today, text, status, save_doc=True, quiet=quiet, alert_on=alert_on)
             counts[f"docs_{status}"] += 1
     store.commit()
     return counts

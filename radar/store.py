@@ -139,6 +139,8 @@ class Store:
                     doc_text: str = "") -> int | None:
         """Insert if unseen; returns the new row id, or None when already known."""
         now = now_ist_iso()
+        if self._adopt_by_url(item, now):
+            return None
         cur = self.db.execute(
             """INSERT OR IGNORE INTO items(key, source_id, title, description, url, notice_url, docs,
                  start_date, end_date, deadline, first_seen, last_seen, baseline, doc_status, doc_text)
@@ -153,6 +155,23 @@ class Store:
             return cur.lastrowid
         self.db.execute("UPDATE items SET last_seen=? WHERE key=?", (now, item.key))
         return None
+
+    def _adopt_by_url(self, item: Item, now: str) -> bool:
+        """A token-link key ('w:…') also hashes the link's text and row, so a change in how
+        that text is read (Nov 2026: row numbers dropped) gives an old notice a new key.
+        If this source already holds the very same URL under another such key, it's the
+        same notice: move it to the new key instead of reporting it again."""
+        if not item.key.startswith("w:") or not item.url or item.url == item.notice_url:
+            return False
+        if self.db.execute("SELECT 1 FROM items WHERE key=?", (item.key,)).fetchone():
+            return False
+        old = self.db.execute(
+            """SELECT id FROM items WHERE source_id=? AND url=? AND key LIKE 'w:%'
+               ORDER BY id DESC LIMIT 1""", (item.source_id, item.url)).fetchone()
+        if old is None:
+            return False
+        self.db.execute("UPDATE items SET key=?, last_seen=? WHERE id=?", (item.key, now, old["id"]))
+        return True
 
     def unknown_keys(self, keys) -> set[str]:
         keys = list(set(keys))

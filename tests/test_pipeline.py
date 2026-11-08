@@ -239,3 +239,23 @@ def test_text_with_half_an_emoji_is_still_saved(tmp_path):
     store.commit()
     row = store.get(row_id)
     assert row["title"] == row["doc_text"] == "Walk-in for Programmer  on 10/11/2026"
+
+
+def test_old_notice_whose_key_changed_is_not_reported_again(tmp_path):
+    """CPCB, Nov 2026: dropping row numbers from token-link keys made every old advert
+    look new. The same URL already stored for the source means the same notice."""
+    from radar.models import Item
+    store = Store(tmp_path / "k.db")
+    url = "https://cpcb.gov.in/openpdffile.php?id=Q2FyZWVyRmlsZXMvMjU1XzE3ODcyMjg1MzlfbWVkaWFwaG90bzg3MDYucGRm"
+    page = "https://cpcb.gov.in/jobs.php"
+
+    def item(key):
+        return Item(source_id="cpcb", title="Advertisement for Scientists", url=url, notice_url=page, key_hint=key)
+
+    first = store.insert_item(item("w:https://cpcb.gov.in/openpdffile.php|old"), baseline=True)
+    assert first is not None
+    assert store.insert_item(item("w:https://cpcb.gov.in/openpdffile.php|new"), baseline=False) is None
+    assert store.get(first)["key"] == "w:https://cpcb.gov.in/openpdffile.php|new"
+    # a different link is still new
+    other = Item(source_id="cpcb", title="Walk-in JRF", url=url + "x", notice_url=page, key_hint="w:x|1")
+    assert store.insert_item(other, baseline=False) is not None

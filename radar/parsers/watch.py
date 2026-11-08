@@ -96,7 +96,7 @@ def _card(a):
     return None
 
 
-_DEADLINE_HEADER = re.compile(r"last\s*date|closing\s*date|अंतिम\s*(तिथि|दिनांक)", re.I)
+_DEADLINE_HEADER = re.compile(r"last\s*date|closing\s*date|end\s*date|अंतिम\s*(तिथि|दिनांक)", re.I)
 
 
 def _table_deadline(a) -> str | None:

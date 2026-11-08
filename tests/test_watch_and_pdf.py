@@ -150,3 +150,15 @@ def test_page_number_links_are_not_notices():
     src = Source(id="dsssb", name="DSSSB", kind="watch", url="https://dsssb.delhi.gov.in/dsssb-vacancies")
     titles = [i.title for i in watch.parse(html, src.url, src).items]
     assert len(titles) == 1 and "Junior Environmental Engineer" in titles[0]
+
+
+def test_end_date_column_is_the_deadline():
+    """CPCB's jobs table: S. No | Title | Start Date | End Date | Advertisement."""
+    from radar.models import Source
+    from radar.parsers import watch
+    src = Source(id="cpcb", name="CPCB", kind="watch", url="https://cpcb.gov.in/jobs.php")
+    html = """<table><tr><th>S. No</th><th>Title</th><th>Start Date</th><th>End Date</th><th>Advertisement</th></tr>
+      <tr><td>1</td><td>Advertisement for Scientists (51) posts</td><td>24-08-2026</td><td>07-09-2026</td>
+      <td><a href="openpdffile.php?id=Q2FyZWVyRmlsZXMvMjU1XzE3ODcyMjg1MzlfbWVkaWFwaG90bzg3MDYucGRm">View</a></td></tr></table>"""
+    (item,) = watch.parse(html, src.url, src).items
+    assert item.end_date == "2026-09-07"

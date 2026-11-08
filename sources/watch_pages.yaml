@@ -1166,6 +1166,26 @@
   state: IN
   url: https://www.iiserb.ac.in/dofa/faculty_recruitment
   job_links: 13
+- id: iiser-bhopal-rnd
+  name: IISER Bhopal – R&D / project posts
+  group: academic
+  state: IN
+  url: https://www.iiserb.ac.in/careers/rnd
+  job_links: 1
+  note: project staff table (Post | Department | Advertisement | Last Date)
+- id: iiser-bhopal-nt
+  name: IISER Bhopal – Non-teaching
+  group: academic
+  state: IN
+  url: https://recruitment.iiserb.ac.in/nt
+  job_links: 3
+- id: inflibnet
+  name: INFLIBNET Centre (UGC), Gandhinagar
+  group: academic
+  state: IN
+  url: https://www.inflibnet.ac.in/jobs/
+  job_links: 60
+  note: Scientist-B (CS) posts take MCA; recruitment.inflibnet.ac.in is only the apply portal
 - id: iiser-mohali
   name: IISER Mohali
   group: academic

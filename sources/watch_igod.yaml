@@ -9268,8 +9268,9 @@
   name: National Company Law Appellate Tribunal (NCLAT)
   group: central
   state: IN
-  url: https://nclat.nic.in/appointment-recruitment
-  job_links: 8
+  url: https://nclat.nic.in/recruitment
+  job_links: 1
+  note: vacancy table (Title | Closing Date); /appointment-recruitment only lists recruitment rules
 - id: national-company-law-tribunal-nclt
   name: National Company Law Tribunal (NCLT)
   group: central

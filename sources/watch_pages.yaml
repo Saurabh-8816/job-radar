@@ -1069,10 +1069,13 @@
   name: IIIT Pune
   group: academic
   state: IN
-  url: https://www.iiitp.ac.in/
-  job_links: 11
+  url: https://www.iiitp.ac.in/careers
+  job_links: 6
   render: true
-  note: no job links found yet (page may be built with JavaScript); review
+  # one card per post: <h3> names it, its links say only "Details" / "Newspaper Advertisement"
+  selector: main div.mb-3 > a:not([href*="forms.gle"]):not([href*="samarth"]):not([href*="Application"])
+  sections: main div.border-b
+  note: careers page (the homepage only showed a few notices among menu links)
 - id: iiit-ranchi
   name: IIIT Ranchi
   group: academic

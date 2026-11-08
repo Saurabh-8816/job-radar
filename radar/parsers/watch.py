@@ -126,6 +126,17 @@ def _scopes(soup, selector):
     return [soup.body or soup]
 
 
+def _links(scopes):
+    """Links inside the scopes; a selector may also pick the links themselves
+    (IIIT Pune: each card's advert links, but not its "Apply Now" form)."""
+    for scope in scopes:
+        if scope.name == "a":
+            if scope.get("href"):
+                yield scope
+        else:
+            yield from scope.find_all("a", href=True)
+
+
 def _soup(html: str):
     """lxml stops reading at </html>. NITTTR Chennai prints its header include as a whole
     page (ending </body></html>) before the recruitment table, which was lost; both end
@@ -142,12 +153,16 @@ def _section_headings(soup, sections):
     for block in soup.select(sections):
         heading = block.find(["h1", "h2", "h3", "h4", "h5", "h6", "button", "legend"])
         if heading is not None:
-            found[id(block)] = clean(heading.get_text(" "))
+            found[id(block)] = (_NEW_TAG.sub("", clean(heading.get_text(" "))), block)
     return found
 
 
-def _section_of(a, headings) -> str:
-    return next((headings[id(p)] for p in a.parents if id(p) in headings), "")
+_NEW_TAG = re.compile(r"\s*\bnew\b\s*$", re.I)   # IIIT Pune: "<h3>Advertisement… <span>NEW</span></h3>"
+
+
+def _section_of(a, headings) -> tuple[str, object]:
+    """(heading, block) of the section holding the link, else ('', None)."""
+    return next((headings[id(p)] for p in a.parents if id(p) in headings), ("", None))
 
 
 def parse(html: str, page_url: str, source) -> ParseResult:
@@ -161,7 +176,7 @@ def parse(html: str, page_url: str, source) -> ParseResult:
     headings = _section_headings(soup, getattr(source, "sections", None))
 
     items, seen = [], set()
-    for a in (a for scope in _scopes(soup, source.selector) for a in scope.find_all("a", href=True)):
+    for a in _links(_scopes(soup, source.selector)):
         href = a["href"].strip()
         if not href or href.lower().startswith(_SKIP_SCHEMES):
             continue
@@ -178,8 +193,16 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         title = text if (len(text) >= 12 and not _says_nothing(text)) else (context or text)
         if not title:
             continue
-        if (section := _section_of(a, headings)) and section not in title:
-            title = f"{section} – {title}"
+        section, block = _section_of(a, headings)
+        if section:   # the heading names the post; the row or link label says which file
+            in_row = row is not None and row.name in ("tr", "li", "p", "dd", "td")
+            label = title if in_row else (text or title)   # a button bar's text lists every button
+            title = label if section in label else f"{section} – {label}"
+        end_date = ((parse_date(context[m.end():m.end() + 40]) if (m := _LAST_DATE.search(context)) else None)
+                    or _table_deadline(a))
+        if not end_date and block is not None:   # the post's "Last Date to Apply" sits in its card
+            card = clean(block.get_text(" "))
+            end_date = parse_date(card[m.end():m.end() + 40]) if (m := _LAST_DATE.search(card)) else None
         items.append(Item(
             source_id=source.id,
             title=title[:300],
@@ -188,8 +211,7 @@ def parse(html: str, page_url: str, source) -> ParseResult:
             notice_url=page_url,
             docs=[(text or "Document", url)] if is_document(url) else [],
             start_date=parse_date(context),
-            end_date=(parse_date(context[m.end():m.end() + 40]) if (m := _LAST_DATE.search(context)) else None)
-                     or _table_deadline(a),
+            end_date=end_date,
             key_hint=stable_key(url, text, context),
         ))
     return ParseResult("ok" if items else "empty", items)

@@ -162,3 +162,17 @@ def test_end_date_column_is_the_deadline():
       <td><a href="openpdffile.php?id=Q2FyZWVyRmlsZXMvMjU1XzE3ODcyMjg1MzlfbWVkaWFwaG90bzg3MDYucGRm">View</a></td></tr></table>"""
     (item,) = watch.parse(html, src.url, src).items
     assert item.end_date == "2026-09-07"
+
+
+def test_card_heading_link_selector_and_card_last_date():
+    """IIIT Pune careers: one card per post; the selector picks its advert links (not the
+    form), the <h3> names the post (minus its NEW tag), the card gives the last date."""
+    html = ('<main><div class="p-6 border-b"><h3>Advertisement for JRF in ISRO Project<span>NEW</span></h3>'
+            '<div class="mb-3"><a href="/careers-documents/Advt.pdf">Details</a>'
+            '<a href="https://forms.gle/x">Apply Now</a></div>'
+            '<div>Date of Upload: 06-11-2026 Last Date to Apply: 25-11-2026</div></div></main>')
+    src = Source(id="iiit-pune", name="IIIT Pune", kind="watch", url="https://www.iiitp.ac.in/careers",
+                 selector='main div.mb-3 > a:not([href*="forms.gle"])', sections="main div.border-b")
+    (item,) = watch.parse(html, src.url, src).items
+    assert item.title == "Advertisement for JRF in ISRO Project – Details"
+    assert item.end_date == "2026-11-25"

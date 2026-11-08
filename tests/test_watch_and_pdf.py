@@ -164,6 +164,17 @@ def test_end_date_column_is_the_deadline():
     assert item.end_date == "2026-09-07"
 
 
+def test_download_link_with_file_size_takes_the_row_title():
+    """NCLAT: Sr. No. | Title | Closing Date | Advocacy Title | Documents ("Download(2.81 MB)")."""
+    src = Source(id="nclat", name="NCLAT", kind="watch", url="https://nclat.nic.in/recruitment")
+    html = """<table><tr><th>Sr. No.</th><th>Title</th><th>Closing Date</th><th>Documents</th></tr>
+      <tr><td>1</td><td>Filling up of various posts in the NCLAT on deputation basis</td><td>09/12/2026</td>
+      <td><a href="/files/Vacancy circular.pdf">Download(2.81 MB)</a></td></tr></table>"""
+    (item,) = watch.parse(html, src.url, src).items
+    assert item.title.startswith("1 Filling up of various posts")
+    assert item.end_date == "2026-12-09"
+
+
 def test_card_heading_link_selector_and_card_last_date():
     """IIIT Pune careers: one card per post; the selector picks its advert links (not the
     form), the <h3> names the post (minus its NEW tag), the card gives the last date."""

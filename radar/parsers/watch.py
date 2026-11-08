@@ -45,7 +45,11 @@ _PAGER = re.compile(
     r"पिछला|अगला|अंतिम|प्रथम|पृष्ठ)(?![a-z]))*[\s«»‹›<>|.…�-]*$", re.I)
 
 
+_FILE_SIZE = re.compile(r"\s*[(\[]\s*[\d.,]+\s*[KMG]i?B\s*[)\]]\s*$", re.I)   # NCLAT: "Download(2.81 MB)"
+
+
 def _says_nothing(text: str) -> bool:
+    text = _FILE_SIZE.sub("", text).strip()
     return text.lower() in _GENERIC or bool(_GENERIC_LABEL.match(text))
 
 

@@ -15789,8 +15789,13 @@
   url: https://www.wrldc.in/
   job_links: 1
 - id: national-institute-for-smart-government-nisg
-  name: ​National Institute for Smart Government (NISG)
+  name: National Institute for Smart Government (NISG) – SARAL
+  kind: saral
   group: psu
   state: IN
-  url: https://www.nisg.org/
-  job_links: 1
+  url: https://saral.nisg.org/api/jobs/public
+  filter_jobs: false   # every entry is an open role
+  job_links: 46
+  note: >-
+    JSON feed behind saral.nisg.org "Open Roles"; NISG hires contract staff for NHA (ABDM, PM-JAY),
+    UIDAI, PIB, DPIIT, NMC… abdm.gov.in/careers (stale since Feb 2025) and nisg.org/careers point here

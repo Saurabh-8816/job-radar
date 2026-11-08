@@ -3,6 +3,7 @@ the laptop relay): every page of every advert PDF, and, when the notice is only 
 link to a detail page (CG Vyapam "Post" pages, SarkariResult job pages), that
 page's text plus the PDFs linked from it."""
 
+import json
 import re
 import time
 from urllib.parse import urlsplit
@@ -11,6 +12,7 @@ from bs4 import BeautifulSoup
 
 from .classify import Classifier
 from .fetch import get
+from .parsers import saral
 from .pdftext import PAGE_BREAK, extract
 from .textutil import clean, join_url
 
@@ -49,15 +51,45 @@ def _is_pdf(resp) -> bool:
     return "pdf" in (resp.content_type or "").lower() or resp.content[:5] == b"%PDF-"
 
 
+_CAMEL = re.compile(r"(?<=[a-z])(?=[A-Z])")
+_JSON_SKIP = re.compile(r"^_|id$|^(postedBy\w*|hrSpoc|uniqueLink|createdAt|updatedAt|isEnabled)$", re.I)
+
+
+def _json_text(raw: bytes) -> str:
+    """Readable text of a JSON detail record: 'last Date Of Application: 20/11/2026 ·
+    qualifications: MCA…', with any HTML in the values stripped. The keys are kept as
+    words so the deadline finder still sees 'last date'."""
+    def walk(value, key=""):
+        if isinstance(value, dict):
+            for k, v in value.items():
+                if not _JSON_SKIP.search(k):
+                    yield from walk(v, k)
+        elif isinstance(value, list):
+            for v in value:
+                yield from walk(v, key)
+        elif isinstance(value, str) and value.strip():
+            text = clean(BeautifulSoup(value, "lxml").get_text(" ")) if "<" in value else clean(value)
+            yield f"{_CAMEL.sub(' ', key)}: {text}" if key else text
+    try:
+        return " · ".join(walk(json.loads(raw)))
+    except ValueError:
+        return ""
+
+
 def _detail_page(url: str, clf: Classifier, ocr: bool, deadline) -> tuple[str, list, str]:
     """Text of a linked page, and the advert documents it links to. The link may itself
-    be a PDF without a .pdf name (NIELIT 'Fileviewer?fileId=…', 'download.php?id=…')."""
-    resp = get(url, binary=True, max_bytes=20_000_000, timeout=30, retries=1, total_timeout=90)
+    be a PDF without a .pdf name (NIELIT 'Fileviewer?fileId=…', 'download.php?id=…').
+    A JavaScript-built role page is read through its JSON feed instead (NISG SARAL)."""
+    resp = get(saral.detail_feed(url) or url, binary=True, max_bytes=20_000_000, timeout=30,
+               retries=1, total_timeout=90)
     if not resp.ok:
         return "", [], "error"
     if _is_pdf(resp):
         doc = extract(resp.content, url, ocr=ocr, deadline=deadline)
         return (doc.text if doc.status in ("text", "ocr") else ""), [], doc.status
+    if "json" in (resp.content_type or "").lower():
+        text = _json_text(resp.content)[:PAGE_TEXT_LIMIT]
+        return text, [], "text" if text else "none"
     if "html" not in (resp.content_type or "text/html").lower():
         return "", [], "none"
     soup = BeautifulSoup(resp.content.decode("utf-8", errors="replace"), "lxml")

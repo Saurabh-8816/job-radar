@@ -46,11 +46,13 @@ _PAGER = re.compile(
 
 
 _FILE_SIZE = re.compile(r"\s*[(\[]\s*[\d.,]+\s*[KMG]i?B\s*[)\]]\s*$", re.I)   # NCLAT: "Download(2.81 MB)"
+# NPPA: the link only says "1.62 MB PDF English".
+_FILE_INFO = re.compile(r"^[\d.,]+\s*[KMG]i?B(\s+(pdf|docx?|xlsx?|file|english|hindi|हिंदी|हिन्दी))*$", re.I)
 
 
 def _says_nothing(text: str) -> bool:
     text = _FILE_SIZE.sub("", text).strip()
-    return text.lower() in _GENERIC or bool(_GENERIC_LABEL.match(text))
+    return text.lower() in _GENERIC or bool(_GENERIC_LABEL.match(text) or _FILE_INFO.match(text))
 
 
 def is_document(url: str) -> bool:

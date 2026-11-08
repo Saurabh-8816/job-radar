@@ -60,6 +60,13 @@ def test_updates_are_not_new_vacancies(clf, title):
     assert classify(clf, title).kind == "update"
 
 
+def test_hiring_notice_with_a_reserve_wait_list_is_new(clf):
+    # NPPA: "...and preparation of reserve panel/wait list of candidates for future positions."
+    v = classify(clf, "Hiring of Seven (07) Consultants/Young Professionals in the office of NPPA on contract "
+                      "basis and preparation of reserve panel/wait list of candidates for future positions.")
+    assert v.kind == "new"
+
+
 def test_update_about_matching_post_is_still_an_update(clf):
     v = classify(clf, "Publication of results following the computer proficiency test for Assistant Programmer")
     assert v.kind == "update"

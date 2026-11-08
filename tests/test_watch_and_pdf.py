@@ -175,6 +175,14 @@ def test_download_link_with_file_size_takes_the_row_title():
     assert item.end_date == "2026-12-09"
 
 
+def test_file_size_only_link_takes_the_row_title():
+    # NPPA: "<td>Hiring of Seven (07) Consultants…</td><td><a>1.62 MB PDF English</a></td>"
+    html = ('<table><tr><td>1</td><td>06-Oct-2026</td><td>Hiring of Seven (07) Consultants/Young Professionals</td>'
+            '<td><a href="/storage/uploads/tender/vacancynotice-ef3a.pdf">1.62 MB PDF English</a></td></tr></table>')
+    (item,) = watch.parse(html, "https://nppa.gov.in/en/view_more?id=5", _src()).items
+    assert "Hiring of Seven (07) Consultants" in item.title
+
+
 def test_card_heading_link_selector_and_card_last_date():
     """IIIT Pune careers: one card per post; the selector picks its advert links (not the
     form), the <h3> names the post (minus its NEW tag), the card gives the last date."""

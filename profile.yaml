@@ -96,7 +96,8 @@ update_words:
   - re:\bmerit\s*(-|cum)?\s*(list|selection)\b
   - re:\b(selection|waiting|provisional|final|select)\s*(-|cum)?\s*(list|lists)\b
   - re:\b(eligible|ineligible|in-eligible|shortlisted|short-listed|rejected)\b
-  - re:\blist\s+of\s+(candidates|eligible|selected|shortlisted)\b
+  # not "…preparation of reserve panel/wait list of candidates for future positions" (NPPA hiring notice)
+  - re:(?<!wait\s)\blist\s+of\s+(candidates|eligible|selected|shortlisted)\b
   - re:\bclaims?\s+(and|&)\s+objections?\b
   - re:\b(result|results|answer\s+key|cut[\s-]?off|admit\s+card|call\s+letter|hall\s+ticket)\b
   - re:\bskill\s+test\b

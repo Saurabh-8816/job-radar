@@ -14861,8 +14861,9 @@
   name: Hindustan Copper Limited (HCL)
   group: psu
   state: IN
-  url: https://www.hindustancopper.com/HindiPage/Career_new
+  url: https://www.hindustancopper.com/Page/Career_new
   job_links: 45
+  note: English page (the Hindi one titled every link just "विज्ञापन देखें")
 - id: hindustan-insecticides-limited-hil
   name: Hindustan Insecticides Limited (HIL)
   group: psu

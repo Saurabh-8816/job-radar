@@ -175,6 +175,19 @@ def test_download_link_with_file_size_takes_the_row_title():
     assert item.end_date == "2026-12-09"
 
 
+def test_due_date_column_and_icon_only_link():
+    # TIFR: Reference No | Description | Due Date | File (a PDF icon whose only text is title="nfile")
+    html = ('<table><tr><td>Reference No</td><td>Description</td><td>Due Date</td><td>File</td></tr>'
+            '<tr><td>Advertisement No.2026/30</td><td>Applications are invited for various categories of posts</td>'
+            '<td>24-11-2026</td><td><a href="viewNoticeFile.php?f=YVJlRTZKSVNFTmVaT01RQ1hSeU96QT09" title="nfile">'
+            '<i class="fa fa-file-pdf"></i></a></td></tr></table>')
+    src = Source(id="tifr", name="TIFR", kind="watch", url="https://www.tifr.res.in/positions", use_base=True)
+    (item,) = watch.parse('<head><base href="/maincampus/"></head>' + html, src.url, src).items
+    assert "various categories of posts" in item.title
+    assert item.end_date == "2026-11-24"
+    assert item.url.startswith("https://www.tifr.res.in/maincampus/viewNoticeFile.php?f=")   # <base> honoured
+
+
 def test_file_size_only_link_takes_the_row_title():
     # NPPA: "<td>Hiring of Seven (07) Consultants…</td><td><a>1.62 MB PDF English</a></td>"
     html = ('<table><tr><td>1</td><td>06-Oct-2026</td><td>Hiring of Seven (07) Consultants/Young Professionals</td>'

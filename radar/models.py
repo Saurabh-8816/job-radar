@@ -27,6 +27,7 @@ class Source:
     every_hours: int = 0         # 0 = every run; the bulk directory lists are checked less often
     digest: bool = True          # False: partial matches are stored quietly, only clear matches alert
     alert_on: str | None = None  # regex: a title matching it is always an instant alert
+    use_base: bool = False       # watch pages: resolve links against the page's <base href> (TIFR)
 
 
 @dataclass

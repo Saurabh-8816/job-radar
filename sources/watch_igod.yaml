@@ -13574,9 +13574,10 @@
   name: Tata Institute of Fundamental Research (TIFR)
   group: central
   state: MH
-  url: https://www.tifr.res.in/
-  job_links: 0
-  note: unreachable at discovery (ConnectTimeout); homepage watched
+  url: https://www.tifr.res.in/positions
+  job_links: 10
+  use_base: true
+  note: Career Notices table (Reference No | Description | Due Date | File); links are relative to <base href=/maincampus/>
 - id: tata-memorial-centre-hospital-tmc
   name: Tata Memorial Centre (Hospital) (TMC)
   group: central

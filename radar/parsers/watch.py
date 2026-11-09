@@ -102,7 +102,7 @@ def _card(a):
     return None
 
 
-_DEADLINE_HEADER = re.compile(r"last\s*date|closing\s*date|end\s*date|अंतिम\s*(तिथि|दिनांक)", re.I)
+_DEADLINE_HEADER = re.compile(r"last\s*date|closing\s*date|end\s*date|due\s*date|अंतिम\s*(तिथि|दिनांक)", re.I)
 
 
 def _table_deadline(a) -> str | None:
@@ -180,13 +180,17 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         if len(tag.get_text(strip=True)) <= 10:
             tag.decompose()
     headings = _section_headings(soup, getattr(source, "sections", None))
+    # Relative links resolve against <base href> on sources that opt in (TIFR: "/maincampus/").
+    # Opt-in, because honouring it everywhere would change other sites' link URLs (= item keys).
+    base = soup.find("base", href=True) if getattr(source, "use_base", False) else None
+    link_base = join_url(page_url, base["href"].strip()) if base and base["href"].strip() else page_url
 
     items, seen = [], set()
     for a in _links(_scopes(soup, source.selector)):
         href = a["href"].strip()
         if not href or href.lower().startswith(_SKIP_SCHEMES):
             continue
-        url = join_url(page_url, href)
+        url = join_url(link_base, href)
         if not url.startswith("http") or url in seen:
             continue
         seen.add(url)

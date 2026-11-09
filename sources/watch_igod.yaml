@@ -10251,8 +10251,9 @@
   name: National Investigation Agency (NIA)
   group: central
   state: IN
-  url: https://nia.gov.in/hi/recruitment-notices
+  url: https://nia.gov.in/en/recruitment-notices
   job_links: 7
+  note: English page (the Hindi one gave Hindi titles); all posts so far are on deputation
 - id: national-judicial-academy-india
   name: National Judicial Academy India
   group: central

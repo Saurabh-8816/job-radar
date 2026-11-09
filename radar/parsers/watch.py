@@ -68,15 +68,28 @@ def _looks_random(value: str) -> bool:
     return bool(_RANDOMISH.fullmatch(value) and re.search(r"\d", value) and re.search(r"[A-Za-z]", value))
 
 
-def stable_key(url: str, text: str, context: str) -> str | None:
-    """If the URL carries per-load tokens, identify the link by its stable parts
-    (path + remaining params) plus its visible text and row. None = URL is stable."""
+def is_portal_root(url: str, page_url: str = "") -> bool:
+    """A bare site root on another host: an application portal that every notice links to
+    (CSIR-IMMT's adverts all point to https://rects.immt.res.in/). Such a URL can't tell
+    one notice from the next, so the link's text and row are part of its identity."""
     parts = urlsplit(url)
-    params = parse_qsl(parts.query, keep_blank_values=True)
-    kept = [(k, v) for k, v in params if k.lower() not in _VOLATILE_PARAMS and not _looks_random(v)]
-    if len(kept) == len(params):
-        return None
-    base = normalize_url(urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(kept), "")))
+    return (parts.path in ("", "/") and not parts.query
+            and parts.netloc.lower() != urlsplit(page_url).netloc.lower())
+
+
+def stable_key(url: str, text: str, context: str, page_url: str = "") -> str | None:
+    """If the URL carries per-load tokens, identify the link by its stable parts
+    (path + remaining params) plus its visible text and row; likewise a link to a
+    portal's bare root (see is_portal_root). None = the URL alone identifies it."""
+    parts = urlsplit(url)
+    if page_url and is_portal_root(url, page_url):
+        base = normalize_url(url)
+    else:
+        params = parse_qsl(parts.query, keep_blank_values=True)
+        kept = [(k, v) for k, v in params if k.lower() not in _VOLATILE_PARAMS and not _looks_random(v)]
+        if len(kept) == len(params):
+            return None
+        base = normalize_url(urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(kept), "")))
     # The row number shifts every time a notice is added on top (CTSP: "1 पुर्नमुल्यांकन…").
     context = _ROW_NUMBER.sub("", context)
     digest = hashlib.sha1(f"{text}|{context}".encode("utf-8")).hexdigest()[:16]
@@ -196,15 +209,18 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         if not href or href.lower().startswith(_SKIP_SCHEMES):
             continue
         url = join_url(link_base, href)
-        if not url.startswith("http") or url in seen:
+        if not url.startswith("http"):
             continue
-        seen.add(url)
 
         text = clean(a.get_text(" ")) or clean(a.get("title")) or clean(a.get("aria-label"))
         if text and _PAGER.match(text):
             continue
         row = _context_element(a)
         context = clean(row.get_text(" "))[:400] if row else text
+        key_hint = stable_key(url, text, context, page_url)
+        if (key_hint or url) in seen:   # one item per notice; a shared portal link can carry several
+            continue
+        seen.add(key_hint or url)
         title = text if (len(text) >= 12 and not _says_nothing(text)) else (context or text)
         if not title:
             continue
@@ -227,6 +243,6 @@ def parse(html: str, page_url: str, source) -> ParseResult:
             docs=[(text or "Document", url)] if is_document(url) else [],
             start_date=parse_date(context),
             end_date=end_date,
-            key_hint=stable_key(url, text, context),
+            key_hint=key_hint,
         ))
     return ParseResult("ok" if items else "empty", items)

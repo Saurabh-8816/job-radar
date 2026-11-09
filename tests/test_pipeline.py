@@ -259,3 +259,44 @@ def test_old_notice_whose_key_changed_is_not_reported_again(tmp_path):
     # a different link is still new
     other = Item(source_id="cpcb", title="Walk-in JRF", url=url + "x", notice_url=page, key_hint="w:x|1")
     assert store.insert_item(other, baseline=False) is not None
+
+
+def test_notices_sharing_a_portal_link_are_told_apart_by_title(tmp_path):
+    """CSIR-IMMT, Nov 2026: every project-staff advert links to https://rects.immt.res.in/,
+    so P87 looked like the already-seen P86 and was never reported."""
+    from radar.models import Item
+    from radar.parsers import watch
+    store = Store(tmp_path / "p.db")
+    page, portal = "https://www.immt.res.in/", "https://rects.immt.res.in/"
+
+    # stored before the fix: keyed by the bare portal URL
+    old = store.insert_item(Item(source_id="immt", title="Project Staff Recruitment via Advt No. PME/P86/2026",
+                                 url=portal, notice_url=page), baseline=True)
+    assert store.get(old)["key"] == portal
+
+    def item(title):
+        return Item(source_id="immt", title=title, url=portal, notice_url=page,
+                    key_hint=watch.stable_key(portal, "", title, page))
+
+    # P86 seen again under its new text-based key: same notice, not new
+    assert store.insert_item(item("Project Staff Recruitment via Advt No. PME/P86/2026"), baseline=False) is None
+    assert store.get(old)["key"].startswith("w:")
+    # P87 on the same portal link: a new notice
+    assert store.insert_item(item("Project Staff Recruitment Advertisement (Advt. No. PME/P87/2026)"),
+                             baseline=False) is not None
+
+
+def test_older_notices_merged_under_a_portal_url_surface_quietly_once(monkeypatch, tmp_path, capsys):
+    """After the portal-root key change, older adverts that shared the portal link are
+    recorded silently on the source's first run; later new ones alert normally."""
+    from radar.models import Item, Source
+    store = Store(tmp_path / "q.db")
+    page, portal = "https://www.immt.res.in/", "https://rects.immt.res.in/"
+    store.insert_item(Item(source_id="immt", title="Project Staff Recruitment via Advt No. PME/P86/2026",
+                           url=portal, notice_url=page), baseline=True)
+    url_only = store.url_only_keys("immt")
+    p85 = Item(source_id="immt", title="Project Staff Recruitment (Advt No. PME/P85/2026)", url=portal,
+               notice_url=page, key_hint="w:https://rects.immt.res.in|p85")
+    assert store.surfaced_sibling(p85, url_only)
+    other = Item(source_id="immt", title="x", url="https://rects.immt.res.in/apply", notice_url=page, key_hint="w:y|1")
+    assert not store.surfaced_sibling(other, url_only)

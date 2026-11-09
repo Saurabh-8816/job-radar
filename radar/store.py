@@ -4,8 +4,15 @@ import json
 import sqlite3
 from pathlib import Path
 
+import re
+
 from .models import Item, Source
-from .textutil import now_ist_iso, storable
+from .parsers.watch import is_portal_root
+from .textutil import normalize_url, now_ist_iso, storable
+
+
+def _norm_title(title) -> str:
+    return re.sub(r"\s+", " ", storable(title or "")).strip().lower()
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS sources (
@@ -156,6 +163,18 @@ class Store:
         self.db.execute("UPDATE items SET last_seen=? WHERE key=?", (now, item.key))
         return None
 
+    def url_only_keys(self, source_id: str) -> set[str]:
+        """Keys that are plain (normalized) URLs: how portal roots were keyed before Nov 2026."""
+        return {r["key"] for r in self.db.execute(
+            "SELECT key FROM items WHERE source_id=? AND key LIKE 'http%'", (source_id,))}
+
+    @staticmethod
+    def surfaced_sibling(item: Item, url_only: set[str]) -> bool:
+        """A portal-root notice whose portal URL was stored under the old URL-only key:
+        an older notice that the URL key had merged into another, now surfacing."""
+        return (item.key.startswith("w:") and normalize_url(item.url or "") in url_only
+                and is_portal_root(item.url, item.notice_url or ""))
+
     def _adopt_by_url(self, item: Item, now: str) -> bool:
         """A token-link key ('w:…') also hashes the link's text and row, so a change in how
         that text is read (Nov 2026: row numbers dropped) gives an old notice a new key.
@@ -164,6 +183,21 @@ class Store:
         if not item.key.startswith("w:") or not item.url or item.url == item.notice_url:
             return False
         if self.db.execute("SELECT 1 FROM items WHERE key=?", (item.key,)).fetchone():
+            return False
+        if is_portal_root(item.url, item.notice_url):
+            # Many notices share a portal root link (CSIR-IMMT's P86 and P87 adverts both
+            # point to rects.immt.res.in), so the URL alone proves nothing: adopt an older
+            # row (keyed by the bare URL before Nov 2026, or by an earlier w: key) only
+            # when it is the same notice by title.
+            new = _norm_title(item.title)
+            for old in self.db.execute(
+                    """SELECT id, title FROM items WHERE source_id=?
+                       AND (key=? OR (key LIKE 'w:%' AND url IN (?, ?))) ORDER BY id DESC""",
+                    (item.source_id, normalize_url(item.url), item.url.rstrip("/"), item.url.rstrip("/") + "/")):
+                was = _norm_title(old["title"])
+                if was and (was == new or was in new or new in was):
+                    self.db.execute("UPDATE items SET key=?, last_seen=? WHERE id=?", (item.key, now, old["id"]))
+                    return True
             return False
         old = self.db.execute(
             """SELECT id FROM items WHERE source_id=? AND url=? AND key LIKE 'w:%'

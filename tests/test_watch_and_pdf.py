@@ -216,3 +216,14 @@ def test_date_only_link_text_takes_the_row_title():
             'Advertisement for the position of Project Associate</li></ul>')
     (item,) = watch.parse(html, "https://www.nitk.ac.in/", _src()).items
     assert "Project Associate" in item.title
+
+
+def test_two_notices_linking_the_same_portal_root_are_two_items():
+    html = ('<ul><li><a href="https://rects.immt.res.in/">Project Staff Recruitment Advertisement (Advt. No. PME/P87/2026)</a></li>'
+            '<li><a href="https://rects.immt.res.in/">Project Staff Recruitment via Advt No. PME/P86/2026</a></li>'
+            '<li><a href="/">Home</a> <a href="/">Main page</a></li></ul>')
+    items = watch.parse(html, "https://www.immt.res.in/", _src()).items
+    portal = [i for i in items if i.url == "https://rects.immt.res.in/"]
+    assert len(portal) == 2 and portal[0].key != portal[1].key
+    assert all(i.key.startswith("w:https://rects.immt.res.in") for i in portal)
+    assert len([i for i in items if i.url == "https://www.immt.res.in/"]) == 1   # own-site root: still one, by URL

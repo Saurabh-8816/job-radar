@@ -156,16 +156,24 @@ def _ingest(ctx: _Run, s, status: str, items, doc_texts: dict | None = None):
             # get a higher per-source limit); this is the site changing its link format.
             # Absorb silently and flag it for review.
             baseline, churn = True, f"{unseen} links changed at once; absorbed without alerts"
+    # Nov 2026: links to a portal's bare root (rects.immt.res.in) were keyed by URL alone,
+    # so several notices sharing one were stored as one. Now each is keyed by its text; on
+    # a source's first run since, the older siblings that surface are recorded silently.
+    portal_marker = f"portal_keys:{s.id}"
+    url_only = store.url_only_keys(s.id) if not baseline and not store.get_meta(portal_marker) else set()
     for item in items:
+        quiet = baseline or store.surfaced_sibling(item, url_only)
         text, doc_status = (doc_texts or {}).get(item.key, ("", None))
         if doc_status is None:
-            doc_status = "skipped" if (baseline and s.kind == "watch") else "pending"
-        row_id = store.insert_item(item, baseline, doc_status, doc_text=text)
+            doc_status = "skipped" if (quiet and s.kind == "watch") else "pending"
+        row_id = store.insert_item(item, quiet, doc_status, doc_text=text)
         if row_id:
             ctx.new_ids.append(row_id)
             if text:
                 ctx.full_text[row_id] = text
-            stats["items_baseline" if baseline else "items_new"] += 1
+            stats["items_baseline" if quiet else "items_new"] += 1
+    if not store.get_meta(portal_marker):
+        store.set_meta(portal_marker, "1")
     store.source_ok(s.id, status, len(items), baselined=True)
     if churn:
         store.flag_source(s.id, churn)

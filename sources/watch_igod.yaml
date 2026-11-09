@@ -15034,6 +15034,13 @@
   state: IN
   url: https://www.ircon.org/career-ircon
   job_links: 11
+- id: npcc-national-projects-construction-corporation
+  name: National Projects Construction Corporation Ltd (NPCC)
+  group: psu
+  state: IN
+  url: http://www.npcc.gov.in/CurrentOpening.aspx
+  job_links: 30
+  note: HTTPS port does not answer; plain HTTP works. Zonal contract posts (incl. Chhattisgarh Zone) + regular posts
 - id: jammu-and-kashmir-development-finance-corporation-jkdfc
   name: Jammu and Kashmir Development Finance Corporation (JKDFC)
   group: psu

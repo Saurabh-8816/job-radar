@@ -1427,3 +1427,11 @@
   url: https://highereducation.cg.gov.in/
   job_links: 0
   note: guest lecturer (atithi vyakhyata) and college recruitment notices
+- id: jisiasr-kolkata
+  name: JIS Institute of Advanced Studies and Research (JISIASR), Kolkata – JIS University (private)
+  group: academic
+  state: WB
+  url: https://www.jisiasr.org/
+  selector: .jis-announce-bar
+  job_links: 1
+  note: private, added on request for its ICMR/DST project posts (Project Research Scientist etc.); no careers page, adverts appear as a "View Notice" link in the homepage announcement bar

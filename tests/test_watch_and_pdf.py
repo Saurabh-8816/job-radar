@@ -208,3 +208,11 @@ def test_card_heading_link_selector_and_card_last_date():
     (item,) = watch.parse(html, src.url, src).items
     assert item.title == "Advertisement for JRF in ISRO Project – Details"
     assert item.end_date == "2026-11-25"
+
+
+def test_date_only_link_text_takes_the_row_title():
+    # NITK: "<li><a>Nov 09, 2026</a> Advertisement for the position of Project Associate</li>"
+    html = ('<ul><li><a href="/advertisement-for-the-postition-of-project-associate">Nov 09, 2026</a> '
+            'Advertisement for the position of Project Associate</li></ul>')
+    (item,) = watch.parse(html, "https://www.nitk.ac.in/", _src()).items
+    assert "Project Associate" in item.title

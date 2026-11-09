@@ -249,7 +249,8 @@ def read_documents(store, clf, opts: RunOptions, today, quiet=(), alert_on=None)
         # A notice that's only a link to a detail page: read that page and its PDFs.
         page_url = row["url"] if (not docs and row["url"] and row["url"] != row["notice_url"]) else None
         try:
-            text, status = read_item_docs(docs, clf, opts.ocr, page_url=page_url, deadline=deadline)
+            text, status = read_item_docs(docs, clf, opts.ocr, page_url=page_url, deadline=deadline,
+                                          title=f"{row['title']} {row['description'] or ''}")
         except Exception as e:   # a broken advert is "error" for that notice, not the end of the run
             print(f"  could not read the advert for #{row['id']}: {e!r}")
             text, status = "", "error"

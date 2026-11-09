@@ -348,6 +348,8 @@ function card(i) {
   const evidence = i.reasons.filter((r) => r.startsWith("advert p."));
   const why = i.reasons.filter((r) => !r.startsWith("advert p."));
   const docs = i.docs.map(([label, url]) => `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label || "Document")}</a>`)
+    .concat(i.url && i.url !== i.page && !i.docs.some(([, u]) => u === i.url)
+      ? [`<a href="${esc(i.url)}" target="_blank" rel="noopener">Advert page</a>`] : [])
     .concat(`<a href="${esc(i.page)}" target="_blank" rel="noopener">Notice page</a>`);
   return `<article class="card ${isNew(i) ? "is-new" : ""} ${s}" data-id="${i.id}">
     <div class="row">

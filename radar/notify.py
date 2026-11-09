@@ -118,6 +118,11 @@ def doc_links(row, limit: int = 3) -> str:
     docs = json.loads(row["docs"] or "[]")[:limit]
     links = [f'<a href="{html.escape(u, quote=True)}">{html.escape(label[:40] or "Document")}</a>'
              for label, u in docs]
+    # The notice's own page (NITK: /advertisement-for-the-position-of-…), when it isn't
+    # already a document above or the list page itself.
+    url = row["url"]
+    if url and url != row["notice_url"] and url not in (u for _l, u in docs):
+        links.append(f'<a href="{html.escape(url, quote=True)}">Advert page</a>')
     links.append(f'<a href="{html.escape(row["notice_url"], quote=True)}">Notice page</a>')
     return " · ".join(links)
 

@@ -190,7 +190,8 @@ def collect(db_path: Path = DEFAULT_DB, push: bool = False, doc_limit: int = 40,
         def read(row):
             docs = [tuple(d) for d in row["docs"]]
             page = row["url"] if not docs and row["url"] != row["notice_url"] else None
-            return read_item_docs(docs, clf, ocr, page_url=page, deadline=deadline)
+            return read_item_docs(docs, clf, ocr, page_url=page, deadline=deadline,
+                                  title=f"{row.get('title') or ''} {row.get('description') or ''}")
 
         with ThreadPoolExecutor(max_workers=3) as pool:
             for row, (text, status) in zip(to_read, pool.map(read, to_read)):

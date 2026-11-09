@@ -76,7 +76,7 @@ def _json_text(raw: bytes) -> str:
         return ""
 
 
-def _detail_page(url: str, clf: Classifier, ocr: bool, deadline) -> tuple[str, list, str]:
+def _detail_page(url: str, clf: Classifier, ocr: bool, deadline, title: str = "") -> tuple[str, list, str]:
     """Text of a linked page, and the advert documents it links to. The link may itself
     be a PDF without a .pdf name (NIELIT 'Fileviewer?fileId=…', 'download.php?id=…').
     A JavaScript-built role page is read through its JSON feed instead (NISG SARAL)."""
@@ -102,7 +102,27 @@ def _detail_page(url: str, clf: Classifier, ocr: bool, deadline) -> tuple[str, l
             docs.append((clean(a.get_text(" ")) or "Document", href))
     _strip_link_lists(soup)
     text = clean((soup.find("main") or soup.body or soup).get_text(" "))[:PAGE_TEXT_LIMIT]
-    return text, rank_docs(list(dict.fromkeys(docs)), clf)[:3], "text" if text else "none"
+    docs = list(dict.fromkeys(docs))
+    return text, rank_docs(_named_after(docs, title) or docs, clf)[:3], "text" if text else "none"
+
+
+_WORD = re.compile(r"[a-zऀ-ॿ]{4,}")
+
+
+def _named_after(docs: list, title: str) -> list:
+    """The page's documents whose link text repeats the notice's own title. NITK puts its
+    whole site menu (Institute Brochure, IT policy…) inside the advert page; reading the
+    brochure matched "MCA" from its course list. Empty when none match: read as before."""
+    head = set(_WORD.findall((title or "").lower()))
+    if not head:
+        return []
+    named = []
+    for label, url in docs:
+        words = set(_WORD.findall(label.lower()))
+        common = words & head
+        if len(common) >= 2 and len(common) * 2 >= len(words):
+            named.append((label, url))
+    return named
 
 
 def _strip_link_lists(soup):
@@ -130,13 +150,14 @@ def _strip_link_lists(soup):
 
 
 def read_item_docs(docs: list, clf: Classifier, ocr: bool = True, page_url: str | None = None,
-                   deadline: float | None = None) -> tuple[str, str]:
+                   deadline: float | None = None, title: str = "") -> tuple[str, str]:
     """All text for one notice and an overall status:
-    text | ocr | unreadable | error | none | deferred (time budget ran out; retry next run)."""
+    text | ocr | unreadable | error | none | deferred (time budget ran out; retry next run).
+    `title` (the notice's title and row text) picks the advert among a page's documents."""
     texts, statuses = [], []
     targets = rank_docs(docs, clf)
     if not targets and page_url:
-        page_text, targets, page_status = _detail_page(page_url, clf, ocr, deadline)
+        page_text, targets, page_status = _detail_page(page_url, clf, ocr, deadline, title)
         statuses.append(page_status)
         if page_text:
             texts.append(page_text)

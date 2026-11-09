@@ -6064,7 +6064,8 @@
   state: KL
   url: https://iiitkottayam.ac.in/
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  render: true
+  note: AngularJS site; notices (JRF / project adverts) load by JavaScript
 - id: indian-institute-of-information-technology-iiit-manipur
   name: Indian Institute of Information Technology (IIIT), Manipur
   group: central
@@ -6083,28 +6084,32 @@
   state: HR
   url: https://iiitsonepat.ac.in/
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  render: true
+  note: React site; notices load by JavaScript
 - id: indian-institute-of-information-technology-iiit-surat
   name: Indian Institute of Information Technology (IIIT), Surat
   group: central
   state: GJ
   url: https://iiitsurat.ac.in/
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  render: true
+  note: React site; announcements load by JavaScript
 - id: indian-institute-of-information-technology-iiit-tiruchirappalli
   name: Indian Institute of Information Technology (IIIT), Tiruchirappalli
   group: central
   state: TN
   url: https://iiitt.ac.in/
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  render: true
+  note: notices load by JavaScript (0 links without a browser)
 - id: indian-institute-of-information-technology-iiit-una
   name: Indian Institute of Information Technology (IIIT), Una
   group: central
   state: HP
-  url: https://iiitu.ac.in/
+  url: https://iiitu.ac.in/recruitment
   job_links: 0
-  note: no job links found yet (page may be built with JavaScript); review
+  render: true
+  note: React site; recruitment page
 - id: indian-institute-of-information-technology-design-and-manufacturing-iiitdm-kurnool
   name: Indian Institute of Information Technology, Design and Manufacturing (IIITDM),
     Kurnool

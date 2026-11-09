@@ -1435,3 +1435,68 @@
   selector: .jis-announce-bar
   job_links: 1
   note: private, added on request for its ICMR/DST project posts (Project Research Scientist etc.); no careers page, adverts appear as a "View Notice" link in the homepage announcement bar
+
+- id: iit-bhilai-project-staff
+  name: IIT Bhilai – R&D / project staff
+  group: academic
+  state: CG
+  url: https://www.iitbhilai.ac.in/index.php?pid=rnd_staff_rec
+  selector: 'table a[href*="pid=adv"]:not([href*="_form"]):not([href*="_online"])'
+  job_links: 15
+  note: project posts table (Post | Last Date | PI); many CSE projects
+- id: iit-bhilai-non-teaching
+  name: IIT Bhilai – Non-teaching
+  group: academic
+  state: CG
+  url: https://www.iitbhilai.ac.in/index.php?pid=institute_staff_rec
+  job_links: 5
+- id: iit-ism-project-openings
+  name: IIT (ISM) Dhanbad – Project openings
+  group: academic
+  state: IN
+  url: https://www.iitism.ac.in/project-opening
+  job_links: 10
+- id: iit-ism-non-faculty
+  name: IIT (ISM) Dhanbad – Non-faculty
+  group: academic
+  state: IN
+  url: https://www.iitism.ac.in/career-non-faculty
+  job_links: 5
+- id: iit-mandi-project
+  name: IIT Mandi – Project positions
+  group: academic
+  state: IN
+  url: https://www.iitmandi.ac.in/recruitments/project
+  job_links: 10
+- id: iit-mandi-non-teaching
+  name: IIT Mandi – Non-teaching
+  group: academic
+  state: IN
+  url: https://www.iitmandi.ac.in/recruitments/non-teaching
+  job_links: 5
+- id: iiit-agartala-recruitment
+  name: IIIT Agartala – Recruitment notices
+  group: academic
+  state: IN
+  url: https://iiitagartala.ac.in/notices/category/recruitment
+  job_links: 10
+- id: iiit-guwahati-recruitment
+  name: IIIT Guwahati – Recruitment
+  group: academic
+  state: IN
+  url: https://www.iiitg.ac.in/recruitment-1
+  job_links: 10
+- id: iiitm-gwalior-recruitments
+  name: ABV-IIITM Gwalior – Recruitments
+  group: academic
+  state: IN
+  url: https://www.iiitm.ac.in/recruitments
+  job_links: 10
+- id: manit-careers
+  name: MANIT Bhopal – Careers
+  group: academic
+  state: IN
+  url: https://www.manit.ac.in/content/jobs
+  job_links: 10
+  runner: local
+  note: careers page (the homepage only shows a few notices)

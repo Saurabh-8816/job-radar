@@ -8987,11 +8987,24 @@
   url: https://www.nbtindia.gov.in/news__40__career.nbt
   job_links: 156
 - id: national-botanical-research-institute-nbri
-  name: National Botanical Research Institute (NBRI)
+  name: CSIR-National Botanical Research Institute (NBRI) – Project posts
   group: central
   state: UP
-  url: https://www.nbri.res.in/
-  job_links: 5
+  url: https://www.nbri.res.in/en/recruitment/2/ProjectPositions/list/all
+  job_links: 270
+  note: homepage had no job list; NBRI splits jobs into permanent / project / temporary lists
+- id: nbri-permanent
+  name: CSIR-National Botanical Research Institute (NBRI) – Permanent posts
+  group: central
+  state: UP
+  url: https://www.nbri.res.in/en/recruitment/1/PermanentPositions/list/all
+  job_links: 160
+- id: nbri-temporary
+  name: CSIR-National Botanical Research Institute (NBRI) – Consultants / temporary
+  group: central
+  state: UP
+  url: https://www.nbri.res.in/en/recruitment/3/TemporaryPositions/list/all
+  job_links: 10
 - id: national-brain-research-centre
   name: National Brain Research Centre
   group: central

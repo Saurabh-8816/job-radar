@@ -1500,3 +1500,11 @@
   job_links: 10
   runner: local
   note: careers page (the homepage only shows a few notices)
+- id: ibitf-iit-bhilai
+  name: IBITF – IIT Bhilai Innovation and Technology Foundation (TIH)
+  group: academic
+  state: CG
+  url: https://www.ibitf.co.in/
+  render: true
+  job_links: 0
+  note: IIT Bhilai's Technology Innovation Hub; hires its own technical/finance/legal/project staff (site has a "Career" link). Added Nov 2026 while the site was unreachable (connection refused from laptop and scrapers) - check health; IBITF-funded project posts also appear on iit-bhilai-project-staff

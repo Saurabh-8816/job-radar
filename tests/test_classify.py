@@ -55,6 +55,8 @@ def test_statewide_drive_spellings(clf, title):
     "Regarding the extension of the date for the recruitment of 05 Accountant posts",
     "Recruitment – Appointment order of selected candidates under National Health Mission",
     "सहायक प्रोग्रामर पद हेतु दावा आपत्ति निराकरण सूची",
+    "Advertisement No. 2026/24 Candidates selected for the post of Tradesman Trainee",
+    "Advertisement No.2026/6 Selected Candidate for the post of Scientific Officer (C)",
 ])
 def test_updates_are_not_new_vacancies(clf, title):
     assert classify(clf, title).kind == "update"

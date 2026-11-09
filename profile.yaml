@@ -96,6 +96,7 @@ update_words:
   - re:\bmerit\s*(-|cum)?\s*(list|selection)\b
   - re:\b(selection|waiting|provisional|final|select)\s*(-|cum)?\s*(list|lists)\b
   - re:\b(eligible|ineligible|in-eligible|shortlisted|short-listed|rejected)\b
+  - re:\b(selected|recommended)\s+candidates?\b|\bcandidates?\s+(selected|called|recommended)\b   # TIFR results
   # not "…preparation of reserve panel/wait list of candidates for future positions" (NPPA hiring notice)
   - re:(?<!wait\s)\blist\s+of\s+(candidates|eligible|selected|shortlisted)\b
   - re:\bclaims?\s+(and|&)\s+objections?\b

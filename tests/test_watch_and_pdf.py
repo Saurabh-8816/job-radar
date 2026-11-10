@@ -227,3 +227,24 @@ def test_two_notices_linking_the_same_portal_root_are_two_items():
     assert len(portal) == 2 and portal[0].key != portal[1].key
     assert all(i.key.startswith("w:https://rects.immt.res.in") for i in portal)
     assert len([i for i in items if i.url == "https://www.immt.res.in/"]) == 1   # own-site root: still one, by URL
+
+
+def test_page_with_thin_text_over_a_scanned_image_is_ocrd(monkeypatch):
+    """IIST, Nov 2026: page 1 had a Hindi letterhead as text over an image of the post
+    table, so it counted as 'readable' and the table (Masters in Computer Science) was lost."""
+    import io
+    from PIL import Image
+    from reportlab.lib.utils import ImageReader
+    from reportlab.pdfgen import canvas
+    from radar import pdftext
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf)
+    c.drawString(72, 800, "Government of India Department of Space Indian Institute")   # thin text layer
+    c.drawImage(ImageReader(Image.new("RGB", (200, 100), "white")), 72, 400)
+    c.showPage()
+    c.save()
+    monkeypatch.setattr(pdftext, "ocr_languages", lambda: "eng")
+    monkeypatch.setattr(pdftext, "_ocr_image", lambda image, langs: "PROJECT ASSOCIATE-I Masters in Computer "
+                        "Science and Engineering or AIML, Rs 31000 plus HRA, maximum age 35 years " * 2)
+    doc = pdftext.extract(buf.getvalue(), "advt.pdf")
+    assert doc.status == "ocr" and "Computer Science" in doc.text

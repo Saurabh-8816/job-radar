@@ -91,6 +91,20 @@ def _page_is_readable(text: str) -> bool:
     return len(_LETTERS.findall(text)) >= 40 and not looks_legacy_font(text)
 
 
+THIN_PAGE = 300   # letters; fewer than this on a page that holds an image suggests a scan
+
+
+def _has_image(page) -> bool:
+    try:
+        xobjects = page["/Resources"].get("/XObject")
+        if xobjects is None:
+            return False
+        xobjects = xobjects.get_object()
+        return any(xobjects[k].get_object().get("/Subtype") == "/Image" for k in xobjects)
+    except Exception:
+        return False
+
+
 def page_of(text: str, pos: int) -> int:
     return text.count("\f", 0, pos) + 1
 
@@ -105,22 +119,28 @@ def extract(data: bytes, url: str = "", *, max_pages: int | None = None, ocr: bo
     try:
         reader = PdfReader(io.BytesIO(data))
         page_count = len(reader.pages)
-        texts = [_page_text(p) for p in (reader.pages if max_pages is None else reader.pages[:max_pages])]
+        pages = reader.pages if max_pages is None else reader.pages[:max_pages]
+        texts = [_page_text(p) for p in pages]
     except Exception:
         return DocText("", "error")
 
     unreadable = [i for i, t in enumerate(texts) if not _page_is_readable(t)]
-    langs = ocr_languages() if (ocr and unreadable) else None
+    # A scanned page can carry a thin text layer (IIST: a Hindi letterhead and some ₹ signs
+    # over an image of the whole post table). Such a page is OCR'd too; the longer reading wins.
+    thin = [i for i, t in enumerate(texts)
+            if i not in unreadable and len(_LETTERS.findall(t)) < THIN_PAGE and _has_image(pages[i])]
+    langs = ocr_languages() if (ocr and (unreadable or thin)) else None
     done = 0
     if langs:
         try:
             import pypdfium2 as pdfium
             pdf = pdfium.PdfDocument(data)
-            for i in unreadable[:ocr_pages]:
+            for i in sorted(unreadable + thin)[:ocr_pages]:
                 if deadline is not None and time.monotonic() > deadline:
                     break
                 ocr_text = _ocr_image(pdf[i].render(scale=200 / 72).to_pil(), langs)
-                if _page_is_readable(ocr_text):
+                if _page_is_readable(ocr_text) and (
+                        i in unreadable or len(_LETTERS.findall(ocr_text)) > len(_LETTERS.findall(texts[i]))):
                     texts[i] = ocr_text
                 done += 1
             pdf.close()

@@ -1508,3 +1508,10 @@
   render: true
   job_links: 0
   note: IIT Bhilai's Technology Innovation Hub; hires its own technical/finance/legal/project staff (site has a "Career" link). Added Nov 2026 while the site was unreachable (connection refused from laptop and scrapers) - check health; IBITF-funded project posts also appear on iit-bhilai-project-staff
+- id: icmr-nirth-jabalpur
+  name: ICMR-National Institute for Tribal Health Research (NIRTH), Jabalpur
+  group: central
+  state: MP
+  url: https://www.nirth.res.in/vacancies.php
+  job_links: 30
+  note: also staffs its Model Rural Health Research Unit at Jheet, Durg (CG); walk-in adverts

@@ -24,3 +24,14 @@ def test_alert_links_the_notice_page_of_its_own():
 def test_no_advert_page_link_when_the_url_is_the_document():
     row = {"docs": '[["Advt", "https://x.in/a.pdf"]]', "url": "https://x.in/a.pdf", "notice_url": "https://x.in/jobs"}
     assert ">Advert page<" not in notify.doc_links(row)
+
+
+def test_viewer_button_and_embedded_documents_are_found():
+    from bs4 import BeautifulSoup
+    html = ('<div class="att"><span>Advertisement - MIU</span> '
+            '<button data-file="/isical_web/admin/uploads/jobs/ADV_MIU.pdf">Preview</button></div>'
+            '<iframe src="/files/notice.pdf"></iframe><button data-file="/x/photo.php">x</button>')
+    found = docs._embedded_docs(BeautifulSoup(html, "lxml"), "https://www.isical.ac.in/isical_web/public/jobs_view.php?id=93")
+    assert ("Advertisement - MIU Preview", "https://www.isical.ac.in/isical_web/admin/uploads/jobs/ADV_MIU.pdf") in found
+    assert any(u == "https://www.isical.ac.in/files/notice.pdf" for _l, u in found)
+    assert len(found) == 2

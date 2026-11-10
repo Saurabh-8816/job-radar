@@ -100,10 +100,36 @@ def _detail_page(url: str, clf: Classifier, ocr: bool, deadline, title: str = ""
         href = join_url(url, a["href"].strip())
         if href.startswith("http") and _is_readable(href):
             docs.append((clean(a.get_text(" ")) or "Document", href))
+    docs += _embedded_docs(soup, url)
     _strip_link_lists(soup)
     text = clean((soup.find("main") or soup.body or soup).get_text(" "))[:PAGE_TEXT_LIMIT]
     docs = list(dict.fromkeys(docs))
     return text, rank_docs(_named_after(docs, title) or docs, clf)[:3], "text" if text else "none"
+
+
+_FILE_ATTRS = ("data-file", "data-src", "data-url", "data-pdf", "data-href")
+
+
+def _embedded_docs(soup, page_url: str) -> list:
+    """Documents a page opens without a plain link: a viewer button carrying the file
+    (ISI Kolkata: <button data-file="/…/ADV_MIU.pdf">Preview</button>) or an embedded
+    viewer (<iframe>/<embed src=…pdf>). Labelled with the text around the button, since
+    the button itself only says "Preview" ("Advertisement - MIU Preview")."""
+    found = []
+    for el in soup.find_all(True):
+        raw = next((el.get(k) for k in _FILE_ATTRS if el.get(k)), None)
+        if raw is None and el.name in ("iframe", "embed", "object"):
+            raw = el.get("src") or el.get("data")
+        if not raw or not isinstance(raw, str):
+            continue
+        href = join_url(page_url, raw.strip())
+        if not (href.startswith("http") and _is_readable(href)):
+            continue
+        label = clean(el.get_text(" "))
+        if len(label) < 12 and el.parent is not None:
+            label = clean(el.parent.get_text(" ")) or label
+        found.append((label[:120] or "Document", href))
+    return found
 
 
 _WORD = re.compile(r"[a-zऀ-ॿ]{4,}")

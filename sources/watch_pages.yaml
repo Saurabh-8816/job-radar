@@ -1515,3 +1515,16 @@
   url: https://www.nirth.res.in/vacancies.php
   job_links: 30
   note: also staffs its Model Rural Health Research Unit at Jheet, Durg (CG); walk-in adverts
+- id: iist-project-positions
+  name: IIST Thiruvananthapuram – Project positions
+  group: academic
+  state: KL
+  url: https://www.iist.ac.in/project-positions
+  job_links: 2
+  note: the administrative-positions page (igod entry) only lists its own menu; project/JRF adverts are here
+- id: iist-non-teaching
+  name: IIST Thiruvananthapuram – Non-teaching
+  group: academic
+  state: KL
+  url: https://www.iist.ac.in/non-teaching-positions
+  job_links: 0

@@ -1528,3 +1528,9 @@
   state: KL
   url: https://www.iist.ac.in/non-teaching-positions
   job_links: 0
+- id: iist-faculty
+  name: IIST Thiruvananthapuram – Faculty
+  group: academic
+  state: KL
+  url: https://www.iist.ac.in/prospective-faculty
+  job_links: 0

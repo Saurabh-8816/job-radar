@@ -233,6 +233,9 @@ def test_page_with_thin_text_over_a_scanned_image_is_ocrd(monkeypatch):
     """IIST, Nov 2026: page 1 had a Hindi letterhead as text over an image of the post
     table, so it counted as 'readable' and the table (Masters in Computer Science) was lost."""
     import io
+
+    import pytest
+    pytest.importorskip("reportlab")   # builds the sample PDF; not a radar dependency
     from PIL import Image
     from reportlab.lib.utils import ImageReader
     from reportlab.pdfgen import canvas

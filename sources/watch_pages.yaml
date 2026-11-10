@@ -1534,3 +1534,70 @@
   state: KL
   url: https://www.iist.ac.in/prospective-faculty
   job_links: 0
+
+# ---- IIMs: careers pages beyond the directory entries in watch_igod.yaml (Nov 2026 audit) ----
+- id: iim-mumbai
+  name: IIM Mumbai (formerly NITIE)
+  group: academic
+  state: IN
+  url: https://www.iimmumbai.ac.in/careers
+  job_links: 90
+- id: iim-bangalore
+  name: IIM Bangalore – Job opportunities
+  group: academic
+  state: IN
+  url: https://www.iimb.ac.in/job-opportunities
+  job_links: 0
+  render: true
+  note: careers page pinned; blocked from discovery sandbox, cloud runner fetches it
+- id: iim-lucknow
+  name: IIM Lucknow – Jobs
+  group: academic
+  state: IN
+  url: https://www.iiml.ac.in/job-detail
+  job_links: 12
+- id: iim-ahmedabad
+  name: IIM Ahmedabad – Krishnamurthy Tandon School of AI careers
+  group: academic
+  state: IN
+  url: https://www.iima.ac.in/faculty-research/krishnamurthy-tandon-school-of-ai/careers
+  job_links: 64
+- id: iim-nagpur
+  name: IIM Nagpur – Careers
+  group: academic
+  state: IN
+  url: https://www.iimnagpur.ac.in/careers/
+  job_links: 10
+  note: the homepage entry (watch_igod) kept failing
+- id: iim-raipur-recruitment
+  name: IIM Raipur – Non-faculty positions
+  group: academic
+  state: CG
+  url: https://iimraipur.ac.in/non-faculty-positions/
+  selector: table
+  job_links: 10
+- id: iim-calcutta-jobs
+  name: IIM Calcutta – Jobs@IIMC
+  group: academic
+  state: IN
+  url: https://www.iimcal.ac.in/jobsiimc
+  job_links: 10
+- id: iim-jammu-jobs
+  name: IIM Jammu – Jobs@IIMJ
+  group: academic
+  state: IN
+  url: https://www.iimj.ac.in/career.php
+  job_links: 10
+- id: iim-sirmaur-jobs
+  name: IIM Sirmaur – Jobs (non-teaching)
+  group: academic
+  state: IN
+  url: https://www.iimsirmaur.ac.in/en/jobs-iims
+  job_links: 10
+- id: dghs-vacancies
+  name: DGHS (Dte. General of Health Services) – Vacancies
+  group: central
+  state: IN
+  url: https://dghs.mohfw.gov.in/vacancy-tenders.php
+  job_links: 62
+  note: the directory entry only watches the homepage

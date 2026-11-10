@@ -69,6 +69,11 @@
 - {name: Kendriya Vidyalaya Sangathan, home: "https://kvsangathan.nic.in/", group: central}
 - {name: Navodaya Vidyalaya Samiti, home: "https://navodaya.gov.in/", group: central}
 
+# ---- Central health / disease-control / research bodies (hire data/IT staff too) ----
+- {name: "NCDC (National Centre for Disease Control)", home: "https://ncdc.mohfw.gov.in/", group: central}
+- {name: ICMR, home: "https://www.icmr.gov.in/", group: central}
+- {name: "DGHS (Dte. General of Health Services)", home: "https://dghs.mohfw.gov.in/", group: central}
+
 # ---- PSUs ------------------------------------------------------------------------
 - {name: BHEL, home: "https://careers.bhel.in/", group: psu}
 - {name: NTPC, home: "https://careers.ntpc.co.in/", url: "https://careers.ntpc.co.in/recruitment/", group: psu}
@@ -157,6 +162,28 @@
 - {name: NIT Uttarakhand, home: "https://nituk.ac.in/", group: academic}
 - {name: SVNIT Surat, home: "https://www.svnit.ac.in/", group: academic}
 - {name: NIT Andhra Pradesh, home: "https://www.nitandhra.ac.in/", group: academic}
+
+# ---- IIMs ------------------------------------------------------------------------
+- {name: IIM Ahmedabad, home: "https://www.iima.ac.in/", group: academic}
+- {name: IIM Bangalore, home: "https://www.iimb.ac.in/", url: "https://www.iimb.ac.in/job-opportunities", group: academic}
+- {name: IIM Calcutta, home: "https://www.iimcal.ac.in/", group: academic}
+- {name: IIM Lucknow, home: "https://www.iiml.ac.in/", group: academic}
+- {name: IIM Kozhikode, home: "https://www.iimk.ac.in/", group: academic}
+- {name: IIM Indore, home: "https://www.iimidr.ac.in/", group: academic}
+- {name: IIM Shillong, home: "https://www.iimshillong.ac.in/", group: academic}
+- {name: IIM Ranchi, home: "https://www.iimranchi.ac.in/", group: academic}
+- {name: IIM Rohtak, home: "https://www.iimrohtak.ac.in/", group: academic}
+- {name: IIM Tiruchirappalli, home: "https://www.iimtrichy.ac.in/", group: academic}
+- {name: IIM Udaipur, home: "https://www.iimu.ac.in/", group: academic}
+- {name: IIM Kashipur, home: "https://www.iimkashipur.ac.in/", group: academic}
+- {name: IIM Nagpur, home: "https://www.iimnagpur.ac.in/", group: academic}
+- {name: IIM Visakhapatnam, home: "https://www.iimv.ac.in/", url: "https://www.iimv.ac.in/qlinks/careers-view-all", group: academic}
+- {name: IIM Bodh Gaya, home: "https://www.iimbg.ac.in/", group: academic}
+- {name: IIM Amritsar, home: "https://www.iimamritsar.ac.in/", group: academic}
+- {name: IIM Sambalpur, home: "https://www.iimsambalpur.ac.in/", group: academic}
+- {name: IIM Sirmaur, home: "https://www.iimsirmaur.ac.in/", group: academic}
+- {name: IIM Jammu, home: "https://iimj.ac.in/", group: academic}
+- {name: IIM Mumbai, home: "https://www.iimmumbai.ac.in/", group: academic}
 
 # ---- IIITs, IISERs, IISc and central universities ------------------------------------
 - {name: IIIT Hyderabad, home: "https://www.iiit.ac.in/", group: academic}

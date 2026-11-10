@@ -69,11 +69,13 @@ def _watch_source(w: dict) -> Source:
     )
 
 
-def due(sources: list[Source], last_runs: dict, now: datetime, limit: int = 700) -> list[Source]:
+def due(sources: list[Source], last_runs: dict, now: datetime, limit: int = 1500) -> list[Source]:
     """Sources to fetch this run. An `every_hours` source is skipped until that long has
     passed since its last check (30 min early is fine: cron start times drift). At most
     `limit` of them per run, longest-waiting first, so a newly added list of thousands
-    spreads itself over a few runs instead of one very long one."""
+    spreads itself over a few runs instead of one very long one. GitHub drops most hourly
+    scheduled runs (Nov 2026: ~11 runs/day), and ~12,000 checks/day are due (2,400 sources
+    every 6 h, 1,300 every 12 h); at 700 per run they fell 15 h behind."""
     always, scheduled = [], []
     for s in sources:
         if not s.every_hours:

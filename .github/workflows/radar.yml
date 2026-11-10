@@ -3,6 +3,8 @@ name: radar
 on:
   schedule:
     - cron: "17 * * * *"          # hourly (public repo: Actions minutes are free); 17 past dodges the top-of-hour queue
+    - cron: "47 * * * *"          # a second slot: GitHub drops most scheduled runs (Nov 2026: 1 in 4-6 ran);
+                                  # the concurrency group queues at most one, so two slots never pile up
   push:
     # GitHub drops scheduled runs when it's busy. The laptop relay's push of an inbox file
     # (every 2 h while the laptop is on) always starts a run, and its pages get ingested at once.

@@ -147,6 +147,8 @@ tier_a:
     - re:(?-i:\b[BM]\.?\s?E\b)\.?\s*(-|in\s+)?\(?\s*(cs|cse|(?-i:IT)|computer|information)\b
     - re:\b(pgdca|dca|o\s*level|a\s*level)\b
     - re:\binformation\s+technology\b
+    # "Graduate in IT" (NITCON's Graduate Engineer Trainee for ICAT): BCA counts. "IT" stays case-sensitive.
+    - re:\bgraduat\w*\s+(degree\s+)?in\s+((?-i:IT)\b|computer|information\s+tech)
     - re:\bsoftware\s+(engineer|developer|development|engineering|programmer|tester|testing|professional|specialist)s?\b
     - re:\bsystem(s)?\s+(analyst|administrator|engineer|manager|officer)\b
     - re:\b(network|database|db)\s+(administrator|engineer|manager)\b

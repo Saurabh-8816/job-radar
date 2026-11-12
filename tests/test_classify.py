@@ -280,3 +280,11 @@ def test_exam_prep_articles_are_not_jobs(clf, title):
 
 def test_job_post_mentioning_salary_is_still_a_job(clf):
     assert not clf.is_not_a_job("LIC ADO Notification 2026-27 Soon: 10000+ Vacancies, Eligibility, Salary")
+
+
+def test_graduate_in_it_is_a_match(clf):
+    # NITCON / ICAT Graduate Engineer Trainee: "Qualification: Graduate in IT. 0-2 years"
+    v = clf.classify("NIT/ICAT/2026-27/17/04 Graduate Engineer Trainee", "",
+                     "Qualification & Experience: Graduate in IT. Experience 0-2 years, MS Office, AI tools")
+    assert v.tier == "A"
+    assert clf.classify("Graduate Engineer Trainee", "", "Graduate in Mechanical Engineering. Be it a graduate in it.").tier != "A"

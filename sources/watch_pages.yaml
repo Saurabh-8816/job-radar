@@ -1601,3 +1601,11 @@
   url: https://dghs.mohfw.gov.in/vacancy-tenders.php
   job_links: 62
   note: the directory entry only watches the homepage
+- id: nitcon
+  name: NITCON Ltd (Union Govt company) – Career
+  group: central
+  state: IN
+  url: https://www.nitcon.org/Career/
+  selector: 'table a[href*="pdfdownload"]:not([href*="Application"]):not([href*="application"])'
+  job_links: 270
+  note: contract/outsourced openings NITCON fills for government bodies (ICAT and others); one advert PDF per row

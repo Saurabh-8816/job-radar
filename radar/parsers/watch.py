@@ -54,10 +54,14 @@ _FILE_INFO = re.compile(r"^[\d.,]+\s*[KMG]i?B(\s+(pdf|docx?|xlsx?|file|english|h
 _DATE_ONLY = re.compile(r"^[\s\d,./-]*((jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?[\s\d,./-]*)?$", re.I)
 
 
+# NITCON: the link is only the file's name, "Adv 17_01.pdf"; the row names the post.
+_FILE_NAME = re.compile(r"^[\w .()\-]{0,60}\.(pdf|docx?|xlsx?|jpe?g|png)$", re.I)
+
+
 def _says_nothing(text: str) -> bool:
     text = _FILE_SIZE.sub("", text).strip()
     return (text.lower() in _GENERIC or bool(_GENERIC_LABEL.match(text) or _FILE_INFO.match(text))
-            or bool(_DATE_ONLY.match(text)))
+            or bool(_DATE_ONLY.match(text) or _FILE_NAME.match(text)))
 
 
 def is_document(url: str) -> bool:

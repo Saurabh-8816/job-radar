@@ -251,3 +251,11 @@ def test_page_with_thin_text_over_a_scanned_image_is_ocrd(monkeypatch):
                         "Science and Engineering or AIML, Rs 31000 plus HRA, maximum age 35 years " * 2)
     doc = pdftext.extract(buf.getvalue(), "advt.pdf")
     assert doc.status == "ocr" and "Computer Science" in doc.text
+
+
+def test_file_name_link_text_takes_the_row_title():
+    # NITCON: "NIT/ICAT/2026-27/17/01 | Engineer | <a>Adv 17_01.pdf</a> | <a>Application Form.pdf</a>"
+    html = ('<table><tr><td>NIT/ICAT/2026-27/17/01</td><td>Engineer</td>'
+            '<td><a href="/pdfdownload/17_01_Engineer_(Fatigue Lab).pdf">Adv 17_01.pdf</a></td></tr></table>')
+    (item,) = watch.parse(html, "https://www.nitcon.org/Career/", _src()).items
+    assert "Engineer" in item.title and "NIT/ICAT/2026-27/17/01" in item.title

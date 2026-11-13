@@ -1734,3 +1734,263 @@
   state: IN
   url: https://www.iitdh.ac.in/other-recruitments
   job_links: 10
+
+# ---- NIT / IIM / IISER / IIIT project, research, non-teaching and technical pages (Nov 2026 audit) ----
+- id: nit-arunachal-notices
+  name: NIT Arunachal Pradesh – Notices (JRF, non-teaching)
+  group: academic
+  state: IN
+  url: https://www.nitap.ac.in/notices/
+  job_links: 5
+- id: manit-project-positions
+  name: MANIT Bhopal – Positions under projects (JRF/RF)
+  group: academic
+  state: IN
+  url: https://www.manit.ac.in/content/jrf-rf-positions
+  job_links: 5
+- id: nit-calicut-project-staff
+  name: NIT Calicut – Contract / ad-hoc / project staff
+  group: academic
+  state: IN
+  url: https://nitc.ac.in/contract-adhoc-recruitment-project-staff
+  job_links: 5
+- id: nit-durgapur-nt-portal
+  name: NIT Durgapur – Non-teaching recruitment portal
+  group: academic
+  state: IN
+  url: https://recruitment.nitdgp.ac.in/
+  job_links: 5
+- id: nit-meghalaya-staff-portal
+  name: NIT Meghalaya – Non-faculty / staff recruitment portal
+  group: academic
+  state: IN
+  url: https://recruitment.nitm.ac.in
+  job_links: 5
+- id: nit-patna-jrf-srf
+  name: NIT Patna – JRF / SRF positions
+  group: academic
+  state: IN
+  url: https://www.nitp.ac.in/Others/recruitment/positions?category=JDRF%2FSRF
+  render: true   # positions are loaded by JavaScript
+  selector: main
+  job_links: 5
+- id: nit-patna-nt-regular
+  name: NIT Patna – Regular non-teaching
+  group: academic
+  state: IN
+  url: https://www.nitp.ac.in/Others/recruitment/positions?category=REGULAR%20NON-TEACHING
+  render: true   # positions are loaded by JavaScript
+  selector: main
+  job_links: 5
+- id: nit-patna-nt-contract
+  name: NIT Patna – Contractual / temporary non-teaching
+  group: academic
+  state: IN
+  url: https://www.nitp.ac.in/Others/recruitment/positions?category=CONTRACTUAL%20%2F%20TEMPORARY%20NON-TEACHING
+  render: true   # positions are loaded by JavaScript
+  selector: main
+  job_links: 5
+- id: nit-rourkela-sricce-career
+  name: NIT Rourkela – SRICCE project advertisements
+  group: academic
+  state: IN
+  url: https://www.nitrkl.ac.in/SRICCE/Career/
+  job_links: 5
+- id: nit-rourkela-non-teaching
+  name: NIT Rourkela – Non-teaching positions
+  group: academic
+  state: IN
+  url: https://www.nitrkl.ac.in/Career/NonTeaching/
+  job_links: 5
+- id: nit-sikkim-research-vacancies
+  name: NIT Sikkim – Research vacancies
+  group: academic
+  state: IN
+  url: https://nitsikkim.ac.in/institute/job_oppurtunities.php?type=research
+  job_links: 5
+- id: nit-srinagar-research-associate
+  name: NIT Srinagar – Research associate / project
+  group: academic
+  state: IN
+  url: https://nitsri.ac.in/Pages/DisplayPages.aspx?page=cacok
+  job_links: 5
+- id: nit-srinagar-temp-non-faculty
+  name: NIT Srinagar – Temporary non-faculty
+  group: academic
+  state: IN
+  url: https://nitsri.ac.in/Pages/DisplayPages.aspx?page=cacsc
+  job_links: 5
+- id: nit-srinagar-perm-non-faculty
+  name: NIT Srinagar – Permanent non-faculty
+  group: academic
+  state: IN
+  url: https://nitsri.ac.in/Pages/DisplayPages.aspx?page=cacog
+  job_links: 5
+- id: iim-ahmedabad-research-staff
+  name: IIM Ahmedabad – Research staff
+  group: academic
+  state: IN
+  url: https://www.iima.ac.in/the-institute/administration/work-with-us/research-assistant
+  job_links: 5
+- id: iim-ahmedabad-admin-staff
+  name: IIM Ahmedabad – Administrative staff
+  group: academic
+  state: IN
+  url: https://www.iima.ac.in/the-institute/administration/work-with-us/administrative-staff
+  job_links: 5
+- id: iim-bangalore-research-positions
+  name: IIM Bangalore – Research positions
+  group: academic
+  state: IN
+  url: https://www.iimb.ac.in/research-positions
+  job_links: 5
+- id: iim-bangalore-admin-positions
+  name: IIM Bangalore – Administrative positions
+  group: academic
+  state: IN
+  url: https://www.iimb.ac.in/jobs-administrative-positions
+  job_links: 5
+- id: iim-sirmaur-non-teaching
+  name: IIM Sirmaur – Non-teaching recruitments
+  group: academic
+  state: IN
+  url: https://www.iimsirmaur.ac.in/non-teaching-recruitments-0
+  job_links: 5
+- id: iim-jammu-project-positions
+  name: IIM Jammu – Project-based positions
+  group: academic
+  state: IN
+  url: https://www.iimj.ac.in/advertisement-project-positions.php
+  job_links: 5
+- id: iim-jammu-non-faculty
+  name: IIM Jammu – Non-faculty positions
+  group: academic
+  state: IN
+  url: https://www.iimj.ac.in/advertisement-non-faculty-positions.php
+  job_links: 5
+- id: iiser-pune-openings
+  name: IISER Pune – Non-teaching / project openings
+  group: academic
+  state: IN
+  url: https://www.iiserpune.ac.in/opportunities/openings
+  job_links: 5
+- id: iiser-pune-sponsored-fellows
+  name: IISER Pune – Sponsored fellows (JRF/project)
+  group: academic
+  state: IN
+  url: https://www.iiserpune.ac.in/opportunities/fellows-sponsored
+  job_links: 5
+- id: iiser-kolkata-careers
+  name: IISER Kolkata – Careers (application portal)
+  group: academic
+  state: IN
+  url: https://apply.iiserkol.ac.in/career.html
+  job_links: 5
+- id: iiser-mohali-project-positions
+  name: IISER Mohali – Research / project positions
+  group: academic
+  state: IN
+  url: https://www.iisermohali.ac.in/project-positions
+  job_links: 5
+- id: iiser-mohali-non-faculty
+  name: IISER Mohali – Non-teaching positions
+  group: academic
+  state: IN
+  url: https://www.iisermohali.ac.in/non-faculty-positions
+  job_links: 5
+- id: iiser-berhampur-non-teaching
+  name: IISER Berhampur – Non-teaching staff
+  group: academic
+  state: IN
+  url: https://www.iiserbpr.ac.in/opportunity/non-teaching-staff
+  job_links: 5
+- id: iiser-berhampur-outsource
+  name: IISER Berhampur – Outsourced positions
+  group: academic
+  state: IN
+  url: https://www.iiserbpr.ac.in/opportunity/outsource
+  job_links: 5
+- id: iiser-tirupati-project-positions
+  name: IISER Tirupati – JRF / RA / project associate
+  group: academic
+  state: IN
+  url: https://www.iisertirupati.ac.in/jobs/?search_keywords=&selected_category=pa-pf&selected_jobtype=-1&selected_location=-1
+  job_links: 5
+- id: iiitdm-jabalpur-project-vacancy
+  name: IIITDM Jabalpur – Project vacancies
+  group: academic
+  state: IN
+  url: https://www.iiitdmj.ac.in/pv.php
+  job_links: 5
+- id: iiitdm-jabalpur-non-teaching
+  name: IIITDM Jabalpur – Non-teaching
+  group: academic
+  state: IN
+  url: https://www.iiitdmj.ac.in/non_teaching.php
+  job_links: 5
+- id: iiitdm-kancheepuram-staff
+  name: IIITDM Kancheepuram – Staff recruitment
+  group: academic
+  state: IN
+  url: https://www.iiitdm.ac.in/recruitment/staff-recruitment
+  job_links: 5
+- id: iiitdm-kancheepuram-contract
+  name: IIITDM Kancheepuram – Contract positions
+  group: academic
+  state: IN
+  url: https://www.iiitdm.ac.in/recruitment/contract-positions
+  job_links: 5
+- id: iiitdm-kurnool-non-teaching
+  name: IIITDM Kurnool – Non-teaching recruitment
+  group: academic
+  state: IN
+  url: https://iiitk.ac.in/Non-Teaching-Recruitment/page
+  job_links: 5
+- id: iiit-sricity-project-positions
+  name: IIIT Sri City – JRF / SRF / project positions
+  group: academic
+  state: IN
+  url: https://iiits.ac.in/careersiiits/jrf-srf-project-positions/
+  job_links: 5
+- id: iiit-sricity-careers
+  name: IIIT Sri City – Careers
+  group: academic
+  state: IN
+  url: https://iiits.ac.in/careersiiits/
+  job_links: 5
+- id: iiit-vadodara-non-teaching
+  name: IIIT Vadodara – Non-teaching
+  group: academic
+  state: IN
+  url: https://iiitvadodara.ac.in/page.php?slug=nonteaching
+  job_links: 5
+- id: iiit-lucknow-project-vacancy
+  name: IIIT Lucknow – Project vacancies
+  group: academic
+  state: IN
+  url: https://iiitl.ac.in/index.php/project-vacancy/
+  job_links: 5
+- id: iiit-lucknow-non-teaching
+  name: IIIT Lucknow – Non-teaching positions
+  group: academic
+  state: IN
+  url: https://iiitl.ac.in/index.php/advertisement-for-the-faculty11/
+  job_links: 5
+- id: iiit-agartala-research-staff
+  name: IIIT Agartala – Research staff recruitment
+  group: academic
+  state: IN
+  url: https://iiitagartala.ac.in/pages/research-staff-recruitment
+  job_links: 5
+- id: iiit-agartala-non-faculty
+  name: IIIT Agartala – Non-faculty recruitment
+  group: academic
+  state: IN
+  url: https://iiitagartala.ac.in/pages/non-faculty-recruitment
+  job_links: 5
+- id: iiit-raichur-careers-html
+  name: IIIT Raichur – Careers (project technical staff)
+  group: academic
+  state: IN
+  url: https://iiitr.ac.in/careers.html
+  job_links: 5

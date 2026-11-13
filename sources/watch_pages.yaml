@@ -1618,3 +1618,9 @@
   selector: 'table a[href*="pdfdownload"]:not([href*="Application"]):not([href*="application"])'
   job_links: 270
   note: contract/outsourced openings NITCON fills for government bodies (ICAT and others); one advert PDF per row
+- id: exim-bank
+  name: EXIM Bank (Export-Import Bank of India)
+  group: psu
+  state: IN
+  url: https://www.eximbankindia.in/careers
+  job_links: 5

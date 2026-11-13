@@ -296,3 +296,15 @@ def test_last_day_for_applying_is_the_deadline(clf):
             "of Examination fee 11-12-2026 Tentative month of Written Examination December 2026")
     v = classify(clf, "India Exim Bank Recruitment 2026: 120 Posts", body=body)
     assert v.deadline == "2026-12-11"
+
+
+@pytest.mark.parametrize("qual", ["Computer Engineering", "Computer Sc.", "Comp. Sci.", "Computer Sci. & Engg.",
+                                  "CS/IT", "CSE / IT", "Computer Science and Engineering", "B.Tech in CSE"])
+def test_computer_science_spellings_in_the_advert_body_match(clf, qual):
+    v = classify(clf, "Recruitment for various posts", body=f"Essential qualification: {qual} with 60% marks.")
+    assert v.tier == "A"
+
+
+def test_computer_screen_is_not_computer_science(clf):
+    v = classify(clf, "Recruitment of Clerk", body="Work on a computer screen for long hours.")
+    assert v.tier != "A"

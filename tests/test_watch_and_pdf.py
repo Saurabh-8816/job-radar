@@ -298,3 +298,16 @@ def test_pages_render_safely_from_parallel_threads():
         images = list(pool.map(lambda i: pdftext._render_page(data, i % 3), range(18)))
     assert all(im is not None and im.size[0] > 0 for im in images)
     assert pdftext._render_page(b"not a pdf", 0) is None
+
+
+def test_a_neighbouring_corrigendum_link_does_not_make_a_new_drive_an_update(clf):
+    # C-DAC: <p><a>C-DAC Invites Online Applications … Contractual Positions …</a><br/><a>CORRIGENDUM - ADVERTISEMENT REF. NO. …</a></p>
+    html = ('<div id="content"><p><a href="https://careers.cdac.in">C-DAC Invites Online Applications For Various Technical '
+            'And Non-Technical Contractual Positions At All Levels For Centres / Locations Across India.</a><br/>'
+            '<a href="/index.aspx?id=pdf_hrd&amp;dynamicId=CORRIGENDUM-ADVT-CORP-JIT-03-2026.pdf">CORRIGENDUM - ADVERTISEMENT '
+            'REF. NO. CORP/JIT/03/2026</a></p></div>')
+    items = watch.parse(html, "https://www.cdac.in/index.aspx?id=current_jobs", _src("#content")).items
+    drive = next(i for i in items if i.title.startswith("C-DAC Invites"))
+    corr = next(i for i in items if i.title.startswith("CORRIGENDUM"))
+    assert clf.classify(drive.title, drive.description, "").kind == "new"
+    assert clf.classify(corr.title, corr.description, "").kind == "update"

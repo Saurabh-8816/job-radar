@@ -333,11 +333,14 @@
   runner: local
   note: no job links found yet (page may be built with JavaScript); review
 - id: c-dac
-  name: C-DAC
+  name: C-DAC – Current openings (all centres)
   group: central
   state: IN
-  url: https://www.cdac.in/index.aspx?id=career
-  job_links: 2
+  url: https://www.cdac.in/index.aspx?id=current_jobs
+  selector: '#content'
+  alert_on: '^(?!.*(corrigendum|admit card|hall ticket|result|select(ed)? list|list of|selected candidates|shortlist|cancel|notice regarding|application form|interview application|schedule)).*(invites|walk-in|recruitment|advertisement|applications are invited|project (engineer|associate|manager|officer|technician)|consultant)'   # C-DAC hiring notices are IT posts; admit cards, results, corrigenda excluded
+  job_links: 20
+  note: the ?id=career page only linked here; JIT drives (Project Engineer/Associate) apply via careers.cdac.in
 - id: nielit
   name: NIELIT
   group: central

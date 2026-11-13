@@ -2421,6 +2421,7 @@
   state: MH
   url: https://cdac.gov.in/index.aspx?id=career
   job_links: 2
+  enabled: false   # same site as c-dac (watch_pages), which watches the current-openings list
 - id: centre-for-dna-fingerprinting-and-diagnostics
   name: Centre for DNA Fingerprinting and Diagnostics
   group: central

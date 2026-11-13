@@ -270,10 +270,18 @@ def parse(html: str, page_url: str, source) -> ParseResult:
         if not end_date and block is not None:   # the post's "Last Date to Apply" sits in its card
             card = clean(block.get_text(" "))
             end_date = parse_date(card[m.end():m.end() + 40]) if (m := _LAST_DATE.search(card)) else None
+        # A link with a title of its own is described by its row minus the OTHER links'
+        # texts: C-DAC puts a new drive and "CORRIGENDUM - ADVERTISEMENT…" in one <p>, and
+        # the neighbour's word made the new drive an "update". (The key keeps `context`.)
+        description = context if context != title else ""
+        if description and row is not None and title == text:
+            own = clean(" ".join(t for t in row.find_all(string=True)
+                                 if not any(p is not a and p.name == "a" for p in t.parents)))[:400]
+            description = own if own and own != title else ""
         items.append(Item(
             source_id=source.id,
             title=title[:300],
-            description=context if context != title else "",
+            description=description,
             url=url,
             notice_url=page_url,
             docs=[(text or "Document", url)] if is_document(url) else [],

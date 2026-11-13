@@ -28,6 +28,7 @@ class Source:
     digest: bool = True          # False: partial matches are stored quietly, only clear matches alert
     alert_on: str | None = None  # regex: a title matching it is always an instant alert
     use_base: bool = False       # watch pages: resolve links against the page's <base href> (TIFR)
+    postback: bool = False       # watch pages: keep javascript:__doPostBack advert links (ASP.NET, PNB)
 
 
 @dataclass

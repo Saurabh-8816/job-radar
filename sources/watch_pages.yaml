@@ -1624,3 +1624,22 @@
   state: IN
   url: https://www.eximbankindia.in/careers
   job_links: 5
+- id: supreme-court-of-india
+  name: Supreme Court of India – Recruitments
+  group: central
+  state: IN
+  url: https://www.sci.gov.in/recruitments/
+  job_links: 10
+  note: Court Assistant, Junior Court Assistant, Court Master, Junior Translator, law clerks etc.
+- id: canara-bank
+  name: Canara Bank – Careers
+  group: psu
+  state: IN
+  url: https://www.canarabank.bank.in/career
+  job_links: 5
+- id: cuh-vacancy-positions
+  name: Central University of Haryana – Vacancy positions
+  group: academic
+  state: IN
+  url: https://www.cuh.ac.in/vacancy-positions.aspx
+  job_links: 5

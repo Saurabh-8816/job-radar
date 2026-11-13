@@ -72,6 +72,29 @@ def _looks_random(value: str) -> bool:
     return bool(_RANDOMISH.fullmatch(value) and re.search(r"\d", value) and re.search(r"[A-Za-z]", value))
 
 
+_NOT_A_NAME = re.compile(r"(?i)^\s*(publish(ed)?\s+date|date|end\s+date|last\s+date|\d{1,2}[./-]\d{1,2}[./-]\d{2,4})")
+
+
+def _lead_text(a):
+    """The line just above a link's block that names the post (skipping date lines)."""
+    block = a
+    for parent in list(a.parents)[:3]:
+        if parent.find_previous_sibling() is not None:
+            block = parent
+            break
+    for sib in block.find_previous_siblings(limit=4):
+        t = clean(sib.get_text(" "))
+        if len(t) >= 15 and not _NOT_A_NAME.match(t):
+            return t[:200]
+    return ""
+
+
+def _postback_key(page_url: str, text: str, context: str) -> str:
+    """Identity of a postback link: the list page plus the link's text and row."""
+    context = _ROW_NUMBER.sub("", context)
+    return f"pb:{normalize_url(page_url)}|" + hashlib.sha1(f"{text}|{context}".encode("utf-8")).hexdigest()[:16]
+
+
 def is_portal_root(url: str, page_url: str = "") -> bool:
     """A bare site root on another host: an application portal that every notice links to
     (CSIR-IMMT's adverts all point to https://rects.immt.res.in/). Such a URL can't tell
@@ -208,11 +231,15 @@ def parse(html: str, page_url: str, source) -> ParseResult:
     link_base = join_url(page_url, base["href"].strip()) if base and base["href"].strip() else page_url
 
     items, seen = [], set()
+    allow_postback = getattr(source, "postback", False)
     for a in _links(_scopes(soup, source.selector)):
         href = a["href"].strip()
-        if not href or href.lower().startswith(_SKIP_SCHEMES):
+        # ASP.NET sites (PNB) open each advert through javascript:__doPostBack(...): no URL
+        # of its own, so on sources that opt in the row becomes a notice on the list page.
+        postback = allow_postback and href.lower().startswith("javascript:__dopostback")
+        if not href or (href.lower().startswith(_SKIP_SCHEMES) and not postback):
             continue
-        url = join_url(link_base, href)
+        url = page_url if postback else join_url(link_base, href)
         if not url.startswith("http"):
             continue
 
@@ -221,11 +248,16 @@ def parse(html: str, page_url: str, source) -> ParseResult:
             continue
         row = _context_element(a)
         context = clean(row.get_text(" "))[:400] if row else text
-        key_hint = stable_key(url, text, context, page_url)
+        key_hint = (_postback_key(page_url, text, context) if postback
+                    else stable_key(url, text, context, page_url))
         if (key_hint or url) in seen:   # one item per notice; a shared portal link can carry several
             continue
         seen.add(key_hint or url)
         title = text if (len(text) >= 12 and not _says_nothing(text)) else (context or text)
+        if postback and _says_nothing(text):
+            lead = _lead_text(a)
+            if lead:   # PNB: "<p>RECRUITMENT OF LOCAL BANK OFFICERS…</p> <div><a>DETAILED ADVERTISEMENT</a>…</div>"
+                title = f"{lead} – {text}"
         if not title:
             continue
         section, block = _section_of(a, headings)

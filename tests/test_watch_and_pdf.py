@@ -259,3 +259,26 @@ def test_file_name_link_text_takes_the_row_title():
             '<td><a href="/pdfdownload/17_01_Engineer_(Fatigue Lab).pdf">Adv 17_01.pdf</a></td></tr></table>')
     (item,) = watch.parse(html, "https://www.nitcon.org/Career/", _src()).items
     assert "Engineer" in item.title and "NIT/ICAT/2026-27/17/01" in item.title
+
+
+def test_postback_advert_links_are_kept_on_sources_that_opt_in():
+    # PNB: <tr><td>Recruitment of Specialist Officers 2026</td><td><a href="javascript:__doPostBack(...)">DETAILED ADVERTISEMENT (ENGLISH)</a></td></tr>
+    html = ('<table><tr><td>Recruitment of Specialist Officers 2026-27</td><td>'
+            "<a href=\"javascript:__doPostBack('ctl00$rptGrid$ctl00$lnkTitle_0','')\">DETAILED ADVERTISEMENT (ENGLISH)</a>"
+            '</td></tr></table>')
+    url = "https://pnb.bank.in/Recruitments.aspx"
+    src = Source(id="pnb", name="PNB", kind="watch", url=url, postback=True)
+    (item,) = watch.parse(html, url, src).items
+    assert item.url == url and item.key.startswith("pb:") and "Specialist Officers" in item.title
+    assert watch.parse(html, url, _src()).items == []      # sources that don't opt in: skipped as before
+
+
+def test_postback_advert_takes_the_post_name_above_it():
+    html = ('<div class="recruitment-content"><h2>20.07.2026</h2><p>RECRUITMENT OF LOCAL BANK OFFICERS UNDER HRP 2026-27</p>'
+            '<p>Publish Date : 11-Nov-2026 10:00 AM</p><div id="g0"><p>'
+            "<a href=\"javascript:__doPostBack('ctl00$rptGrid$ctl00$lnkTitle_0','')\">DETAILED ADVERTISEMENT (ENGLISH)</a>"
+            ' Publish Date -: 20-Jul-2026 End Date -: 01-Mar-2027</p></div></div>')
+    url = "https://pnb.bank.in/Recruitments.aspx"
+    src = Source(id="pnb", name="PNB", kind="watch", url=url, postback=True)
+    (item,) = watch.parse(html, url, src).items
+    assert item.title.startswith("RECRUITMENT OF LOCAL BANK OFFICERS UNDER HRP 2026-27")

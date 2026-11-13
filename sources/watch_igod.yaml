@@ -776,8 +776,9 @@
   name: Bank of Baroda
   group: central
   state: IN
-  url: https://www.bankofbaroda.in/
+  url: https://bankofbaroda.bank.in/career/current-opportunities
   job_links: 16
+  note: moved to bankofbaroda.bank.in (Nov 2026)
 - id: bank-of-ideas-and-innovations
   name: Bank of Ideas and Innovations
   group: central
@@ -796,9 +797,9 @@
   name: Bank of Maharashtra
   group: central
   state: MH
-  url: https://bankofmaharashtra.in/
+  url: https://bankofmaharashtra.bank.in/careers
   job_links: 0
-  note: unreachable at discovery (ConnectTimeout); homepage watched
+  note: moved to the .bank.in domain; old bankofmaharashtra.in times out
 - id: baroda-uttar-pradesh-gramin-bank
   name: Baroda Uttar Pradesh Gramin Bank
   group: central
@@ -2301,7 +2302,7 @@
   name: Central University of Haryana
   group: central
   state: HR
-  url: https://www.cuh.ac.in/
+  url: https://www.cuh.ac.in/cuh-jobs.aspx
   job_links: 7
 - id: central-university-of-himachal-pradesh
   name: Central University of Himachal Pradesh
@@ -6470,8 +6471,9 @@
   name: Indian Overseas Bank
   group: central
   state: IN
-  url: https://www.iob.in/
+  url: https://www.iob.bank.in/en/careers
   job_links: 8
+  note: careers page on the .bank.in domain (was the iob.in homepage)
 - id: indian-pharmacopoeia-commission-ipc
   name: Indian Pharmacopoeia Commission (IPC)
   group: central
@@ -6811,7 +6813,7 @@
   name: Institute for Plasma Research (IPR)
   group: central
   state: GJ
-  url: https://www.ipr.res.in/
+  url: https://www.ipr.res.in/opportunities/current-opening-recruitment
   job_links: 0
   note: no job links found yet (page may be built with JavaScript); review
 - id: institute-for-stem-cell-science-and-regenerative-medicine
@@ -13378,6 +13380,8 @@
   state: DL
   url: https://www.stqc.gov.in/vacancies
   job_links: 8
+  filter_jobs: false   # links are bare file names ("Consultant (Level-6)-2026.pdf"); every link here is a vacancy
+  note: STQC labs incl. ERTL (East) Kolkata post here
 - id: standing-conference-of-public-enterprises-scope
   name: Standing Conference of Public Enterprises (SCOPE)
   group: central
@@ -15609,8 +15613,10 @@
   name: Punjab National Bank (PNB)
   group: psu
   state: IN
-  url: https://www.pnbindia.in/
+  url: https://pnb.bank.in/Recruitments.aspx
+  postback: true   # each advert opens via __doPostBack
   job_links: 9
+  note: recruitment page on the .bank.in domain (was the pnbindia.in homepage)
 - id: rail-vikas-nigam-limited
   name: Rail Vikas Nigam Limited
   group: psu
@@ -15778,9 +15784,9 @@
   name: Union Bank of India
   group: psu
   state: IN
-  url: https://www.unionbankofindia.co.in/
+  url: https://www.unionbankofindia.bank.in/en/common/recruitment
   job_links: 0
-  note: unreachable at discovery (ConnectTimeout); homepage watched
+  note: moved to the .bank.in domain; old .co.in times out
 - id: united-india-insurance-company-limited
   name: United India Insurance Company Limited
   group: psu

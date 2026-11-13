@@ -12,6 +12,7 @@ import logging
 import os
 import re
 import shutil
+import threading
 import time
 from dataclasses import dataclass
 from functools import lru_cache
@@ -30,6 +31,10 @@ _DEVANAGARI = re.compile(r"[\u0900-\u097F]")
 LOCAL_TESSDATA = ROOT / ".tessdata"
 _WINDOWS_TESSERACT = Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 _IMAGE_EXT = (".jpg", ".jpeg", ".png")
+# PDFium is not thread-safe, and adverts are read three at a time: two threads rendering
+# at once crashed a run with a segmentation fault (exit 139, 13 Nov 2026). Every PDFium
+# call happens under this lock; the slow part, Tesseract, still runs in parallel.
+_PDFIUM = threading.Lock()
 
 
 @dataclass
@@ -132,25 +137,42 @@ def extract(data: bytes, url: str = "", *, max_pages: int | None = None, ocr: bo
     langs = ocr_languages() if (ocr and (unreadable or thin)) else None
     done = 0
     if langs:
-        try:
-            import pypdfium2 as pdfium
-            pdf = pdfium.PdfDocument(data)
-            for i in sorted(unreadable + thin)[:ocr_pages]:
-                if deadline is not None and time.monotonic() > deadline:
-                    break
-                ocr_text = _ocr_image(pdf[i].render(scale=200 / 72).to_pil(), langs)
-                if _page_is_readable(ocr_text) and (
-                        i in unreadable or len(_LETTERS.findall(ocr_text)) > len(_LETTERS.findall(texts[i]))):
-                    texts[i] = ocr_text
-                done += 1
-            pdf.close()
-        except Exception:
-            pass
+        for i in sorted(unreadable + thin)[:ocr_pages]:
+            if deadline is not None and time.monotonic() > deadline:
+                break
+            image = _render_page(data, i)
+            if image is None:
+                break
+            ocr_text = _ocr_image(image, langs)
+            if _page_is_readable(ocr_text) and (
+                    i in unreadable or len(_LETTERS.findall(ocr_text)) > len(_LETTERS.findall(texts[i]))):
+                texts[i] = ocr_text
+            done += 1
 
     text = PAGE_BREAK.join(t if _page_is_readable(t) else "" for t in texts)
     if not is_useful(text):
         return DocText(text, "unreadable", page_count, done)
     return DocText(text, "ocr" if done else "text", page_count, done)
+
+
+def _render_page(data: bytes, index: int):
+    """One page as a standalone PIL image (200 dpi), rendered under the PDFium lock with
+    every PDFium object closed before the lock is released. None if it can't be rendered."""
+    with _PDFIUM:
+        try:
+            import pypdfium2 as pdfium
+            pdf = pdfium.PdfDocument(data)
+            try:
+                page = pdf[index]
+                bitmap = page.render(scale=200 / 72)
+                image = bitmap.to_pil().copy()      # detach from PDFium's buffer
+                bitmap.close()
+                page.close()
+                return image
+            finally:
+                pdf.close()
+        except Exception:
+            return None
 
 
 def _extract_image(data: bytes, ocr: bool) -> DocText:

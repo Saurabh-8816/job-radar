@@ -282,3 +282,19 @@ def test_postback_advert_takes_the_post_name_above_it():
     src = Source(id="pnb", name="PNB", kind="watch", url=url, postback=True)
     (item,) = watch.parse(html, url, src).items
     assert item.title.startswith("RECRUITMENT OF LOCAL BANK OFFICERS UNDER HRP 2026-27")
+
+
+def test_pages_render_safely_from_parallel_threads():
+    """PDFium isn't thread-safe; adverts are read three at a time (exit 139, 13 Nov 2026)."""
+    import io
+    from concurrent.futures import ThreadPoolExecutor
+    from PIL import Image
+    from radar import pdftext
+    buf = io.BytesIO()
+    pages = [Image.new("RGB", (400, 300), c) for c in ("white", "gray", "black")]
+    pages[0].save(buf, format="PDF", save_all=True, append_images=pages[1:])
+    data = buf.getvalue()
+    with ThreadPoolExecutor(max_workers=6) as pool:
+        images = list(pool.map(lambda i: pdftext._render_page(data, i % 3), range(18)))
+    assert all(im is not None and im.size[0] > 0 for im in images)
+    assert pdftext._render_page(b"not a pdf", 0) is None

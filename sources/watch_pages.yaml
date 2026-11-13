@@ -857,8 +857,17 @@
   group: academic
   state: IN
   url: https://www.manit.ac.in/
+  selector: '.modal-body.quick, #marqueeText, li.news-item'   # notice pop-up, ticker, news list (not the banner menu)
   job_links: 31
   runner: local
+- id: manit-non-teaching
+  name: MANIT Bhopal – Non-teaching recruitment
+  group: academic
+  state: IN
+  url: https://www.manit.ac.in/content/non-teaching-positions
+  job_links: 5
+  runner: local
+  note: Group B/C adverts and their schedules, syllabus and results
 - id: mnit-jaipur
   name: MNIT Jaipur
   group: academic

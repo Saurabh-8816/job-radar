@@ -288,3 +288,11 @@ def test_graduate_in_it_is_a_match(clf):
                      "Qualification & Experience: Graduate in IT. Experience 0-2 years, MS Office, AI tools")
     assert v.tier == "A"
     assert clf.classify("Graduate Engineer Trainee", "", "Graduate in Mechanical Engineering. Be it a graduate in it.").tier != "A"
+
+
+def test_last_day_for_applying_is_the_deadline(clf):
+    # EXIM Bank: "Website link opens 27-11-2026 Last day for applying and payment of Examination fee 11-12-2026"
+    body = ("Schedule of recruitment: Website link opens 27-11-2026 Last day for applying and payment "
+            "of Examination fee 11-12-2026 Tentative month of Written Examination December 2026")
+    v = classify(clf, "India Exim Bank Recruitment 2026: 120 Posts", body=body)
+    assert v.deadline == "2026-12-11"

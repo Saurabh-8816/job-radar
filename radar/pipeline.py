@@ -207,10 +207,14 @@ def _ingest_inbox(ctx: _Run):
             path.unlink()
 
 
+DEADLINE_RULES = "words-v2"   # bump when profile deadline_before/after learn new phrases
+
+
 def _backfill_deadlines(store, clf, today):
-    """One-off: deadlines written in words ("15th November, 2026") weren't recognised
-    before; re-read them from the advert text already stored. Runs once."""
-    if store.get_meta("deadline_backfill") == "words-v1":
+    """Re-read undated notices' deadlines from the advert text already stored, once per
+    version of the deadline rules: v1 dates in words ("15th November, 2026"); v2 "last
+    day for applying …" (EXIM Bank), "applications close on", "apply by"."""
+    if store.get_meta("deadline_backfill") == DEADLINE_RULES:
         return
     since = (today - timedelta(days=60)).isoformat()
     rows = store.db.execute(
@@ -222,7 +226,7 @@ def _backfill_deadlines(store, clf, today):
         if d:
             store.db.execute("UPDATE items SET deadline=? WHERE id=?", (d, r["id"]))
             found += 1
-    store.set_meta("deadline_backfill", "words-v1")
+    store.set_meta("deadline_backfill", DEADLINE_RULES)
     store.commit()
     print(f"Deadline backfill: {found} of {len(rows)} undated notices got a last date")
 

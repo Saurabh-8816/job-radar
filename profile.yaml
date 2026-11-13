@@ -323,7 +323,10 @@ region_filter:
 # deadline_after:  word within ~25 characters AFTER a date ("06/11/2026 तक" = "until").
 deadline_before:
   - re:last\s+date
+  - re:last\s+day\s+(for|of|to)\s+(apply|applying|application|submission|submitting|registration|online|receipt)   # EXIM Bank: "Last day for applying and payment of Examination fee 11-12-2026"
   - re:closing\s+date
+  - re:(applications?|registration)\s+(will\s+)?close[sd]?\s+on
+  - re:apply\s+(on\s*line\s+)?(by|before|till)
   - re:on\s+or\s+before
   - re:due\s+date
   - re:not\s+later\s+than

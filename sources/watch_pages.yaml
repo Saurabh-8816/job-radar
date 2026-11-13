@@ -1643,3 +1643,94 @@
   state: IN
   url: https://www.cuh.ac.in/vacancy-positions.aspx
   job_links: 5
+# ---- IIT project / research staff pages (Nov 2026 audit: faculty or main pages alone missed these) ----
+- id: iit-kharagpur-sric-temporary-jobs
+  name: IIT Kharagpur – SRIC project positions
+  group: academic
+  state: IN
+  kind: sric_kgp
+  url: https://erp.iitkgp.ac.in/SricWeb/viewTemporaryJobDetails.htm
+  filter_jobs: false
+  job_links: 22
+  note: JSON feed behind temporaryJobs.htm (the page fills its table from it)
+- id: iit-kharagpur-sric-staff-recruitment
+  name: IIT Kharagpur – SRIC staff recruitment (Project Scientist / Associate)
+  group: academic
+  state: IN
+  url: https://erp.iitkgp.ac.in/SRICStaffRecruitment/Advertise.jsp
+  enabled: false   # links are advView() scripts; the same posts come through the SRIC feed above
+  job_links: 5
+- id: iit-bombay-ircc-jobs
+  name: IIT Bombay – IRCC (R&D) job opportunities
+  group: academic
+  state: IN
+  url: https://rnd.iitb.ac.in/jobs
+  job_links: 10
+- id: iit-madras-project-positions
+  name: IIT Madras – Project positions
+  group: academic
+  state: IN
+  url: https://www.iitm.ac.in/careers/project-positions
+  job_links: 10
+- id: iit-kanpur-dord-research-staff
+  name: IIT Kanpur – DoRD scientific & research staff
+  group: academic
+  state: IN
+  url: https://www.iitk.ac.in/dord/scientific-and-research-staff
+  job_links: 20
+- id: iit-kanpur-staff-vacancies
+  name: IIT Kanpur – Staff / project vacancies
+  group: academic
+  state: IN
+  url: https://www.iitk.ac.in/staff-vacancies
+  job_links: 5
+- id: iit-jodhpur-project-staff
+  name: IIT Jodhpur – Project staff (R&D temporary jobs)
+  group: academic
+  state: IN
+  url: https://erponline.iitj.ac.in/RnDOutside/projectTemporaryAppointment.htm
+  render: true
+  job_links: 0
+  note: table is loaded by JavaScript
+- id: iit-jodhpur-non-teaching
+  name: IIT Jodhpur – Non-teaching staff
+  group: academic
+  state: IN
+  url: https://iitj.ac.in/office-of-recruitment-nf/en/non-teaching-staff-recruitment
+  job_links: 5
+- id: iit-patna-notices
+  name: IIT Patna – Notices (incl. project recruitment)
+  group: academic
+  state: IN
+  url: https://www.iitp.ac.in/notices
+  job_links: 10
+- id: iit-gandhinagar-project-positions
+  name: IIT Gandhinagar – Project positions
+  group: academic
+  state: IN
+  url: https://iitgn.ac.in/careers/staff
+  job_links: 5
+- id: iit-gandhinagar-contract-positions
+  name: IIT Gandhinagar – Contractual staff
+  group: academic
+  state: IN
+  url: https://iitgn.ac.in/careers/contract-positions
+  job_links: 5
+- id: iit-indore-project-positions
+  name: IIT Indore – Project positions
+  group: academic
+  state: IN
+  url: https://www.iiti.ac.in/careers/project_positions
+  job_links: 10
+- id: iit-goa-contract-positions
+  name: IIT Goa – Non-teaching (contract)
+  group: academic
+  state: IN
+  url: https://iitgoa.ac.in/non-teaching-position-on-contract/
+  job_links: 5
+- id: iit-dharwad-project-staff
+  name: IIT Dharwad – RA / iPDF & project staff
+  group: academic
+  state: IN
+  url: https://www.iitdh.ac.in/other-recruitments
+  job_links: 10

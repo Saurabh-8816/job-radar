@@ -53,6 +53,7 @@
   group: central
   state: IN
   url: https://amscau.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: academic-management-system-central-institute-of-fisheries-education
@@ -60,6 +61,7 @@
   group: central
   state: IN
   url: https://amscife.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: academic-management-system-indian-veterinary-research-institute
@@ -67,6 +69,7 @@
   group: central
   state: IN
   url: https://amsivri.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: academic-management-system-national-dairy-research-institute
@@ -74,6 +77,7 @@
   group: central
   state: IN
   url: https://amsndri.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: academic-management-system-university-of-horticultural-sciences-bagalkot
@@ -81,6 +85,7 @@
   group: central
   state: IN
   url: https://amsuhs.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: adi-prashikshan
@@ -200,6 +205,7 @@
   group: central
   state: IN
   url: https://education.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: agricultural-meteorology-division
@@ -1118,6 +1124,7 @@
   group: central
   state: TN
   url: https://caneinfo.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: canteen-stores-departments-mumbai
@@ -1896,6 +1903,7 @@
   group: central
   state: TN
   url: https://ciba.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: central-institute-of-buddhist-studies
@@ -2131,6 +2139,7 @@
   group: central
   state: WB
   url: https://crijaf.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: central-research-institute-for-siddha-tamil-nadu
@@ -4163,6 +4172,7 @@
   group: central
   state: HP
   url: https://dmrsolan.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: directorate-of-naval-veterans-dnv
@@ -4177,6 +4187,7 @@
   group: central
   state: IN
   url: https://iiopr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: directorate-of-oilseeds-development-dod
@@ -4191,6 +4202,7 @@
   group: central
   state: MH
   url: https://dogr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: directorate-of-ordnance-coordination-and-services-kolkata
@@ -5461,6 +5473,7 @@
   group: central
   state: IN
   url: https://iifsr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-bureau-of-agricultural-insect-resources-nbair-bangalore
@@ -5484,6 +5497,7 @@
   group: central
   state: IN
   url: https://ataribengaluru.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-research-complex-for-eastern-region-icar-rcer-patna
@@ -5491,6 +5505,7 @@
   group: central
   state: IN
   url: https://icarrcer.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-agricultural-technology-application-research-institute-atari-hyderabad
@@ -5498,6 +5513,7 @@
   group: central
   state: TG
   url: https://atari-hyderabad.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-agricultural-technology-application-research-institute-umiam
@@ -5512,6 +5528,7 @@
   group: central
   state: MP
   url: https://atarijabalpur.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-central-institute-for-research-on-buffaloes-cirb
@@ -5519,6 +5536,7 @@
   group: central
   state: IN
   url: https://cirb.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-central-institute-for-women-in-agriculture-icar-ciwa
@@ -5550,6 +5568,7 @@
   group: central
   state: IN
   url: https://cpri.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-central-tobacco-research-institute-rajahmundry
@@ -5557,6 +5576,7 @@
   group: central
   state: AP
   url: https://ctri.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-directorate-of-weed-research-dwr-jabalpur
@@ -5564,6 +5584,7 @@
   group: central
   state: IN
   url: https://dwr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-indian-agricultural-statistics-research-institute
@@ -5577,6 +5598,7 @@
   group: central
   state: MP
   url: https://iiss.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-indian-institute-of-water-management-bhubaneswar-odisha
@@ -5584,6 +5606,7 @@
   group: central
   state: OD
   url: https://iiwm.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-institute-of-aboitic-stress-management-malegaon
@@ -5591,6 +5614,7 @@
   group: central
   state: MH
   url: https://niasm.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-institute-of-high-security-animal-diseases
@@ -5605,6 +5629,7 @@
   group: central
   state: TG
   url: https://nrcmeat.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-research-centre-for-banana-tiruchirapalli
@@ -5612,6 +5637,7 @@
   group: central
   state: IN
   url: https://nrcb.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-research-centre-for-soybean-indore
@@ -5619,6 +5645,7 @@
   group: central
   state: IN
   url: https://iisrindore.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-research-centre-on-mithun-dimapur
@@ -5626,6 +5653,7 @@
   group: central
   state: IN
   url: https://nrcmithun.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icar-national-research-centre-on-plant-biotechnology-indian-agricultural-research-institute-new-delhi
@@ -5634,6 +5662,7 @@
   group: central
   state: DL
   url: https://iims.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: icfre-forest-research-institute-fri-dehradun
@@ -6313,6 +6342,7 @@
   group: central
   state: UP
   url: https://iisr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: indian-institute-of-tourism-and-travel-management-iittm
@@ -6357,6 +6387,7 @@
   group: central
   state: UP
   url: https://iivr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: indian-journal-of-educational-technology-journals-of-ncert
@@ -7785,6 +7816,7 @@
   group: central
   state: JK
   url: https://kvk.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: krishi-vigyan-kendra-east-kameng
@@ -8857,6 +8889,7 @@
   group: central
   state: IN
   url: https://nahep.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-agricultural-innovation-project
@@ -8864,6 +8897,7 @@
   group: central
   state: IN
   url: https://naip.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-agriculture-infra-financing-facility
@@ -9032,6 +9066,7 @@
   group: central
   state: UP
   url: https://nbaim.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-bureau-of-animal-genetic-resources-nbagr-karnal
@@ -9039,6 +9074,7 @@
   group: central
   state: IN
   url: https://nbagr.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-bureau-of-fish-genetic-resources-nbfgr-lucknow
@@ -9124,6 +9160,7 @@
   group: central
   state: IN
   url: https://ncipm.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-centre-for-medium-range-weather-forecasting-ncmrwf
@@ -10477,6 +10514,7 @@
   group: central
   state: IN
   url: https://nrccamel.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-research-centre-for-grapes-nrcg-pune-maharashtra
@@ -10484,6 +10522,7 @@
   group: central
   state: MH
   url: https://nrcgrapes.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-research-centre-for-groundnut-nrcg
@@ -10491,6 +10530,7 @@
   group: central
   state: GJ
   url: https://aicrp.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-research-centre-for-orchids-nrco
@@ -10498,6 +10538,7 @@
   group: central
   state: SK
   url: https://nrco.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: national-resource-centre-for-value-education
@@ -13462,6 +13503,7 @@
   group: central
   state: TN
   url: https://sugarcane.icar.gov.in/
+  enabled: false  # domain no longer exists; ICAR institutes moved to their own sites (see icar-* in watch_pages)
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: support-for-marginalized-individuals-for-livelihood-and-enterprise-smile

@@ -2170,3 +2170,481 @@
   state: WB
   url: 'https://www.iicb.res.in/careers/permanent'
   render: true
+- id: icar-hq-vacancies
+  name: ICAR (HQ) – Vacancies (ICAR, ASRB & other)
+  group: central
+  state: DL
+  url: 'https://icar.org.in/en/vacancies'
+  render: true
+- id: iiitnr-ai-coe
+  name: IIIT Naya Raipur – AI Centre of Excellence (IFTBIE)
+  kind: spa_bundle
+  group: academic
+  state: CG
+  url: 'https://www.iftbie.co.in/'
+  note: React app; the recruitment notice PDF is only linked from the JS bundle (Careers view)
+- id: icar-iari-jobs
+  name: ICAR-IARI New Delhi – Jobs
+  group: central
+  state: DL
+  url: 'https://iari.res.in/bms/announcements/jobs.php'
+- id: icar-ndri-recruitments
+  name: ICAR-NDRI Karnal – Recruitments
+  group: central
+  state: HR
+  url: 'https://ndri.res.in/recruitments'
+- id: icar-cift-jobs
+  name: ICAR-CIFT Kochi – Job opportunities
+  group: central
+  state: KL
+  url: 'https://www.cift.res.in/job-opportunities'
+- id: icar-ciwa-opportunities
+  name: ICAR-CIWA Bhubaneswar – Opportunities
+  group: central
+  state: OD
+  url: 'https://icar-ciwa.org.in/index.php/opportunities'
+- id: icar-nivedi-employment
+  name: ICAR-NIVEDI Bengaluru – Employment
+  group: central
+  state: KA
+  url: 'https://www.nivedi.res.in/employment.php'
+  render: true
+- id: icar-cafri
+  name: ICAR-CAFRI Jhansi – Vacancies
+  group: central
+  state: UP
+  url: 'https://cafri.res.in/vacancies/'
+- id: icar-cazri
+  name: ICAR-CAZRI Jodhpur – Job vacancies
+  group: central
+  state: RJ
+  url: 'https://www.cazri.res.in/English/job-vacancies.php'
+- id: icar-cari
+  name: ICAR-CARI Izatnagar – Vacancy
+  group: central
+  state: UP
+  url: 'https://cari.res.in/employee-vacancy'
+- id: icar-ccri
+  name: ICAR-CCRI Nagpur (citrus) – notices
+  group: central
+  state: MH
+  url: 'https://ccri.org.in/'
+- id: icar-ciah
+  name: ICAR-CIAH Bikaner – Employment
+  group: central
+  state: RJ
+  url: 'https://icar-ciah.org/index.php?mod=anouncmnt&do=anouncmnt_employmnt'
+- id: icar-cirb
+  name: ICAR-CIRB Hisar (buffaloes)
+  group: central
+  state: HR
+  url: 'https://cirb.res.in/'
+- id: icar-circ
+  name: ICAR-CIRC Meerut (cattle) – Recruitments
+  group: central
+  state: UP
+  url: 'https://circ.icar.gov.in/pages/recruitments.php'
+- id: icar-cirg
+  name: ICAR-CIRG Makhdoom (goats)
+  group: central
+  state: UP
+  url: 'https://www.cirg.res.in/'
+- id: icar-ciae
+  name: ICAR-CIAE Bhopal – Announcements
+  group: central
+  state: MP
+  url: 'https://ciae.res.in/announcements.html'
+- id: icar-cicfr
+  name: ICAR-CICFR Bhimtal – Employment
+  group: central
+  state: UK
+  url: 'https://cicfr.res.in/employment-opportunities/'
+- id: icar-cicr
+  name: ICAR-CICR Nagpur (cotton) – Jobs
+  group: central
+  state: MH
+  url: 'https://cicr.org.in/advertisement_category/jobs/'
+- id: icar-cish
+  name: ICAR-CISH Lucknow
+  group: central
+  state: UP
+  url: 'https://www.cish.org.in/'
+  render: true
+- id: icar-cith
+  name: ICAR-CITH Srinagar – Notifications
+  group: central
+  state: JK
+  url: 'https://www.icarcith.org.in/Home/AllNotifications'
+  render: true
+- id: icar-ciari
+  name: ICAR-CIARI Port Blair – Employment
+  group: central
+  state: AN
+  url: 'http://www.ciari.res.in/Employment.html'
+- id: icar-cifri-direct
+  name: ICAR-CIFRI Barrackpore – Direct recruitment
+  group: central
+  state: WB
+  url: 'http://www.cifri.res.in/Directrecruitment.html'
+- id: icar-cifri-walkin
+  name: ICAR-CIFRI Barrackpore – Walk-in interviews
+  group: central
+  state: WB
+  url: 'http://www.cifri.res.in/Walkininterview.html'
+- id: icar-ciba
+  name: ICAR-CIBA Chennai – Recruitment
+  group: central
+  state: TN
+  url: 'http://ciba.res.in/notices/recruitment/'
+- id: icar-cpcri
+  name: ICAR-CPCRI Kasaragod – Vacancies
+  group: central
+  state: KL
+  url: 'https://cpcri.gov.in/page/vacancies'
+- id: icar-cpri
+  name: ICAR-CPRI Shimla – Vacancies
+  group: central
+  state: HP
+  url: 'https://icarcpri.res.in//content/Index/?qlid=8896&Ls_is=10348&lngid=1'
+- id: icar-crijaf
+  name: ICAR-CRIJAF Barrackpore – Recruitment
+  group: central
+  state: WB
+  url: 'http://144.16.144.133/SideLinks/Others/Recruitment.php'
+- id: icar-crida
+  name: ICAR-CRIDA Hyderabad – Recruitment
+  group: central
+  state: TG
+  url: 'https://www.icar-crida.res.in/recruit.html'
+- id: icar-cswri
+  name: ICAR-CSWRI Avikanagar – Vacancies
+  group: central
+  state: RJ
+  url: 'http://www.cswri.res.in/announcement?activeTab=1'
+- id: icar-cssri
+  name: ICAR-CSSRI Karnal – Employment
+  group: central
+  state: HR
+  url: 'https://cssri.res.in/employment/'
+- id: icar-rcer
+  name: ICAR-RCER Patna – Recruitment
+  group: central
+  state: BR
+  url: 'https://icarrcer.org.in/recruitment-vacancy/'
+- id: icar-rc-neh
+  name: ICAR-RC for NEH Region Barapani – Employment
+  group: central
+  state: ML
+  url: 'http://www.icarneh.ernet.in/employment.html'
+- id: icar-iifsr
+  name: ICAR-IIFSR Modipuram – Recruitments
+  group: central
+  state: UP
+  url: 'https://www.iifsr.org.in/Recruitments.php'
+- id: icar-iiopr
+  name: ICAR-IIOPR Pedavegi – Opportunities
+  group: central
+  state: AP
+  url: 'https://iiopr.org.in/en/opportunities'
+- id: icar-iior
+  name: ICAR-IIOR Hyderabad (oilseeds)
+  group: central
+  state: TG
+  url: 'https://www.icar-iior.org.in/'
+  render: true
+- id: icar-iiswc
+  name: ICAR-IISWC Dehradun – Vacancies
+  group: central
+  state: UK
+  url: 'http://www.cswcrtiweb.org/index1.html?vacancy.html'
+- id: icar-iiwm
+  name: ICAR-IIWM Bhubaneswar – Employment
+  group: central
+  state: OD
+  url: 'https://www.iiwm.res.in/Employment-Opportunity.php'
+- id: icar-iiwbr
+  name: ICAR-IIWBR Karnal (wheat & barley)
+  group: central
+  state: HR
+  url: 'https://iiwbr.org.in/'
+- id: icar-igfri
+  name: ICAR-IGFRI Jhansi – Jobs & vacancies
+  group: central
+  state: UP
+  url: 'https://igfri.org.in/Job-Vacancies.aspx'
+- id: icar-iiab
+  name: ICAR-IIAB Ranchi
+  group: central
+  state: JH
+  url: 'https://icar-iiab.res.in/'
+- id: icar-iigr
+  name: ICAR-IIGR Junagadh – Career
+  group: central
+  state: GJ
+  url: 'https://icar-iigr.org.in/career/'
+- id: icar-iimr-maize
+  name: ICAR-IIMR Ludhiana (maize) – Vacancy
+  group: central
+  state: PB
+  url: 'https://www.iimr.res.in/events/vacancy'
+- id: icar-iipr
+  name: ICAR-IIPR Kanpur – Jobs
+  group: central
+  state: UP
+  url: 'https://www.icar-iipr.org.in/jobs/'
+- id: icar-iirmr
+  name: ICAR-IIRMR Bharatpur
+  group: central
+  state: RJ
+  url: 'https://iirmr.res.in/'
+  render: true
+- id: icar-iirr
+  name: ICAR-IIRR Hyderabad – Employment corner
+  group: central
+  state: TG
+  url: 'https://www.icar-iirr.org/index.php?option=com_content&view=article&id=72'
+- id: icar-iiss
+  name: ICAR-IISS Bhopal – Recruitment
+  group: central
+  state: MP
+  url: 'https://iiss.res.in/recruitment.php'
+- id: icar-iisr-spices
+  name: ICAR-IISR Kozhikode (spices) – Jobs
+  group: central
+  state: KL
+  url: 'https://spices.res.in/jobs'
+- id: icar-iisr-sugarcane
+  name: ICAR-IISR Lucknow (sugarcane) – Vacancies
+  group: central
+  state: UP
+  url: 'https://isri.res.in/iisr/pages/vacancynotice-hindi.jsp'
+- id: icar-iivr
+  name: ICAR-IIVR Varanasi – Recruitment
+  group: central
+  state: UP
+  url: 'https://icariivr.org.in/notification/recruitment/'
+- id: icar-naarm
+  name: ICAR-NAARM Hyderabad – Careers
+  group: central
+  state: TG
+  url: 'https://naarm.org.in/announcements/careers/'
+- id: icar-niasm
+  name: ICAR-NIASM Malegaon – Recruitment
+  group: central
+  state: MH
+  url: 'https://niam.res.in/Recruitment'
+- id: icar-nirca
+  name: ICAR-NIRCA Rajahmundry – Employment
+  group: central
+  state: AP
+  url: 'https://nirca.org.in/employment.php'
+- id: icar-nianp
+  name: ICAR-NIANP Bengaluru – Careers
+  group: central
+  state: KA
+  url: 'http://www.nianp.res.in/careers'
+- id: icar-nibsm
+  name: ICAR-NIBSM Raipur
+  group: central
+  state: CG
+  url: 'https://nibsm.org/'
+- id: icar-ninfet
+  name: ICAR-NINFET Kolkata – Recruitment
+  group: central
+  state: WB
+  url: 'http://www.nirjaft.res.in/Jobs'
+- id: icar-nipb
+  name: ICAR-NIPB New Delhi
+  group: central
+  state: DL
+  url: 'https://www.nipb.res.in/'
+  render: true
+- id: icar-nisa
+  name: ICAR-NISA Ranchi – Vacancies
+  group: central
+  state: JH
+  url: 'https://www.nisa.res.in/index.php/vacancies/'
+- id: icar-nifmd
+  name: ICAR-NIFMD Bhubaneswar – Employment
+  group: central
+  state: OD
+  url: 'http://www.nifmd.res.in/employment.php'
+- id: icar-nmri
+  name: ICAR-NMRI Hyderabad (meat) – Jobs
+  group: central
+  state: TG
+  url: 'https://www.nmri.res.in/page/jobs'
+- id: icar-nriipm
+  name: ICAR-NRIIPM New Delhi – Employment
+  group: central
+  state: DL
+  url: 'https://nriipm.res.in/employmenth.aspx'
+- id: icar-nrri-vacancies
+  name: ICAR-NRRI Cuttack – Vacancies
+  group: central
+  state: OD
+  url: 'https://icar-crri.in/vacancies/'
+- id: icar-nrri-walkin
+  name: ICAR-NRRI Cuttack – Walk-in interviews
+  group: central
+  state: OD
+  url: 'https://icar-crri.in/walk-in-intervew/'
+- id: icar-nsri
+  name: ICAR-NSRI Indore (soybean) – Vacancies
+  group: central
+  state: MP
+  url: 'https://icar-nsri.res.in/newwebsitehindi/vacancy.html'
+- id: icar-mgifri
+  name: ICAR-MGIFRI Motihari
+  group: central
+  state: BR
+  url: 'https://mgifri.org.in/'
+- id: icar-sbi
+  name: ICAR-SBI Coimbatore (sugarcane breeding) – Vacancy
+  group: central
+  state: TN
+  url: 'https://sugarcane.res.in/?page_id=3292'
+- id: icar-vpkas
+  name: ICAR-VPKAS Almora
+  group: central
+  state: UK
+  url: 'http://www.vpkas.nic.in/'
+- id: icar-atari-ludhiana
+  name: ICAR-ATARI Zone I Ludhiana
+  group: central
+  state: PB
+  url: 'http://atariz1.org.in/'
+- id: icar-atari-jodhpur
+  name: ICAR-ATARI Zone II Jodhpur – Recruitment
+  group: central
+  state: RJ
+  url: 'https://atarijodhpur.res.in/recruitment'
+- id: icar-atari-kanpur
+  name: ICAR-ATARI Zone III Kanpur
+  group: central
+  state: UP
+  url: 'https://atarikanpur.org.in/'
+- id: icar-atari-kolkata
+  name: ICAR-ATARI Zone V Kolkata
+  group: central
+  state: WB
+  url: 'https://www.atarikolkata.org/'
+- id: icar-atari-guwahati
+  name: ICAR-ATARI Zone VI Guwahati – Recruitment
+  group: central
+  state: AS
+  url: 'https://www.icaratariguwahati.org.in/recruitments'
+- id: icar-atari-jabalpur
+  name: ICAR-ATARI Zone IX Jabalpur – Career
+  group: central
+  state: MP
+  url: 'https://atarijabalpur.org/Career.html'
+- id: icar-atari-hyderabad
+  name: ICAR-ATARI Zone X Hyderabad
+  group: central
+  state: TG
+  url: 'https://atari-hyderabad.org.in/'
+- id: icar-atari-bengaluru
+  name: ICAR-ATARI Zone XI Bengaluru
+  group: central
+  state: KA
+  url: 'https://ataribengaluru.org/'
+  render: true
+- id: icar-dmr
+  name: ICAR-DMR Solan (mushroom) – Advertisements
+  group: central
+  state: HP
+  url: 'https://dmrsolan.res.in/html/advertisements.html'
+- id: icar-dogr
+  name: ICAR-DOGR Pune (onion & garlic)
+  group: central
+  state: MH
+  url: 'http://www.dogr.res.in/'
+- id: icar-dcr
+  name: ICAR-DCR Puttur (cashew)
+  group: central
+  state: KA
+  url: 'https://cashewresearch.in/'
+- id: icar-dfr
+  name: ICAR-DFR Pune (floriculture)
+  group: central
+  state: MH
+  url: 'https://icardfr.in/'
+  render: true
+- id: icar-dwr
+  name: ICAR-DWR Jabalpur (weed) – Jobs
+  group: central
+  state: MP
+  url: 'https://dwr.org.in/Vacancies.aspx'
+- id: icar-nbpgr
+  name: ICAR-NBPGR New Delhi
+  group: central
+  state: DL
+  url: 'https://nbpgr.org.in/'
+- id: icar-nbaim
+  name: ICAR-NBAIM Mau
+  group: central
+  state: UP
+  url: 'http://www.nbaim.org.in/'
+  render: true
+- id: icar-nbair
+  name: ICAR-NBAIR Bengaluru
+  group: central
+  state: KA
+  url: 'https://www.nbair.res.in/'
+  render: true
+- id: icar-nbsslup
+  name: ICAR-NBSS&LUP Nagpur – Jobs
+  group: central
+  state: MH
+  url: 'https://icar-nbsslup.org.in/jobs_viewmore/'
+- id: icar-nbagr
+  name: ICAR-NBAGR Karnal
+  group: central
+  state: HR
+  url: 'https://nbagr.res.in/'
+- id: icar-nrcb
+  name: ICAR-NRC Banana Trichy – Job opportunities
+  group: central
+  state: TN
+  url: 'https://nrcb.org.in/Pages/job_opportunities'
+- id: icar-nrcg
+  name: ICAR-NRC Grapes Pune – Employment
+  group: central
+  state: MH
+  url: 'https://www.nrcgrapes.in/Employment-opportunities.htm'
+- id: icar-nrc-litchi
+  name: ICAR-NRC Litchi Muzaffarpur – Recruitments
+  group: central
+  state: BR
+  url: 'https://nrclitchi.org.in/recruitments/'
+- id: icar-nrc-pomegranate
+  name: ICAR-NRC Pomegranate Solapur – Recruitment
+  group: central
+  state: MH
+  url: 'https://nrcpomegranate.in/recruitment/'
+- id: icar-nrce
+  name: ICAR-NRC Equines Hisar – Vacancies
+  group: central
+  state: HR
+  url: 'https://www.icarnrce.co.in/jobs'
+- id: icar-nrc-mithun
+  name: ICAR-NRC Mithun – Notices
+  group: central
+  state: NL
+  url: 'https://nrcm.org.in/notice_view_all.php'
+- id: icar-nrc-pig
+  name: ICAR-NRC Pig Guwahati – Jobs
+  group: central
+  state: AS
+  url: 'http://nrcpig.res.in/jobs_archive.php'
+- id: icar-nrcss
+  name: ICAR-NRC Seed Spices Ajmer – Vacancy
+  group: central
+  state: RJ
+  url: 'https://nrcssajmer.org.in/Indexnrcs.aspx?Sid=31'
+- id: icar-nrc-yak
+  name: ICAR-NRC Yak
+  group: central
+  state: AR
+  url: 'https://nrcy.org/'

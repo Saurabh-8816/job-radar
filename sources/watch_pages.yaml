@@ -1997,3 +1997,9 @@
   state: IN
   url: https://iiitr.ac.in/careers.html
   job_links: 5
+- id: nhrdf-vacancies
+  name: NHRDF (National Horticultural Research & Development Foundation) – Vacancies
+  group: central
+  state: MH
+  url: https://nhrdf.org/downloadvacancies.php
+  selector: '#dnn_ctr871_VacanciesDwnld_grdMkt'

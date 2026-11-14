@@ -2764,3 +2764,8 @@
   state: IN
   url: 'https://www.cdot.in/cdotweb/web/current_openings.php?lang=en'
   render: true
+- id: ihmcl-careers
+  name: IHMCL (Indian Highways Management Co., NHAI's FASTag/toll-tech arm) – Careers
+  group: psu
+  state: IN
+  url: 'https://ihmcl.co.in/careers/'

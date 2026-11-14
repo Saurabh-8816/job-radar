@@ -2753,3 +2753,14 @@
   group: central
   state: TG
   url: 'https://rrbsecunderabad.gov.in/'
+- id: nhai-direct-recruitment
+  name: NHAI – Direct recruitment (Deputy Manager Tech/IT etc.)
+  group: central
+  state: IN
+  url: 'https://nhai.gov.in/nhai/taxonomy/term/248'
+- id: cdot-current-openings
+  name: C-DOT – Current openings
+  group: central
+  state: IN
+  url: 'https://www.cdot.in/cdotweb/web/current_openings.php?lang=en'
+  render: true

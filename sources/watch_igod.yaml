@@ -8291,8 +8291,8 @@
   name: Military Engineering Service (MES)
   group: central
   state: IN
-  url: https://mes.gov.in/pers/recruitment/rules
-  job_links: 14
+  url: https://mes.gov.in/index.php/pers/recruitment/advertisement-circulars
+  note: was the recruitment-rules page; adverts are posted under Advertisement/Circulars
 - id: mineral-concessionaires-registration-system-indian-bureau-of-mines
   name: Mineral Concessionaires Registration System, Indian Bureau of Mines
   group: central

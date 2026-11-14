@@ -2003,3 +2003,12 @@
   state: MH
   url: https://nhrdf.org/downloadvacancies.php
   selector: '#dnn_ctr871_VacanciesDwnld_grdMkt'
+- id: cenjows-vacancies
+  name: CENJOWS (Centre for Joint Warfare Studies, MoD) – Vacancies
+  kind: sitemap
+  group: central
+  state: IN
+  url: https://cenjows.in/wp-sitemap-posts-page-1.xml
+  url_filter: ^https?://[^/]+/vacancies/
+  alert_on: research\s+(assistant|associate)|technical
+  note: vacancies page shows adverts only as images; each post also gets its own /vacancies/<slug>/ page, listed in this sitemap

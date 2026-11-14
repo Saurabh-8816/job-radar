@@ -3,6 +3,9 @@ engines of its articles from the last day or two, with titles and publish dates.
 
 Exam-news sites such as PW (pw.live) have no single "latest jobs" page, but publish one
 of these. Each article becomes an item; its page is read like any other notice page.
+
+A plain page sitemap works too, with `url_filter` keeping only the job pages (CENJOWS
+lists each vacancy as /vacancies/<post>/, while its vacancies page only shows images).
 """
 
 import html
@@ -25,6 +28,7 @@ def _title_from_url(url: str) -> str:
 def parse(text: str, page_url: str, source) -> ParseResult:
     if "<urlset" not in text[:2000] and "<url>" not in text:
         return ParseResult("unrecognized", [])
+    keep = re.compile(source.url_filter, re.I) if getattr(source, "url_filter", None) else None
     items = []
     for block in _URL.findall(text):
         loc = _LOC.search(block)
@@ -34,7 +38,7 @@ def parse(text: str, page_url: str, source) -> ParseResult:
         title = _TITLE.search(block)
         title = clean(html.unescape(title.group(1))) if title else _title_from_url(url)
         date = _DATE.search(block)
-        if not url.startswith("http") or not title:
+        if not url.startswith("http") or not title or (keep and not keep.search(url)):
             continue
         items.append(Item(source_id=source.id, title=title, url=url, notice_url=page_url,
                           start_date=date.group(1) if date else None))

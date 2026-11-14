@@ -26,3 +26,18 @@ def test_news_sitemap_articles_become_notices():
 
 def test_a_sitemap_index_or_html_page_is_flagged():
     assert sitemap.parse("<html><body>Maintenance</body></html>", SRC.url, SRC).status == "unrecognized"
+
+
+def test_url_filter_keeps_only_job_pages_of_a_page_sitemap():
+    src = Source(id="cenjows-vacancies", name="CENJOWS", kind="sitemap",
+                 url="https://cenjows.in/wp-sitemap-posts-page-1.xml",
+                 url_filter=r"^https?://[^/]+/vacancies/")
+    xml = """<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      <url><loc>https://cenjows.in/about-us/</loc></url>
+      <url><loc>https://cenjows.in/vacancies/technical-research-assistant/</loc></url>
+      <url><loc>https://cenjows.in/internship/</loc></url>
+      <url><loc>https://cenjows.in/publications/vacancies-in-the-army/</loc></url>
+    </urlset>"""
+    res = sitemap.parse(xml, src.url, src)
+    assert [i.url for i in res.items] == ["https://cenjows.in/vacancies/technical-research-assistant/"]
+    assert res.items[0].title == "Technical research assistant"

@@ -66,6 +66,7 @@ def _watch_source(w: dict) -> Source:
         region_filter=w.get("region_filter", False), render=w.get("render", False),
         every_hours=w.get("every_hours", 0), digest=digest, alert_on=w.get("alert_on"),
         use_base=w.get("use_base", False), postback=w.get("postback", False),
+        url_filter=w.get("url_filter"),
     )
 
 

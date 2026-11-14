@@ -29,6 +29,7 @@ class Source:
     alert_on: str | None = None  # regex: a title matching it is always an instant alert
     use_base: bool = False       # watch pages: resolve links against the page's <base href> (TIFR)
     postback: bool = False       # watch pages: keep javascript:__doPostBack advert links (ASP.NET, PNB)
+    url_filter: str | None = None  # sitemaps: keep only URLs matching this regex (CENJOWS /vacancies/)
 
 
 @dataclass

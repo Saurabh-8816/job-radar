@@ -193,7 +193,7 @@
   state: CG
   url: https://www.secl-cil.in/career
   job_links: 1
-  render: true
+  note: plain fetch lists the notices; the rendered page came back empty on GitHub
 - id: nmdc
   name: NMDC
   group: psu
@@ -2733,3 +2733,23 @@
   group: cg-state
   state: CG
   url: 'https://jskbmbilaspur.in/'
+- id: thdc-new-job-opening
+  name: THDC India – New job openings
+  group: psu
+  state: IN
+  url: 'https://www.thdc.co.in/en/career/new-job-opening'
+- id: balmer-lawrie-current-openings
+  name: Balmer Lawrie – Current openings
+  group: psu
+  state: IN
+  url: 'https://www.balmerlawrie.com/careers/current-openings'
+- id: mecon-careers
+  name: MECON Ltd (Ranchi) – Careers
+  group: psu
+  state: JH
+  url: 'https://www.meconlimited.co.in/'
+- id: rrb-secunderabad
+  name: RRB Secunderabad
+  group: central
+  state: TG
+  url: 'https://rrbsecunderabad.gov.in/'

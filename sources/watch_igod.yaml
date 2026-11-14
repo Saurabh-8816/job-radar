@@ -12160,7 +12160,7 @@
   name: Railway Recruitment Board (RRB), Mumbai
   group: central
   state: MH
-  url: https://www.rrbmumbai.gov.in/
+  url: https://rrbmumbai.gov.in/
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: railway-recruitment-board-rrb-muzaffarpur

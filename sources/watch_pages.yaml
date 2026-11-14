@@ -2012,3 +2012,161 @@
   url_filter: ^https?://[^/]+/vacancies/
   alert_on: research\s+(assistant|associate)|technical
   note: vacancies page shows adverts only as images; each post also gets its own /vacancies/<slug>/ page, listed in this sitemap
+- id: cftri-project-positions
+  name: CSIR-CFTRI Mysuru – Project positions
+  group: central
+  state: KA
+  url: 'https://www.cftri.res.in/recruitments/project-positions'
+- id: cftri-jrf-srf
+  name: CSIR-CFTRI Mysuru – JRF / SRF
+  group: central
+  state: KA
+  url: 'https://www.cftri.res.in/recruitments/jrf-srf'
+- id: cftri-regular
+  name: CSIR-CFTRI Mysuru – Regular positions
+  group: central
+  state: KA
+  url: 'https://www.cftri.res.in/recruitments/regular-positions'
+- id: serc-recruitment
+  name: CSIR-SERC Chennai – Recruitment
+  group: central
+  state: TN
+  url: 'https://www.serc.res.in/csir-recruitment'
+- id: ampri-project-staff
+  name: CSIR-AMPRI Bhopal – Project staff
+  group: central
+  state: MP
+  url: 'https://recttproject.ampri.res.in/index.php/projectstaffengagement'
+- id: ccmb-project
+  name: CSIR-CCMB Hyderabad – Project positions
+  group: central
+  state: TG
+  url: 'https://www.ccmb.res.in/job-notifications/?category=project'
+- id: ccmb-regular
+  name: CSIR-CCMB Hyderabad – Regular positions
+  group: central
+  state: TG
+  url: 'https://www.ccmb.res.in/job-notifications/?category=regular'
+- id: ceeri-project-staff
+  name: CSIR-CEERI Pilani – Project staff
+  group: central
+  state: RJ
+  url: 'https://www.ceeri.res.in/project-staff-recruitement'
+- id: csio-recruitment
+  name: CSIR-CSIO Chandigarh – Recruitment
+  group: central
+  state: CH
+  url: 'https://www.csio.res.in/CommonNew.php?ds=361&page=1'
+- id: csmcri-jobs
+  name: CSIR-CSMCRI Bhavnagar – Jobs
+  group: central
+  state: GJ
+  url: 'https://www.csmcri.res.in/jobs'
+- id: igib-advertisements
+  name: CSIR-IGIB Delhi – Project advertisements
+  group: central
+  state: DL
+  url: 'https://www.igib.res.in/Opportunities/advertisement_list.html'
+  render: true
+- id: iiim-temporary
+  name: CSIR-IIIM Jammu – Temporary (project) positions
+  group: central
+  state: JK
+  url: 'https://iiim.res.in/temporary-position'
+- id: iiim-permanent
+  name: CSIR-IIIM Jammu – Permanent positions
+  group: central
+  state: JK
+  url: 'https://iiim.res.in/permanent-position'
+- id: iip-recruitment
+  name: CSIR-IIP Dehradun – Recruitment
+  group: central
+  state: UK
+  url: 'https://www.iip.res.in/recruitment-2'
+- id: iitr-recruitment
+  name: CSIR-IITR Lucknow – Recruitment
+  group: central
+  state: UP
+  url: 'https://www.iitr.res.in/En/Recruitment.aspx'
+- id: immt-project-staff
+  name: CSIR-IMMT Bhubaneswar – Project staff
+  group: central
+  state: OD
+  url: 'https://rects.immt.res.in'
+- id: ncl-project-jobs
+  name: CSIR-NCL Pune – Project vacancies
+  group: central
+  state: MH
+  url: 'https://www.ncl.res.in/JoinUs/JobVacancies/TemporaryJobs'
+  render: true
+- id: ncl-temporary-vacancies
+  name: CSIR-NCL Pune – Temporary vacancies
+  group: central
+  state: MH
+  url: 'https://www.ncl.res.in/JoinUs/JobVacancies/TemporaryVacancies'
+  render: true
+- id: ngri-project-staff
+  name: CSIR-NGRI Hyderabad – Doctoral fellows & project staff
+  group: central
+  state: TG
+  url: 'https://www.ngri.res.in/cms/doctoralfellows.html'
+- id: niist-permanent
+  name: CSIR-NIIST Thiruvananthapuram – Permanent positions
+  group: central
+  state: KL
+  url: 'https://www.niist.res.in/opportunities-and-careers/permanent-positions'
+- id: nml-permanent
+  name: CSIR-NML Jamshedpur – Permanent positions
+  group: central
+  state: JH
+  url: 'https://nml.res.in/permanent-career-lists'
+- id: 4pi-positions
+  name: CSIR-4PI Bengaluru – Apply for a position
+  group: central
+  state: KA
+  url: 'https://www.csir4pi.res.in/index.php/en/careers/apply-for-a-position'
+- id: cbri-recruitments
+  name: CSIR-CBRI Roorkee – Recruitments
+  group: central
+  state: UK
+  url: 'https://cbri.res.in/notifications/recruitments/'
+- id: cecri-opportunities
+  name: CSIR-CECRI Karaikudi – Opportunities
+  group: central
+  state: TN
+  url: 'https://www.cecri.res.in/opportunities.aspx'
+- id: cimap-vacancies
+  name: CSIR-CIMAP Lucknow – Vacancies
+  group: central
+  state: UP
+  url: 'https://cimap.res.in/pages/Vacancies.aspx'
+- id: nio-temporary
+  name: CSIR-NIO Goa – Temporary (project) positions
+  group: central
+  state: GA
+  url: 'https://www.nio.res.in/vacancies/temporary'
+  render: true
+- id: nio-permanent
+  name: CSIR-NIO Goa – Permanent positions
+  group: central
+  state: GA
+  url: 'https://www.nio.res.in/vacancies/permanent'
+  render: true
+- id: ihbt-recruitment
+  name: CSIR-IHBT Palampur – Recruitment
+  group: central
+  state: HP
+  url: 'https://www.ihbt.res.in/en/other-links/recruitment'
+  render: true
+- id: iicb-careers-temporary
+  name: CSIR-IICB Kolkata – Temporary (project) positions
+  group: central
+  state: WB
+  url: 'https://www.iicb.res.in/careers/temporary'
+  render: true
+- id: iicb-careers-permanent
+  name: CSIR-IICB Kolkata – Permanent positions
+  group: central
+  state: WB
+  url: 'https://www.iicb.res.in/careers/permanent'
+  render: true

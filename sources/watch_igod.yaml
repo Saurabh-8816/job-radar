@@ -1970,9 +1970,8 @@
   name: Central Institute of Mining and Fuel Research (CIMFR), Jharkhand
   group: central
   state: JH
-  url: https://www.cimfr.nic.in/
-  job_links: 0
-  note: unreachable at discovery (ConnectionError); homepage watched
+  url: https://cimfr.res.in/vacancies.html
+  note: moved from cimfr.nic.in (unreachable) to cimfr.res.in
 - id: central-institute-of-plastics-engineering-and-technology-cipet
   name: Central Institute of Plastics Engineering and Technology (CIPET)
   group: central

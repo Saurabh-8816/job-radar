@@ -1516,10 +1516,9 @@
   name: IBITF – IIT Bhilai Innovation and Technology Foundation (TIH)
   group: academic
   state: CG
-  url: https://www.ibitf.co.in/
+  url: https://www.ibitf.co.in/career
   render: true
-  job_links: 0
-  note: IIT Bhilai's Technology Innovation Hub; hires its own technical/finance/legal/project staff (site has a "Career" link). Added Nov 2026 while the site was unreachable (connection refused from laptop and scrapers) - check health; IBITF-funded project posts also appear on iit-bhilai-project-staff
+  note: IIT Bhilai's Technology Innovation Hub (React app). The /career route renders a table (post, qualification, last date, advert PDF) from the JS bundle; IBITF-funded project posts also appear on iit-bhilai-project-staff
 - id: icmr-nirth-jabalpur
   name: ICMR-National Institute for Tribal Health Research (NIRTH), Jabalpur
   group: central

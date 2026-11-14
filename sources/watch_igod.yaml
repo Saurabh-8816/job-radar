@@ -15351,6 +15351,7 @@
   group: psu
   state: IN
   url: https://nicportal.nic.co.in/
+  enabled: false  # dead address; see national-insurance-recruitment
   job_links: 0
   note: unreachable at discovery (HTTP 403); homepage watched
 - id: national-internet-exchange-of-india-nixi
@@ -15821,6 +15822,7 @@
   group: psu
   state: IN
   url: https://www.uco.bank.in/
+  enabled: false  # homepage only; see uco-bank-job-opportunities
   job_links: 45
 - id: union-bank-of-india
   name: Union Bank of India

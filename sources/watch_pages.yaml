@@ -2647,3 +2647,89 @@
   group: central
   state: AR
   url: 'https://nrcy.org/'
+- id: uco-bank-job-opportunities
+  name: UCO Bank – Job opportunities
+  group: psu
+  state: IN
+  url: 'https://www.uco.bank.in/job-opportunities'
+- id: ippb-current-openings
+  name: India Post Payments Bank (IPPB) – Current openings
+  group: psu
+  state: IN
+  url: 'https://ippbonline.bank.in/web/ippb/current-openings'
+- id: nhb-careers
+  name: National Housing Bank – Careers
+  group: central
+  state: IN
+  url: 'https://nhb.org.in/en/careers/'
+- id: national-insurance-recruitment
+  name: National Insurance Co. – Recruitment
+  group: psu
+  state: IN
+  url: 'https://nationalinsurance.nic.co.in/recruitment'
+- id: nabfid-careers
+  name: NaBFID (National Bank for Financing Infrastructure & Development) – Careers
+  group: central
+  state: IN
+  url: 'https://nabfid.org/careers'
+  render: true
+- id: oriental-insurance-careers
+  name: Oriental Insurance – Careers
+  group: psu
+  state: IN
+  url: 'https://orientalinsurance.org.in/careers'
+  render: true
+- id: aic-careers
+  name: Agriculture Insurance Co. of India – Careers
+  group: psu
+  state: IN
+  url: 'https://www.aicofindia.com/careers'
+  render: true
+- id: ecgc-careers
+  name: ECGC – Careers
+  group: psu
+  state: IN
+  url: 'https://www.ecgc.in/careers/'
+  render: true
+- id: cg-rajya-gramin-bank
+  name: Chhattisgarh Rajya Gramin Bank – Career
+  group: cg-state
+  state: CG
+  url: 'https://cgb.bank.in/Home/Page/Career'
+- id: dccb-raipur-vacancy
+  name: District Cooperative Central Bank Raipur – Recruitment
+  group: cg-state
+  state: CG
+  url: 'https://jskbraipur.bank.in/vacancy'
+- id: dccb-raipur-notices
+  name: District Cooperative Central Bank Raipur – Notices
+  group: cg-state
+  state: CG
+  url: 'https://jskbraipur.bank.in/notices'
+- id: dccb-durg
+  name: District Cooperative Central Bank Durg
+  group: cg-state
+  state: CG
+  url: 'https://jskbdurg.bank.in/'
+  render: true
+- id: dccb-ambikapur-recruitment
+  name: District Cooperative Central Bank Ambikapur – Recruitment
+  group: cg-state
+  state: CG
+  url: 'https://jskbambikapur.bank.in/portal/recruitment/'
+- id: dccb-rajnandgaon-recruitment
+  name: District Cooperative Central Bank Rajnandgaon – Recruitment
+  group: cg-state
+  state: CG
+  url: 'https://www.jskbrjn.bank.in/portal/?post_type=recruitment'
+- id: dccb-jagdalpur
+  name: District Cooperative Central Bank Jagdalpur
+  group: cg-state
+  state: CG
+  url: 'https://www.jskbjdp.com/'
+  render: true
+- id: dccb-bilaspur
+  name: District Cooperative Central Bank Bilaspur
+  group: cg-state
+  state: CG
+  url: 'https://jskbmbilaspur.in/'

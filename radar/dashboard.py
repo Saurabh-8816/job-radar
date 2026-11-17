@@ -3,12 +3,15 @@ installable app (manifest, service worker, icons). Opens from disk as a plain pa
 served over https (GitHub Pages) it installs on a phone and works offline."""
 
 import json
+import re
 import shutil
 from datetime import timedelta
 from pathlib import Path
 
 from . import SITE_DIR
 from .notify import Telegram
+from .models import TRACK_PREFIX
+from .sources import load_sources
 from .textutil import now_ist_iso, today_ist
 
 TEMPLATES = Path(__file__).parent / "templates"
@@ -24,8 +27,23 @@ AREA = {
 }
 
 
+def _tracked() -> dict:
+    """source id -> (label, title pattern) for recruitments the user applied to."""
+    out = {}
+    for s in load_sources(None, runner=None):
+        if s.track and s.alert_on:
+            out[s.id] = (s.track, re.compile(s.alert_on, re.I))
+    return out
+
+
+def _track_of(r, tracked) -> str:
+    label, rule = tracked.get(r["source_id"], (None, None))
+    return label if label and rule.search(r["title"] or "") else ""
+
+
 def build(store, out_dir: Path = SITE_DIR) -> Path:
     today = today_ist()
+    tracked = _tracked()
     since = (today - timedelta(days=WINDOW_DAYS)).isoformat()
     items = []
     for r in store.dashboard_rows(since, today.isoformat()):
@@ -38,6 +56,10 @@ def build(store, out_dir: Path = SITE_DIR) -> Path:
             "kind": r["kind"], "tier": r["tier"], "matched": json.loads(r["matched"] or "[]")[:8],
             "reasons": json.loads(r["reasons"] or "[]"), "doc": r["doc_status"],
             "status": r["user_status"] or "",
+            # track: every notice of an applied-for recruitment, history included (My applications tab);
+            # pin: only those found after tracking was switched on, pinned until the user dismisses them
+            "track": _track_of(r, tracked),
+            "pin": any(x.startswith(TRACK_PREFIX) for x in json.loads(r["reasons"] or "[]")),
         })
     updated = now_ist_iso()
     payload = json.dumps({"updated": updated, "bot": bot_username(store), "health": _health(store),

@@ -81,6 +81,7 @@
   # Saurabh applied for DEO under this recruitment (Nov 2026): every new file for it
   # (corrigendum, admit card, exam date, answer key, result) is an instant alert
   alert_on: '(?i)notice dated 07\.?\s*aug\w*\.?\s*2026|data entry operator|\bDEO\b'
+  track: CSPC 2026 – Data Entry Operator (applied 17 Nov)
   note: JSON feed behind web.cspdcl.co.in/#/FrmViewRecruitment (cspc.co.in's homepage only had menu links)
 - id: cg-apex-cooperative-bank
   name: CG Apex Cooperative Bank
@@ -2917,4 +2918,5 @@
   url: 'https://cdn.digialm.com/EForms/configuredHtml/1258/102606/CA5JBy9lnHhL3sLrGu/Index.html'
   filter_jobs: false
   alert_on: '.'   # applied (DEO): anything new here — admit card, exam city, answer key, result — is instant
+  track: CSPC 2026 – Data Entry Operator (applied 17 Nov)
   note: reachable from GitHub, unlike escapi.cspdcl.co.in (laptop only); TCS iON posts call letters here

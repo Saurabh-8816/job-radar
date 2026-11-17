@@ -15,6 +15,7 @@ from pathlib import Path
 
 from rapidfuzz import fuzz, process
 
+from .models import TRACK_PREFIX
 from . import DEFAULT_DB, commands, dashboard, relay, render
 from .classify import Classifier
 from .docs import read_item_docs
@@ -69,7 +70,7 @@ def run(opts: RunOptions) -> Counter:
     _backfill_deadlines(store, clf, today)
     sources = load_sources(opts.only, runner=None if opts.runner == "all" else opts.runner)
     ctx.quiet = {s.id for s in sources if not s.digest}
-    ctx.alert_on = {s.id: re.compile(s.alert_on, re.I) for s in sources if s.alert_on}
+    ctx.alert_on = {s.id: AlertRule.of(s) for s in sources if s.alert_on}
     sources = due(sources, store.last_runs(), now_ist())
     for s in sources:
         store.sync_source(s)
@@ -191,7 +192,7 @@ def _ingest_inbox(ctx: _Run):
             if not source.digest:
                 ctx.quiet.add(source.id)
             if source.alert_on:
-                ctx.alert_on[source.id] = re.compile(source.alert_on, re.I)
+                ctx.alert_on[source.id] = AlertRule.of(source)
             if status == "failed":
                 ctx.store.source_failed(source.id, f"from laptop: {error or 'fetch failed'}")
                 ctx.stats["sources_failed"] += 1
@@ -231,6 +232,20 @@ def _backfill_deadlines(store, clf, today):
     print(f"Deadline backfill: {found} of {len(rows)} undated notices got a last date")
 
 
+@dataclass
+class AlertRule:
+    """A source's alert_on pattern; `track` names the application it follows, if any."""
+    pattern: re.Pattern
+    track: str | None = None
+
+    @classmethod
+    def of(cls, source) -> "AlertRule":
+        return cls(re.compile(source.alert_on, re.I), source.track)
+
+    def search(self, text: str):
+        return self.pattern.search(text)
+
+
 def _classify(store, clf, row, today, body="", body_status=None, save_doc=False, quiet=(), alert_on=None):
     verdict = clf.classify(row["title"], row["description"] or "", body,
                            row["end_date"], body_status, today)
@@ -238,6 +253,8 @@ def _classify(store, clf, row, today, body="", body_status=None, save_doc=False,
         # e.g. CTSP announcing a typing-test session: "कौशल परीक्षा" reads as an update elsewhere
         verdict.kind, verdict.tier = "new", "A"
         verdict.reasons.append("this source's notices of this kind are always alerted")
+        if getattr(rule, "track", None):
+            verdict.reasons.insert(0, f"{TRACK_PREFIX}{rule.track}")
     elif verdict.tier == "B" and row["source_id"] in quiet:
         # e.g. a KV walk-in in another state: kept on the dashboard, alerted only if it's a clear match
         verdict.tier = "C"

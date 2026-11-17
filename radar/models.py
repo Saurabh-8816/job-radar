@@ -6,6 +6,9 @@ from dataclasses import dataclass, field
 from .textutil import normalize_url
 
 
+TRACK_PREFIX = "your application: "   # reason marking a notice of a recruitment the user applied to
+
+
 @dataclass
 class Source:
     id: str
@@ -27,6 +30,7 @@ class Source:
     every_hours: int = 0         # 0 = every run; the bulk directory lists are checked less often
     digest: bool = True          # False: partial matches are stored quietly, only clear matches alert
     alert_on: str | None = None  # regex: a title matching it is always an instant alert
+    track: str | None = None     # an application the user made here: alert_on matches are pinned as "yours"
     use_base: bool = False       # watch pages: resolve links against the page's <base href> (TIFR)
     postback: bool = False       # watch pages: keep javascript:__doPostBack advert links (ASP.NET, PNB)
     url_filter: str | None = None  # sitemaps: keep only URLs matching this regex (CENJOWS /vacancies/)

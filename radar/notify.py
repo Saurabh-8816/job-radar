@@ -13,6 +13,7 @@ from datetime import date
 import requests
 
 from .textutil import days_left
+from .models import TRACK_PREFIX
 
 _API = "https://api.telegram.org/bot{token}/{method}"
 _TAG = re.compile(r"<[^>]+>")
@@ -132,7 +133,10 @@ def format_alert(row, source, today: date | None = None) -> str:
     evidence = [r for r in json.loads(row["reasons"] or "[]") if r.startswith("advert p.")]
     title = html.escape(row["title"][:280])
     i = row["id"]
+    tracked = [r[len(TRACK_PREFIX):] for r in json.loads(row["reasons"] or "[]")
+               if r.startswith(TRACK_PREFIX)]
     lines = [
+        *[f"📌 <b>YOUR APPLICATION – {html.escape(t)}</b>" for t in tracked[:1]],
         f"<b>{title}</b>",
         html.escape(where(source)),
         f"⏳ {deadline_phrase(row['deadline'], today)}",

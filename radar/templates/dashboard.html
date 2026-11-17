@@ -106,6 +106,17 @@ main { max-width: 820px; margin: 0 auto; padding: 12px 16px calc(env(safe-area-i
 .banner b { color: var(--accent); }
 .banner button { margin-left: auto; border: 0; background: transparent; color: var(--muted); font-size: 13px; }
 .count { color: var(--muted); font-size: 13px; margin: 2px 2px 8px; }
+/* "your application" pins: notices of a recruitment the user applied to */
+.pins { display: grid; gap: 8px; margin-bottom: 12px; }
+.pin {
+  border: 2px solid var(--hot); background: var(--hot-soft); border-radius: 12px; padding: 10px 12px; font-size: 14px;
+}
+.pin .k { font-size: 12px; font-weight: 700; color: var(--hot); letter-spacing: .02em; text-transform: uppercase; }
+.pin a { display: block; font-weight: 600; margin: 4px 0 2px; overflow-wrap: anywhere; }
+.pins .meta { font-size: 12.5px; color: var(--muted); }
+.pins button { margin-top: 2px; font-weight: 600; color: var(--hot); border: 1px solid var(--line); background: var(--surface); border-radius: 9px; height: 32px; padding: 0 10px; font-size: 13px; }
+.card.tracked { border: 2px solid var(--hot); }
+.chip.trk { background: var(--hot-soft); color: var(--hot); }
 
 /* cards */
 .list { display: grid; gap: 10px; }
@@ -203,6 +214,7 @@ details .docs a { color: var(--accent); }
       <label class="check"><input type="checkbox" id="closed"> Include closed</label>
       <button class="btn reset" id="reset">Reset filters</button>
     </div>
+    <div class="pins" id="pins" hidden></div>
     <div class="banner" id="banner" hidden></div>
     <div class="count" id="count" aria-live="polite"></div>
     <div class="list" id="list"></div>
@@ -259,6 +271,8 @@ addEventListener("pagehide", () => store.set("last-visit", DATA.updated));
 const open = (i) => i.deadline === null || daysLeft(i.deadline) >= 0;
 const live = (i) => statusOf(i) !== "hidden";
 const VIEWS = [
+  {id: "mine", label: "📌 My applications", test: (i) => !!i.track, sort: "new", allClosed: true,
+   empty: "Nothing yet. Every notice about a recruitment you applied to (admit card, exam date, answer key, result) lands here and on Telegram instantly."},
   {id: "foryou", label: "For you", test: (i) => i.tier === "A" && i.kind === "new" && live(i), sort: "deadline",
    empty: "No open matches right now. New ones arrive on Telegram the moment they're found."},
   {id: "closing", label: "Closing soon", test: (i) => i.kind === "new" && i.tier !== "C" && i.deadline && daysLeft(i.deadline) >= 0 && daysLeft(i.deadline) <= 7 && live(i) && statusOf(i) !== "applied", sort: "deadline",
@@ -351,11 +365,12 @@ function card(i) {
     .concat(i.url && i.url !== i.page && !i.docs.some(([, u]) => u === i.url)
       ? [`<a href="${esc(i.url)}" target="_blank" rel="noopener">Advert page</a>`] : [])
     .concat(`<a href="${esc(i.page)}" target="_blank" rel="noopener">Notice page</a>`);
-  return `<article class="card ${isNew(i) ? "is-new" : ""} ${s}" data-id="${i.id}">
+  return `<article class="card ${isNew(i) ? "is-new" : ""} ${i.track ? "tracked" : ""} ${s}" data-id="${i.id}">
     <div class="row">
       ${deadlineChip(i)}
       ${isNew(i) ? `<span class="chip new">New</span>` : ""}
-      ${i.tier === "A" ? `<span class="chip tA">Match</span>` : ""}
+      ${i.track ? `<span class="chip trk">📌 Your application · ${esc(i.track)}</span>` : ""}
+      ${i.tier === "A" && !i.track ? `<span class="chip tA">Match</span>` : ""}
       ${i.kind === "update" ? `<span class="chip upd">Update</span>` : ""}
       ${s === "applied" ? `<span class="chip st">Applied</span>` : ""}
     </div>
@@ -420,6 +435,7 @@ function render() {
   $("sources-view").hidden = view.id !== "sources";
   if (view.id === "sources") return renderSources();
   $("filter-btn").innerHTML = "Filters" + (activeFilters() ? ` <span class="dot" aria-label="${activeFilters()} active"></span>` : "");
+  renderPins();
   const list = rows(view);
   const fresh = lastVisit ? list.filter(isNew).length : 0;
   $("banner").hidden = !fresh;
@@ -430,6 +446,20 @@ function render() {
     : `<div class="empty">${esc(view.empty)}${activeFilters() || $("q").value ? "<br>Try clearing the search or filters." : ""}</div>`;
   const more = $("more");
   if (more) more.onclick = () => { state.shown += 60; render(); };
+}
+// Unread notices about recruitments the user applied to stay pinned on every tab until dismissed.
+function renderPins() {
+  const seen = store.get("pins-seen", "");
+  const pins = DATA.items.filter((i) => i.pin && i.track && i.at > seen).sort((a, b) => b.at.localeCompare(a.at));
+  $("pins").hidden = !pins.length;
+  $("pins").innerHTML = pins.slice(0, 5).map((i) => `<div class="pin">
+      <div class="k">📌 New on your application · ${esc(i.track)}</div>
+      <a href="${esc(i.url || i.page)}" target="_blank" rel="noopener">${esc(i.title)}</a>
+      <div class="meta">${esc(i.source)} · found ${esc(ago(i.at))}</div>
+    </div>`).join("") + (pins.length ? `<div><button id="pins-ok">Got it, mark as seen</button>${
+      pins.length > 5 ? ` <span class="meta">+${pins.length - 5} more in 📌 My applications</span>` : ""}</div>` : "");
+  const ok = $("pins-ok");
+  if (ok) ok.onclick = () => { store.set("pins-seen", pins[0].at); render(); };
 }
 function renderSources() {
   const h = DATA.health;

@@ -116,6 +116,33 @@ def test_alert_on_rule_and_shifting_row_numbers(monkeypatch, tmp_path):
     assert stats["items_new"] == 1 and stats["alerts"] == 1
 
 
+def test_tracked_application_notices_are_instant_and_labelled(monkeypatch, tmp_path):
+    # The user applied for DEO: an admit-card notice (an "update" elsewhere) must alert, marked as theirs.
+    from radar.models import Source
+    from radar.notify import format_alert
+    src = Source(id="cspc", name="CG Power Companies", kind="watch", url="https://cspc.example/rec",
+                 group="cg-state", filter_jobs=False, alert_on=r"notice dated 07\.?\s*aug",
+                 track="CSPC 2026 DEO")
+    rows = ['<li><a href="/a.pdf">Notice dated 07.Aug.2026 - Advertisement</a></li>',
+            '<li><a href="/b.pdf">Notice dated 07.Aug.2026 - Admit card for CBT</a></li>',
+            '<li><a href="/c.pdf">Apprenticeship 2026-27 result</a></li>']
+    monkeypatch.setattr(pipeline, "load_sources", lambda only=None, **kw: [src])
+    monkeypatch.setattr(pipeline, "today_ist", lambda: TODAY)
+    opts = pipeline.RunOptions(dry_run=True, read_docs=False, build_site=False, db_path=tmp_path / "t.db")
+    for page in (rows[:1], rows):
+        monkeypatch.setattr(pipeline, "fetch_many", lambda urls, **kw: {
+            u: Response(u, True, 200, text="<ul>" + "".join(page) + "</ul>") for u in urls})
+        stats = pipeline.run(opts)
+    store = Store(tmp_path / "t.db")
+    got = {r["title"]: r for r in store.db.execute("SELECT * FROM items WHERE baseline=0")}
+    admit = next(r for t, r in got.items() if "Admit card" in t)
+    assert admit["tier"] == "A" and admit["kind"] == "new" and stats["alerts"] == 1
+    assert "your application: CSPC 2026 DEO" in admit["reasons"]
+    assert "YOUR APPLICATION" in format_alert(admit, store.source_of("cspc"))
+    other = next(r for t, r in got.items() if "Apprenticeship" in t)
+    assert "your application" not in (other["reasons"] or "")
+
+
 def test_same_notice_on_two_institute_pages_alerts_once(monkeypatch, tmp_path):
     empty = "<html><body><p>none</p></body></html>"
     _run_watch(monkeypatch, tmp_path, [empty, empty])

@@ -57,3 +57,15 @@ def test_app_sync_links_work_as_bot_commands():
         m = commands._CMD.match(text)
         assert m and m.group(1) == verb and m.group(2) == item, text
     assert commands._CMD.match("/start") is None
+
+
+def test_tracked_recruitment_gets_its_own_tab_and_pins(tmp_path, monkeypatch):
+    monkeypatch.setattr(dashboard, "today_ist", lambda: TODAY)
+    store, row_id = _store(tmp_path)
+    src_id = store.db.execute("SELECT source_id FROM items WHERE id=?", (row_id,)).fetchone()[0]
+    monkeypatch.setattr(dashboard, "_tracked", lambda: {src_id: ("CSPC 2026 DEO", re.compile("Programmer"))})
+    store.db.execute("UPDATE items SET reasons=? WHERE id=?", (json.dumps(["your application: CSPC 2026 DEO"]), row_id))
+    html = dashboard.build(store, tmp_path / "site").read_text(encoding="utf-8")
+    item = json.loads(re.search(r'<script id="data" type="application/json">(.*?)</script>', html, re.S).group(1))["items"][0]
+    assert item["track"] == "CSPC 2026 DEO" and item["pin"] is True
+    assert 'id="pins"' in html and "My applications" in html

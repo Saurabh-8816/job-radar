@@ -2882,3 +2882,28 @@
   group: central
   state: TG
   url: 'https://aiimsbibinagar.edu.in/nursingrecruitment.html'
+- id: niper-hyderabad-careers
+  name: NIPER Hyderabad – Careers & recruitment
+  group: academic
+  state: TG
+  url: 'https://niperhyd.ac.in/Careers_of_NIPER_Hyderabad.html'
+- id: niper-kolkata-careers
+  name: NIPER Kolkata – Careers
+  group: academic
+  state: WB
+  url: 'https://www.niperkolkata.edu.in/CareerNew.aspx'
+- id: niper-raebareli-nonteaching
+  name: NIPER Raebareli – Non-teaching positions
+  group: academic
+  state: UP
+  url: 'https://niperraebareli.edu.in/nonteaching.html'
+- id: niper-raebareli-project
+  name: NIPER Raebareli – Project recruitment
+  group: academic
+  state: UP
+  url: 'https://niperraebareli.edu.in/project.html'
+- id: niper-raebareli-teaching
+  name: NIPER Raebareli – Teaching positions
+  group: academic
+  state: UP
+  url: 'https://niperraebareli.edu.in/teaching.html'

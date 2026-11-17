@@ -78,6 +78,9 @@
   url: https://escapi.cspdcl.co.in/api/api/recruitment/pagination?page=1&limit=20
   filter_jobs: false   # the recruitment feed only; every file is a notice, corrigendum, syllabus or result
   runner: local        # escapi.cspdcl.co.in times out from GitHub's servers
+  # Saurabh applied for DEO under this recruitment (Nov 2026): every new file for it
+  # (corrigendum, admit card, exam date, answer key, result) is an instant alert
+  alert_on: '(?i)notice dated 07\.?\s*aug\w*\.?\s*2026|data entry operator|\bDEO\b'
   note: JSON feed behind web.cspdcl.co.in/#/FrmViewRecruitment (cspc.co.in's homepage only had menu links)
 - id: cg-apex-cooperative-bank
   name: CG Apex Cooperative Bank
@@ -2907,3 +2910,11 @@
   group: academic
   state: UP
   url: 'https://niperraebareli.edu.in/teaching.html'
+- id: cspc-2026-application-portal
+  name: CG Power Companies recruitment 2026 (Notice 07.Aug.2026) – TCS iON application portal
+  group: cg-state
+  state: CG
+  url: 'https://cdn.digialm.com/EForms/configuredHtml/1258/102606/CA5JBy9lnHhL3sLrGu/Index.html'
+  filter_jobs: false
+  alert_on: '.'   # applied (DEO): anything new here — admit card, exam city, answer key, result — is instant
+  note: reachable from GitHub, unlike escapi.cspdcl.co.in (laptop only); TCS iON posts call letters here

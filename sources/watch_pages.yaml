@@ -2769,3 +2769,116 @@
   group: psu
   state: IN
   url: 'https://ihmcl.co.in/careers/'
+- id: aiims-exams-recruitments
+  name: AIIMS Exams portal – Recruitments (CRE / NORCET, all AIIMS)
+  group: central
+  state: IN
+  url: 'https://aiimsexams.ac.in/landingpage/courses/68dbbb27b7b096817673976e'
+  render: true
+- id: aiims-exams-notices
+  name: AIIMS Exams portal – Notices
+  group: central
+  state: IN
+  url: 'https://aiimsexams.ac.in/landingpage/notice'
+  render: true
+- id: pmssy-aiims-vacancy
+  name: PMSSY (MoHFW) – Vacancies at AIIMS
+  group: central
+  state: IN
+  url: 'https://pmssy.mohfw.gov.in/index4.php?lang=1&level=0&linkid=76&lid=102'
+- id: aiims-mangalagiri-vacancies
+  name: AIIMS Mangalagiri – Vacancies
+  group: central
+  state: AP
+  url: 'https://www.aiimsmangalagiri.edu.in/vacancies'
+- id: aiims-nagpur-recruitment
+  name: AIIMS Nagpur – Recruitment
+  group: central
+  state: MH
+  url: 'https://aiimsnagpur.edu.in/recruitment'
+- id: aiims-raebareli-recruitments
+  name: AIIMS Raebareli – Recruitments
+  group: central
+  state: UP
+  url: 'https://aiimsrbl.edu.in/recruitments'
+- id: aiims-gorakhpur-recruitment
+  name: AIIMS Gorakhpur – Current recruitment notices
+  group: central
+  state: UP
+  url: 'https://aiimsgorakhpur.edu.in/category/current-recruitment-notice/'
+- id: aiims-bathinda-nonfaculty
+  name: AIIMS Bathinda – Non-faculty recruitment
+  group: central
+  state: PB
+  url: 'https://aiimsbathinda.edu.in/Recruitment.aspx?type=2'
+- id: aiims-bathinda-project
+  name: AIIMS Bathinda – Project posts
+  group: central
+  state: PB
+  url: 'https://aiimsbathinda.edu.in/Recruitment.aspx?type=4'
+- id: aiims-bilaspur-hp-nonfaculty
+  name: AIIMS Bilaspur (HP) – Non-faculty recruitment
+  group: central
+  state: HP
+  url: 'https://aiimsbilaspur.edu.in/recruitment/non-faculty'
+- id: aiims-bilaspur-hp-projects
+  name: AIIMS Bilaspur (HP) – Research project posts
+  group: central
+  state: HP
+  url: 'https://aiimsbilaspur.edu.in/recruitment/research-projects'
+- id: aiims-deoghar-recruitments
+  name: AIIMS Deoghar – Recruitment advertisements
+  group: central
+  state: JH
+  url: 'https://www.aiimsdeoghar.edu.in/recruitments/list'
+  render: true
+- id: aiims-guwahati
+  name: AIIMS Guwahati
+  group: central
+  state: AS
+  url: 'https://aiimsguwahati.ac.in/'
+  render: true
+- id: aiims-kalyani
+  name: AIIMS Kalyani
+  group: central
+  state: WB
+  url: 'https://aiimskalyani.edu.in/'
+  render: true
+- id: aiims-madurai-vacancies
+  name: AIIMS Madurai – Vacancy notices
+  group: central
+  state: TN
+  url: 'https://aiimsmadurai.edu.in/vacancy-notices.php'
+- id: aiims-awantipora-recruitment
+  name: AIIMS Awantipora (Kashmir) – Recruitments
+  group: central
+  state: JK
+  url: 'https://aiimsawantipora.edu.in/recruitment/'
+- id: aiims-rewari-nonfaculty
+  name: AIIMS Rewari – Non-faculty recruitment
+  group: central
+  state: HR
+  url: 'https://aiimsrewari.edu.in/nonfaculty.html'
+  render: true
+- id: aiims-patna-advertisement
+  name: AIIMS Patna – Recruitment notices
+  group: central
+  state: BR
+  url: 'https://aiimspatna.edu.in/advertisement'
+  render: true
+- id: aiims-jodhpur-nonfaculty
+  name: AIIMS Jodhpur – Non-faculty recruitment
+  group: central
+  state: RJ
+  url: 'https://aiimsjodhpur.edu.in/non-fac-rec.php'
+- id: aiims-rajkot
+  name: AIIMS Rajkot
+  group: central
+  state: GJ
+  url: 'https://www.aiimsrajkot.edu.in/'
+  render: true
+- id: aiims-bibinagar-nonfaculty
+  name: AIIMS Bibinagar – Nursing/paramedical recruitment
+  group: central
+  state: TG
+  url: 'https://aiimsbibinagar.edu.in/nursingrecruitment.html'

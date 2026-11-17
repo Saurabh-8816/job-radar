@@ -352,6 +352,7 @@
   group: central
   state: IN
   url: https://www.aiimsjodhpur.edu.in/
+  enabled: false  # homepage gave nothing; replaced by aiims-jodhpur-nonfaculty
   job_links: 0
   note: unreachable at discovery (ConnectionError); homepage watched
 - id: all-india-institute-of-medical-sciences-aiims-new-delhi
@@ -365,6 +366,7 @@
   group: central
   state: IN
   url: https://aiimspatna.edu.in/
+  enabled: false  # homepage gave nothing; replaced by aiims-patna-advertisement
   job_links: 0
   note: no job links found yet (page may be built with JavaScript); review
 - id: all-india-institute-of-medical-sciences-aiims-rajkot
@@ -372,6 +374,7 @@
   group: central
   state: GJ
   url: https://aiimsrajkot.edu.in/
+  enabled: false  # homepage gave nothing; replaced by aiims-rajkot
   job_links: 0
   note: no job links found yet (page may be built with JavaScript); review
 - id: all-india-institute-of-medical-sciences-aiims-rishikesh

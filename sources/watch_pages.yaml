@@ -2926,6 +2926,7 @@
   group: psu
   state: GA
   url: 'https://infotech.goa.gov.in/api/post/type/slug/announcements'
+  enabled: false   # Goa state company: posts need Goa residency + Konkani; Saurabh is CG domicile
   filter_jobs: false
   note: JSON behind infotech.goa.gov.in/announcements (rows have JS download buttons, no links)
 - id: itg-goa-appointments
@@ -2934,4 +2935,5 @@
   group: psu
   state: GA
   url: 'https://infotech.goa.gov.in/api/post/type/slug/appointments'
+  enabled: false   # Goa state company: posts need Goa residency + Konkani; Saurabh is CG domicile
   filter_jobs: false

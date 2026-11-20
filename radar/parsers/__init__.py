@@ -1,9 +1,9 @@
-from . import cspdcl, s3waas, saral, servicesetu, sitemap, spa_bundle, sric_kgp, watch
+from . import cms_posts, cspdcl, s3waas, saral, servicesetu, sitemap, spa_bundle, sric_kgp, watch
 
 PARSERS = {"s3waas": s3waas.parse, "watch": watch.parse, "servicesetu": servicesetu.parse,
            "sitemap": sitemap.parse, "cspdcl": cspdcl.parse,
            "saral": saral.parse, "sric_kgp": sric_kgp.parse,
-           "spa_bundle": spa_bundle.parse}
+           "spa_bundle": spa_bundle.parse, "cms_posts": cms_posts.parse}
 
 
 def parse(source, html: str, page_url: str):

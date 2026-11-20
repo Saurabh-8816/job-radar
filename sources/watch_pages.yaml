@@ -2920,3 +2920,18 @@
   alert_on: '.'   # applied (DEO): anything new here — admit card, exam city, answer key, result — is instant
   track: CSPC 2026 – Data Entry Operator (applied 17 Nov)
   note: reachable from GitHub, unlike escapi.cspdcl.co.in (laptop only); TCS iON posts call letters here
+- id: itg-goa-announcements
+  name: Info Tech Corporation of Goa (ITG) – Announcements
+  kind: cms_posts
+  group: psu
+  state: GA
+  url: 'https://infotech.goa.gov.in/api/post/type/slug/announcements'
+  filter_jobs: false
+  note: JSON behind infotech.goa.gov.in/announcements (rows have JS download buttons, no links)
+- id: itg-goa-appointments
+  name: Info Tech Corporation of Goa (ITG) – Appointments / empanelment
+  kind: cms_posts
+  group: psu
+  state: GA
+  url: 'https://infotech.goa.gov.in/api/post/type/slug/appointments'
+  filter_jobs: false
